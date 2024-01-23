@@ -53,8 +53,6 @@ public class RobotContainer {
                 XboxController.Button.kRightBumper.value);
 
         /* Subsystems */
-        // public final static VisionSubsystem s_visionSubsystem = new
-        // VisionSubsystem();
         
         /* Commands */
         private final Swerve s_Swerve = new Swerve(gyro);

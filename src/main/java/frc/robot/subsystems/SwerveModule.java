@@ -36,7 +36,7 @@ public class SwerveModule {
   private final SparkPIDController angleController; 
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
-      Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
   public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
     this.moduleNumber = moduleNumber;
@@ -56,7 +56,6 @@ public class SwerveModule {
     driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
     driveEncoder = driveMotor.getEncoder();
     driveController = driveMotor.getPIDController();
-    
     driveMotor.setInverted(moduleConstants.driverInvert);
 
     // driveEncoder.setPositionConversionFactor(moduleConstants.conversionFactor)
