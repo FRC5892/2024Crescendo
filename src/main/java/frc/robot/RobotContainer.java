@@ -10,7 +10,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -59,7 +58,6 @@ public class RobotContainer {
         
         /* Commands */
         private final Swerve s_Swerve = new Swerve(gyro);
-        private final Ground_Intake ground_intake = new Ground_Intake();
         private final LedSub ledsub = new LedSub();
                 
         /* LED Commands */
