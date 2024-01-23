@@ -19,10 +19,7 @@ public final class Constants {
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
     /* Autonomous Speeds */
-    public static final double balanceSpeed = 0.45;
-    public static final double speedyBalanceSpeed = 0.7;
-    public static final double speedyBackup = 0.3;
-
+    
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(20.5);
     public static final double wheelBase = Units.inchesToMeters(20.5);
@@ -52,7 +49,7 @@ public final class Constants {
     /* TODO: test Angle Motor PID Values (these are default, may tune if needed) */
     public static final double angleKP = 0.02;
     public static final double angleKI = 0.0;
-    public static final double angleKD = 0.000;
+    public static final double angleKD = 0.0;
     public static final double angleKFF = 0.0;
 
     /* Drive Motor PID Values */
@@ -62,9 +59,9 @@ public final class Constants {
     public static final double driveKFF = 0.0; // leave
 
     /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
-    public static final double driveKS = 0.11979;
-    public static final double driveKV = 2.3823;
-    public static final double driveKA = 0.30034;
+    public static final double driveKS = 0.0;
+    public static final double driveKV = 0.0;
+    public static final double driveKA = 0.;
 
     /* Drive Motor Conversion Factors */
     public static final double driveConversionVelocityFactor = ((wheelDiameter * Math.PI) / driveGearRatio) / 60.0;
@@ -90,7 +87,7 @@ public final class Constants {
       public static final int canCoderID = 12;
 
       public static final boolean driveInvert = false;
-      public static final double offsetDegree = -133+180;
+      public static final double offsetDegree = 0;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree + 45);
       public static final double conversionFactor = 0.060509807;
@@ -106,7 +103,7 @@ public final class Constants {
       public static final int driveMotorID = 6;
       public static final int angleMotorID = 5;
       public static final int canCoderID = 11;
-      public static final double offsetDegree = -23;
+      public static final double offsetDegree = 0;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);
       public static final double conversionFactor = 0.060509807;
@@ -122,7 +119,7 @@ public final class Constants {
       public static final int driveMotorID = 4;
       public static final int angleMotorID = 3;
       public static final int canCoderID = 10;
-      public static final double offsetDegree = 158;
+      public static final double offsetDegree = 0;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree + 45);
       public static final double conversionFactor = 0.060509807;
@@ -138,7 +135,7 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 9;
-      public static final double offsetDegree = 40;
+      public static final double offsetDegree = 0;
 
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);
@@ -171,9 +168,6 @@ public final class Constants {
     public static double aimingSpeed;
 
   }
-
-  // public static final int[] GROUND_INTAKE_PORTS = {0, 0};
-  public static final int[] GROUND_INTAKE_SOLENOID_PORTS = { 0, 1, 2, 3, 4, 5 };
 
   /* LED Ports */
   public static final class LEDConstants {
