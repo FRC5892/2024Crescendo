@@ -7,11 +7,8 @@ package frc.robot;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,68 +26,71 @@ This code is for the robot container and has a joy stick, joystick buttons, swer
 
 public class RobotContainer {
         /* Controllers */
-        public final static Joystick driver = new Joystick(0);
-        // private final Joystick coDriver = new Joystick(1);
+                public final static Joystick driver = new Joystick(0);
+                // private final Joystick coDriver = new Joystick(1);
 
-        /* Compressor */
-        private Compressor compressor;
+        /* Subsystems & Hardware */
+                //TODO: add compressor when we have a compressor 
+                /* Compressor */
+                // private Compressor compressor;
+                /* Gyro Sensor */
+                private static Pigeon2 gyro = new Pigeon2(Constants.Swerve.pigeonID);
+                /* Swerve Subsystem */
+                private final Swerve s_Swerve = new Swerve(gyro);
+                // private final LedSub ledSub = new LedSub();
 
-        // Gyro Sensor
-        private static Pigeon2 gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        /* Controls and buttons */
+                /* Drive Controls */
+                private static final int translationAxis = XboxController.Axis.kLeftY.value;
+                private static final int strafeAxis = XboxController.Axis.kLeftX.value;
+                private static final int rotationAxis = XboxController.Axis.kRightX.value;
+                private double SPEED_MULTIPLIER = 1.0;
 
-        /* Drive Controls */
-        private static final int translationAxis = XboxController.Axis.kLeftY.value;
-        private static final int strafeAxis = XboxController.Axis.kLeftX.value;
-        private static final int rotationAxis = XboxController.Axis.kRightX.value;
-        private double SPEED_MULTIPLIER = 1.0;
+                
+                /* Driver Buttons */
+                private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+                private final JoystickButton robotCentric = new JoystickButton(driver,
+                        XboxController.Button.kRightBumper.value);
 
         
-        /* Driver Buttons */
-        private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-        private final JoystickButton robotCentric = new JoystickButton(driver,
-                XboxController.Button.kRightBumper.value);
-
-        /* Subsystems */
-        private final Swerve s_Swerve = new Swerve(gyro);
-        // private final LedSub ledSub = new LedSub();
-        
-        /* Commands */
-        
-        /* LED Commands */
-        
-        
-        /* SendableChooser */
-        public final SendableChooser<Command> autoChooser;
+        /* Other */
+                /* SendableChooser */
+                public final SendableChooser<Command> autoChooser;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
-                System.out.print("init");
-                CameraServer.startAutomaticCapture();
-                // CameraServer.startAutomaticCapture();
-                compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-                compressor.enableDigital();
+                /* Hardware and Logging */
+                        // TODO: add Camera when we have a camera
+                        // CameraServer.startAutomaticCapture();
+                        
+                        // TODO: add compressor when we have a compressor 
+                        // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+                        // compressor.enableDigital();
 
-                s_Swerve.setDefaultCommand(
-                        new TeleopSwerve(
-                                s_Swerve,
 
-                                () -> -driver.getRawAxis(translationAxis) * SPEED_MULTIPLIER,
-                                () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
-                                () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
-                                () -> robotCentric.getAsBoolean()));
-                SmartDashboard.putNumber("Speed Multiplier", SPEED_MULTIPLIER);
+                /* Default Commands */
+
+                        s_Swerve.setDefaultCommand(
+                                new TeleopSwerve(
+                                        s_Swerve,
+
+                                        () -> -driver.getRawAxis(translationAxis) * SPEED_MULTIPLIER,
+                                        () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
+                                        () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
+                                        () -> robotCentric.getAsBoolean()));
                 
-                autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+                                        
+                                        
+                /* Others */
+                        // Auto chooser
+                        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+                        // Configure the button bindings
+                        configureButtonBindings();
 
-                SmartDashboard.putData("Auto Chooser", autoChooser);
-
-                // Configure the button bindings
-                configureButtonBindings();
-
-                // Configure Smart Dashboard options
-                configureSmartDashboard();
+                        // Configure Smart Dashboard options
+                        configureSmartDashboard();
 
                 
         }
@@ -109,6 +109,9 @@ public class RobotContainer {
         }
 
         private void configureSmartDashboard() {
+                SmartDashboard.putNumber("Speed Multiplier", SPEED_MULTIPLIER);
+                SmartDashboard.putData("Auto Chooser", autoChooser);
+
         
         }
 
@@ -124,7 +127,6 @@ public class RobotContainer {
         public Command getAutonomousCommand() {
                 // Executes the autonomous command chosen in smart dashboard
                 return autoChooser.getSelected();
-                        // return new PathPlannerAuto("New Auto");
 
         }
 }
