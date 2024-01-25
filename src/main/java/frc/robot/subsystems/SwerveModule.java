@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.config.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
@@ -97,7 +96,7 @@ public class SwerveModule {
   }
 
   public void resetToAbsolute() {
-    // System.out.println("resettoAbsolute \n \n \n \n reset to absolute");
+    // System.out.println("resetAbsolute \n \n \n \n reset to absolute");
     // double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
     
     double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();

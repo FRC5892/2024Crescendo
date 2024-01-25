@@ -3,7 +3,6 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import frc.robot.Constants;
 
 public final class CTREConfigs {
   public CANcoderConfiguration swerveCanCoderConfig;

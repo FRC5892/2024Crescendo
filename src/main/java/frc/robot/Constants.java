@@ -14,7 +14,7 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class Swerve {
-    public static final double stickDeadband = 0.1;
+    public static final double stickDeadBand = 0.1;
     public static final int pigeonID = 13;
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
@@ -160,7 +160,7 @@ public final class Constants {
 
   public static final class VisionConstants {
     public static final String USB_CAMERA_NAME = "photonvision";
-    public static final double TRACKED_TAG_ROATION_KP = 0;
+    public static final double TRACKED_TAG_ROTATION_KP = 0;
     public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(new Translation3d(-0.3425, 0.0, -0.233),
         new Rotation3d());
     public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();

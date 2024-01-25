@@ -25,5 +25,18 @@
       }
     },
   ],
-  "java.test.defaultConfig": "WPIlibUnitTests"
+  "java.test.defaultConfig": "WPIlibUnitTests",
+  "cSpell.words": [
+    "apriltag",
+    "Brushless",
+    "cancoder",
+    "CTRE",
+    "CTREPCM",
+    "feedforward",
+    "photonvision",
+    "Subsytem",
+    "Teleop",
+    "Vbat",
+    "wpilibj"
+  ]
 }

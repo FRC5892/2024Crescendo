@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -32,7 +30,7 @@ This code is for the robot container and has a joy stick, joystick buttons, swer
 public class RobotContainer {
         /* Controllers */
         public final static Joystick driver = new Joystick(0);
-        private final Joystick codriver = new Joystick(1);
+        // private final Joystick coDriver = new Joystick(1);
 
         /* Compressor */
         private Compressor compressor;
@@ -53,11 +51,11 @@ public class RobotContainer {
                 XboxController.Button.kRightBumper.value);
 
         /* Subsystems */
+        private final Swerve s_Swerve = new Swerve(gyro);
+        // private final LedSub ledSub = new LedSub();
         
         /* Commands */
-        private final Swerve s_Swerve = new Swerve(gyro);
-        private final LedSub ledsub = new LedSub();
-                
+        
         /* LED Commands */
         
         
@@ -82,7 +80,7 @@ public class RobotContainer {
                                 () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
                                 () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
                                 () -> robotCentric.getAsBoolean()));
-                SmartDashboard.putNumber("Speed Multipler", SPEED_MULTIPLIER);
+                SmartDashboard.putNumber("Speed Multiplier", SPEED_MULTIPLIER);
                 
                 autoChooser = AutoBuilder.buildAutoChooser("New Auto");
 
