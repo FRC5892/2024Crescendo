@@ -25,7 +25,7 @@ public class CANCoderUtil {
    * @param cancoder The CANCoder to adjust the status frames on.
    * @param usage    The status frame feedback to enable. kAll is the default when
    *                 a CANCoder
-   *                 isconstructed.
+   *                 is constructed.
    */
   public static void setCANCoderBusUsage(CANcoder cancoder, CCUsage usage) {
     cancoder.optimizeBusUtilization(1);
