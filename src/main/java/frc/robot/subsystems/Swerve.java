@@ -14,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -38,8 +40,11 @@ public class Swerve extends SubsystemBase {
   private Field2d field;
   BuiltInAccelerometer accelerometer;
 
+
+
   public Swerve(Pigeon2 gyro) {
-    System.out.println("init swerve");
+    
+    
     accelerometer = new BuiltInAccelerometer();
     this.gyro = gyro;
     //gyro.configFactoryDefault();
@@ -263,30 +268,50 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions());
     field.setRobotPose(getPose());
-    SmartDashboard.putNumber("Robot Pose X", getPose().getX());
-    SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
 
     SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getYaw().getValue());
     SmartDashboard.putNumber("Pigeon2 Pitch", gyro.getPitch().getValue());
-   // SmartDashboard.putNumber("Acceleration", gyro.getBiasedAccelerometer(null);
 
     SmartDashboard.putNumber("Pigeon2 Roll", gyro.getRoll().getValue());
-    //SmartDashboard.putData("Distance:", getPose());
 
     SmartDashboard.putNumber("Acceleration", accelerometer.getX());
-    for (SwerveModule mod : mSwerveMods) {
-      //SmartDashboard.putNumber(
-        //  "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
-      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Can Coder", mod.getCanCoder().getDegrees());
-      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Can Absolute Position", mod.getAbsolutePosition());
-      SmartDashboard.putBoolean("Teleop",DriverStation.isTeleopEnabled());
 
+    final Double[] states = new Double[8];
+    final Double[] cancoder = new Double[4];
+    final Double[] integrated = new Double[4];
+    final Double[] velocity = new Double[4];
+    final Double[] position = new Double[4];
+
+
+    for (SwerveModule mod : mSwerveMods) {
+      final SwerveModuleState state = mod.getState();
+      final Double angle = state.angle.getDegrees();
+      final Double speed = state.speedMetersPerSecond;
+      
+      states[mod.moduleNumber*2] = angle;
+      states[(mod.moduleNumber*2)+1] = speed;
+
+      cancoder[mod.moduleNumber] = mod.getCanCoder().getDegrees();
+      integrated[mod.moduleNumber] = angle;
+      velocity[mod.moduleNumber] = speed;
+      position[mod.moduleNumber] = mod.getPosition().distanceMeters;
+      // SmartDashboard.putNumber(
+      //    "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+      // SmartDashboard.putNumber(
+      //     "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+      // SmartDashboard.putNumber(
+      //     "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+      // SmartDashboard.putNumber(
+      //     "Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
+          
     }
+    SmartDashboard.putBoolean("Teleop",DriverStation.isTeleopEnabled());
+    SmartDashboard.putNumberArray("Swerve/moduleStates", states);
+
+    SmartDashboard.putNumberArray("Swerve/Cancoders", cancoder);
+    SmartDashboard.putNumberArray("Swerve/Integrated", integrated);
+    SmartDashboard.putNumberArray("Swerve/Velocity", velocity);
+    SmartDashboard.putNumberArray("Swerve/Position", position);
+
   }
 }
