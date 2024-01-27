@@ -65,6 +65,7 @@ public class RobotContainer {
          */
         public RobotContainer() {
                 /* Hardware and Logging */
+                DriverStation.silenceJoystickConnectionWarning(true);
                         // TODO: add Camera when we have a camera
                         // CameraServer.startAutomaticCapture();
                         
