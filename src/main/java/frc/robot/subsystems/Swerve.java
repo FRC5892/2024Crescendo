@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -36,7 +37,7 @@ In the periodic() method, the robot's odometry is updated, and the yaw of the ro
 */
 
 public class Swerve extends SubsystemBase {
-  private Pigeon2 gyro;
+  private AHRS gyro;
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
@@ -48,7 +49,7 @@ public class Swerve extends SubsystemBase {
 
 
 
-  public Swerve(Pigeon2 gyro) {
+  public Swerve(AHRS gyro) {
     
     
     accelerometer = new BuiltInAccelerometer();
@@ -286,10 +287,8 @@ public class Swerve extends SubsystemBase {
    * Sets the yaw of the robot to 0.
    */
   public void zeroGyro() {
-    gyro.setYaw(0);
-  }
-  public void invertGyro() {
-    gyro.setYaw(180);
+    gyro.zeroYaw();
+    // gyro.setYaw(0);
   }
 
   /**
@@ -299,8 +298,8 @@ public class Swerve extends SubsystemBase {
    */
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValue())
-        : Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+        : Rotation2d.fromDegrees(gyro.getYaw());
   }
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
   return routine.quasistatic(direction);
@@ -315,15 +314,12 @@ public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     swerveOdometry.update(getYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getYaw().getValue());
-    SmartDashboard.putNumber("Pigeon2 Pitch", gyro.getPitch().getValue());
+    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("Pigeon2 Pitch", gyro.getPitch());
 
-    SmartDashboard.putNumber("Pigeon2 Roll", gyro.getRoll().getValue());
+    SmartDashboard.putNumber("Pigeon2 Roll", gyro.getRoll());
 
     SmartDashboard.putNumber("Acceleration", accelerometer.getX());
-
-
-    
 
 
     final Double[] states = new Double[8];
@@ -331,7 +327,6 @@ public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     final Double[] integrated = new Double[4];
     final Double[] velocity = new Double[4];
     final Double[] position = new Double[4];
-
 
     for (SwerveModule mod : mSwerveMods) {
       final SwerveModuleState state = mod.getState();

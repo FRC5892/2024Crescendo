@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,9 +39,9 @@ public class RobotContainer {
                 /* Compressor */
                 // private Compressor compressor;
                 /* Gyro Sensor */
-                private static Pigeon2 gyro = new Pigeon2(Constants.Swerve.pigeonID);
+                AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
-                private final Swerve s_Swerve = new Swerve(gyro);
+                private final Swerve s_Swerve = new Swerve(ahrs);
                 // private final LedSub ledSub = new LedSub();
 
         /* Controls and buttons */
