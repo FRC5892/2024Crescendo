@@ -61,7 +61,7 @@ public final class Constants {
     /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
     public static final double driveKS = 0.0;
     public static final double driveKV = 0.0;
-    public static final double driveKA = 0.;
+    public static final double driveKA = 0.0;
 
     /* Drive Motor Conversion Factors */
     public static final double driveConversionVelocityFactor = ((wheelDiameter * Math.PI) / driveGearRatio) / 60.0;
@@ -82,12 +82,12 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
-      public static final int driveMotorID = 8;
-      public static final int angleMotorID = 7;
-      public static final int canCoderID = 12;
+      public static final int driveMotorID = 1;
+      public static final int angleMotorID = 2;
+      public static final int canCoderID = 9;
 
       public static final boolean driveInvert = false;
-      public static final double offsetDegree = 0;
+      public static final double offsetDegree = 138.36-180;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree + 45);
       public static final double conversionFactor = 0.060509807;
@@ -100,10 +100,10 @@ public final class Constants {
     /* Front Right Module - Module 1 */
     public static final class Mod1 {
       public static final boolean driveInvert = false;
-      public static final int driveMotorID = 6;
-      public static final int angleMotorID = 5;
-      public static final int canCoderID = 11;
-      public static final double offsetDegree = 0;
+      public static final int driveMotorID = 3;
+      public static final int angleMotorID = 4;
+      public static final int canCoderID = 10;
+      public static final double offsetDegree = 76.5-180;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);
       public static final double conversionFactor = 0.060509807;
@@ -116,10 +116,10 @@ public final class Constants {
     /* Back Left Module - Module 2 */
     public static final class Mod2 {
       public static final boolean driveInvert = true;
-      public static final int driveMotorID = 4;
-      public static final int angleMotorID = 3;
-      public static final int canCoderID = 10;
-      public static final double offsetDegree = 0;
+      public static final int driveMotorID = 7;
+      public static final int angleMotorID = 8;
+      public static final int canCoderID = 12;
+      public static final double offsetDegree = 18.11-180;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree + 45);
       public static final double conversionFactor = 0.060509807;
@@ -132,10 +132,10 @@ public final class Constants {
     /* Back Right Module - Module 3 */
     public static final class Mod3 {
       public static final boolean driveInvert = true;
-      public static final int driveMotorID = 2;
-      public static final int angleMotorID = 1;
-      public static final int canCoderID = 9;
-      public static final double offsetDegree = 0;
+      public static final int driveMotorID = 5;
+      public static final int angleMotorID = 6;
+      public static final int canCoderID = 11;
+      public static final double offsetDegree = 238.26-180;
 
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);

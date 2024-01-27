@@ -112,10 +112,10 @@ public class Swerve extends SubsystemBase {
   }
 
   public void getPreferences() {
-   mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0",mSwerveMods[0].getAngleOffset().getDegrees()));
-   mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1",mSwerveMods[0].getAngleOffset().getDegrees()));
-   mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2",mSwerveMods[0].getAngleOffset().getDegrees()));
-   mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3",mSwerveMods[0].getAngleOffset().getDegrees()));
+  //  mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0",mSwerveMods[0].getAngleOffset().getDegrees()));
+  //  mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1",mSwerveMods[1].getAngleOffset().getDegrees()));
+  //  mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2",mSwerveMods[2].getAngleOffset().getDegrees()));
+  //  mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3",mSwerveMods[3].getAngleOffset().getDegrees()));
     
   }
   
