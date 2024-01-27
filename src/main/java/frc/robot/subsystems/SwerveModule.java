@@ -159,6 +159,12 @@ public class SwerveModule {
 
     // driveMotor.setInverted(Constants.Swerve.driveInvert);
   }
+  public void setAngleOffset(double degree) {
+    angleOffset = new Rotation2d(degree);
+  }
+  public Rotation2d getAngleOffset() {
+    return angleOffset;
+  }
 
   public Rotation2d getCanCoder() {
     return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());

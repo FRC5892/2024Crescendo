@@ -18,6 +18,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -102,7 +103,22 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putData("Swerve/SysId/quasistatic backward",sysIdQuasistatic(Direction.kReverse));
     SmartDashboard.putData("Swerve/subsytem",this);
 
+    Preferences.initDouble("offset 0",Constants.Swerve.Mod0.offsetDegree);
+    Preferences.initDouble("offset 1",Constants.Swerve.Mod0.offsetDegree);
+    Preferences.initDouble("offset 2",Constants.Swerve.Mod0.offsetDegree);
+    Preferences.initDouble("offset 3",Constants.Swerve.Mod0.offsetDegree);
+
+
   }
+
+  public void getPreferences() {
+   mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0",mSwerveMods[0].getAngleOffset().getDegrees()));
+   mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1",mSwerveMods[0].getAngleOffset().getDegrees()));
+   mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2",mSwerveMods[0].getAngleOffset().getDegrees()));
+   mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3",mSwerveMods[0].getAngleOffset().getDegrees()));
+    
+  }
+  
 
   public void voltageDrive(Measure<Voltage> volts) {
     for (SwerveModule mod : mSwerveMods) {
