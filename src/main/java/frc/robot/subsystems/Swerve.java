@@ -14,13 +14,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 
 /*
@@ -39,6 +42,8 @@ public class Swerve extends SubsystemBase {
 
   private Field2d field;
   BuiltInAccelerometer accelerometer;
+
+  SysIdRoutine routine;
 
 
 
@@ -86,6 +91,24 @@ public class Swerve extends SubsystemBase {
       },
       this // Reference to this subsystem to set requirements
     );
+    routine = new SysIdRoutine(
+    new SysIdRoutine.Config(),
+    new SysIdRoutine.Mechanism(this::voltageDrive, null, this)
+    );  
+
+    SmartDashboard.putData("Swerve/SysId/dynamic forward",sysIdDynamic(Direction.kForward));
+    SmartDashboard.putData("Swerve/SysId/dynamic backward",sysIdDynamic(Direction.kReverse));
+    SmartDashboard.putData("Swerve/SysId/quasistatic forward",sysIdQuasistatic(Direction.kForward));
+    SmartDashboard.putData("Swerve/SysId/quasistatic backward",sysIdQuasistatic(Direction.kReverse));
+    SmartDashboard.putData("Swerve/subsytem",this);
+
+  }
+
+  public void voltageDrive(Measure<Voltage> volts) {
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setVoltage(volts);
+    }
+
   }
 
   /**
@@ -263,6 +286,13 @@ public class Swerve extends SubsystemBase {
         ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValue())
         : Rotation2d.fromDegrees(gyro.getYaw().getValue());
   }
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+  return routine.quasistatic(direction);
+}
+
+public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+  return routine.dynamic(direction);
+}
 
   @Override
   public void periodic() {
@@ -275,6 +305,10 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Pigeon2 Roll", gyro.getRoll().getValue());
 
     SmartDashboard.putNumber("Acceleration", accelerometer.getX());
+
+
+    
+
 
     final Double[] states = new Double[8];
     final Double[] cancoder = new Double[4];
@@ -314,4 +348,5 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumberArray("Swerve/Position", position);
 
   }
+  
 }

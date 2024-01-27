@@ -10,6 +10,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import frc.lib.config.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
@@ -83,6 +86,9 @@ public class SwerveModule {
           0,
           feedforward.calculate(desiredState.speedMetersPerSecond));
     }
+  }
+  public void setVoltage(Measure<Voltage> volts) {
+    driveMotor.setVoltage(volts.in(Units.Volts));
   }
 
   private void setAngle(SwerveModuleState desiredState) {

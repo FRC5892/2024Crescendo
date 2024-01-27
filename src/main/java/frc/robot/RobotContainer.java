@@ -7,12 +7,15 @@ package frc.robot;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.autos.*;
@@ -67,7 +70,6 @@ public class RobotContainer {
                         
                         // TODO: add compressor when we have a compressor 
                         // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-                        // compressor.enableDigital();
 
 
                 /* Default Commands */
@@ -106,6 +108,13 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+                
+
+                
+
+        
+                        
+        
         }
 
         private void configureSmartDashboard() {
