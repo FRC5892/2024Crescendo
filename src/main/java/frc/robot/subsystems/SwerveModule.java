@@ -19,7 +19,6 @@ import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-//we did it
 
 public class SwerveModule {
   public int moduleNumber;
@@ -36,6 +35,8 @@ public class SwerveModule {
 
   private final SparkPIDController driveController;
   private final SparkPIDController angleController; 
+
+  private SwerveModuleState desiredState = new SwerveModuleState(0, new Rotation2d(0));
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
     Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
@@ -68,12 +69,15 @@ public class SwerveModule {
 
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
     desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+    this.desiredState = desiredState;
     // Custom optimize command, since default WPILib optimize assumes
     // continuous controller which REV and CTRE are not
+
 
     setAngle(desiredState);
     setSpeed(desiredState, isOpenLoop);
   }
+
 
   private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
     if (isOpenLoop) {
@@ -158,6 +162,9 @@ public class SwerveModule {
     driveEncoder.setPosition(0.0);
 
     // driveMotor.setInverted(Constants.Swerve.driveInvert);
+  }
+  public SwerveModuleState getDesiredState() {
+    return desiredState;
   }
   public void setAngleOffset(double degree) {
     angleOffset = new Rotation2d(degree);

@@ -38,6 +38,7 @@
     "Odometry",
     "photonvision",
     "Quasistatic",
+    "Setpoint",
     "Subsytem",
     "Teleop",
     "Vbat",

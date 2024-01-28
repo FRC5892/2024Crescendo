@@ -15,6 +15,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -105,18 +107,18 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putData("Swerve/subsytem",this);
 
     Preferences.initDouble("offset 0",Constants.Swerve.Mod0.offsetDegree);
-    Preferences.initDouble("offset 1",Constants.Swerve.Mod0.offsetDegree);
-    Preferences.initDouble("offset 2",Constants.Swerve.Mod0.offsetDegree);
-    Preferences.initDouble("offset 3",Constants.Swerve.Mod0.offsetDegree);
+    Preferences.initDouble("offset 1",Constants.Swerve.Mod1.offsetDegree);
+    Preferences.initDouble("offset 2",Constants.Swerve.Mod2.offsetDegree);
+    Preferences.initDouble("offset 3",Constants.Swerve.Mod3.offsetDegree);
 
 
   }
 
   public void getPreferences() {
-  //  mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0",mSwerveMods[0].getAngleOffset().getDegrees()));
-  //  mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1",mSwerveMods[1].getAngleOffset().getDegrees()));
-  //  mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2",mSwerveMods[2].getAngleOffset().getDegrees()));
-  //  mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3",mSwerveMods[3].getAngleOffset().getDegrees()));
+   mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0",mSwerveMods[0].getAngleOffset().getDegrees()));
+   mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1",mSwerveMods[1].getAngleOffset().getDegrees()));
+   mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2",mSwerveMods[2].getAngleOffset().getDegrees()));
+   mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3",mSwerveMods[3].getAngleOffset().getDegrees()));
     
   }
   
@@ -164,6 +166,14 @@ public class Swerve extends SubsystemBase {
     }
     
     return states;
+  }
+  public SwerveModuleState[] getModuleDesiredStates(){
+    SwerveModuleState[] dstates = new SwerveModuleState[4];
+    for(SwerveModule mod : mSwerveMods){
+        dstates[mod.moduleNumber] = mod.getDesiredState();
+    }
+    
+    return dstates;
   }
   
   public void driveRelative(ChassisSpeeds chassisSpeeds) {
@@ -309,8 +319,18 @@ public Command sysIdDynamic(SysIdRoutine.Direction direction) {
   return routine.dynamic(direction);
 }
 
+
+  StructArrayPublisher<SwerveModuleState> statePublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard/Swerve")
+    .getStructArrayTopic("States", SwerveModuleState.struct).publish();
+  StructArrayPublisher<SwerveModuleState> desiredStatePublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard/Swerve")
+    .getStructArrayTopic("Desired States", SwerveModuleState.struct).publish();
   @Override
   public void periodic() {
+
+    statePublisher.set(getModuleStates());
+    desiredStatePublisher.set(getModuleDesiredStates());
+
+
     swerveOdometry.update(getYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
@@ -322,41 +342,25 @@ public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     SmartDashboard.putNumber("Acceleration", accelerometer.getX());
 
 
-    final Double[] states = new Double[8];
-    final Double[] cancoder = new Double[4];
-    final Double[] integrated = new Double[4];
-    final Double[] velocity = new Double[4];
-    final Double[] position = new Double[4];
-
     for (SwerveModule mod : mSwerveMods) {
       final SwerveModuleState state = mod.getState();
-      final Double angle = state.angle.getDegrees();
-      final Double speed = state.speedMetersPerSecond;
-      
-      states[mod.moduleNumber*2] = angle;
-      states[(mod.moduleNumber*2)+1] = speed;
+      final SwerveModuleState desiredState = mod.getDesiredState();
 
-      cancoder[mod.moduleNumber] = mod.getCanCoder().getDegrees();
-      integrated[mod.moduleNumber] = angle;
-      velocity[mod.moduleNumber] = speed;
-      position[mod.moduleNumber] = mod.getPosition().distanceMeters;
-      // SmartDashboard.putNumber(
-      //    "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-      // SmartDashboard.putNumber(
-      //     "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-      // SmartDashboard.putNumber(
-      //     "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-      // SmartDashboard.putNumber(
-      //     "Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
+      SmartDashboard.putNumber(
+         "Swerve/Modules/Mod " + mod.moduleNumber + "/Cancoder", mod.getCanCoder().getDegrees());
+      SmartDashboard.putNumber(
+          "Swerve/Modules/Mod " + mod.moduleNumber + "/Integrated", state.angle.getDegrees());
+      SmartDashboard.putNumber(
+          "Swerve/Modules/Mod " + mod.moduleNumber + "/Velocity", state.speedMetersPerSecond);
+      SmartDashboard.putNumber(
+          "Swerve/Modules/Mod " + mod.moduleNumber + "/Position", mod.getPosition().distanceMeters);
+      SmartDashboard.putNumber(
+          "Swerve/Modules/Mod " + mod.moduleNumber + "/Setpoint Angle", desiredState.angle.getDegrees());
+      SmartDashboard.putNumber(
+          "Swerve/Modules/Mod " + mod.moduleNumber + "/Setpoint Velocity",desiredState.speedMetersPerSecond);
           
     }
     SmartDashboard.putBoolean("Teleop",DriverStation.isTeleopEnabled());
-    SmartDashboard.putNumberArray("Swerve/moduleStates", states);
-
-    SmartDashboard.putNumberArray("Swerve/Cancoders", cancoder);
-    SmartDashboard.putNumberArray("Swerve/Integrated", integrated);
-    SmartDashboard.putNumberArray("Swerve/Velocity", velocity);
-    SmartDashboard.putNumberArray("Swerve/Position", position);
 
   }
   
