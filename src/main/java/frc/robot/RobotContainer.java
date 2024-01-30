@@ -42,6 +42,7 @@ public class RobotContainer {
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
+                private final GroundIntake groundIntake = new GroundIntake();
                 // private final LedSub ledSub = new LedSub();
 
         /* Controls and buttons */
@@ -56,7 +57,11 @@ public class RobotContainer {
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
+                private final JoystickButton intakeButton = new JoystickButton(driver, 
+                        XboxController.Button.kLeftBumper.value);
+
         /*Commands */
+                private final IntakeGamepiece intakeGamepiece = new IntakeGamepiece(groundIntake);
         
         /* Other */
                 /* SendableChooser */
@@ -111,12 +116,8 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-                
-
-                
-
-        
-                        
+                intakeButton.onTrue(intakeGamepiece);
+                //intakeButton.onTrue(new InstantCommand(() -> groundIntake.runIntake()));
         
         }
 

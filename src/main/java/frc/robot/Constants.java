@@ -165,7 +165,9 @@ public final class Constants {
     public static final int LED_LENGTH = 105;
   }
 
-
-public static final int intakeMotorPort = 0;
+  public static final class IntakeConstants {
+    public static final int intakeMotorPort = 9;
+    public static double intakeSpeed = 0.3;
+  }
 
 }

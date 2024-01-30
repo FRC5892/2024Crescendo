@@ -16,7 +16,7 @@ public class GroundIntake extends SubsystemBase {
 
   /** Creates a new GroundIntake. */
   public GroundIntake() {
-    intakeMotor = new CANSparkMax(Constants.intakeMotorPort, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorPort, MotorType.kBrushless);
   }
 
   @Override
@@ -25,8 +25,10 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public void runIntake() {
-
+    intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
-  public void 
+  public void stopIntake() {
+    intakeMotor.set(0);
+  }
 }
