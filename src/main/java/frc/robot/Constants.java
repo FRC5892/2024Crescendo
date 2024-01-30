@@ -53,13 +53,13 @@ public final class Constants {
     public static final double angleKFF = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.0; // TODO: Tune after charactarization
+    public static final double driveKP = 0.02; // TODO: Tune after charactarization
     public static final double driveKI = 0.0; // leave
     public static final double driveKD = 0.0; // leave
     public static final double driveKFF = 0.0; // leave
 
     /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
-    public static final double driveKS = 0.0;
+    public static final double driveKS = 0.02;
     public static final double driveKV = 0.0;
     public static final double driveKA = 0.0;
 
@@ -164,5 +164,8 @@ public final class Constants {
     public static final int LED_PORT = 0;
     public static final int LED_LENGTH = 105;
   }
+
+
+public static final int intakeMotorPort = 0;
 
 }
