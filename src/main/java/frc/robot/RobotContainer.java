@@ -61,7 +61,7 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
 
         /*Commands */
-                private final IntakeGamepiece intakeGamepiece = new IntakeGamepiece(groundIntake);
+                private final Command intakeGamepiece = groundIntake.intakePieceCommand();
         
         /* Other */
                 /* SendableChooser */
