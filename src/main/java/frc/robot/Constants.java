@@ -9,9 +9,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
+  public static final class IntakeConstants {
+    public static final int intakeMotorID = 13;
+    public static final int deployMotorID = 14;
+    public static double intakeSpeed = 0.3;
+    public static double deploySpeed = 0.3;
+  }
+  public static final class ShooterConstants {
+    //TODO: change me
+    public static final int leftMotorId = 15;
+    public static final int rightMotorId = 16;
+    public static final Measure<Distance> wheelDiameter = edu.wpi.first.units.Units.Inches.of(10);
+  }
 
   public static final class Swerve {
     public static final double stickDeadBand = 0.1;
@@ -165,9 +179,6 @@ public final class Constants {
     public static final int LED_LENGTH = 105;
   }
 
-  public static final class IntakeConstants {
-    public static final int intakeMotorPort = 9;
-    public static double intakeSpeed = 0.3;
-  }
+  
 
 }

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,10 +15,14 @@ import frc.robot.Constants;
 public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
+  private CANSparkMax deployMotor;
+  private RelativeEncoder deployEncoder;
 
   /** Creates a new GroundIntake. */
   public GroundIntake() {
-    intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorPort, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
+    deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
+    deployEncoder = deployMotor.getEncoder();
   }
 
   @Override
@@ -32,7 +37,20 @@ public class GroundIntake extends SubsystemBase {
   public void stopIntake() {
     setIntakeSpeed(0);
   }
+  /* runs intake at intakeSpeed until interrupted 
+   */
   public Command intakePieceCommand() {
-    return runEnd(()-> this.setIntakeSpeed(Constants.IntakeConstants.intakeSpeed), ()->this.stopIntake());
+    return startEnd(()-> this.setIntakeSpeed(Constants.IntakeConstants.intakeSpeed), ()->this.stopIntake());
+  }
+
+  public void deployIntake () {
+    if (true) {
+      
+    }
+    deployMotor.set(Constants.IntakeConstants.deploySpeed);
+  }
+
+  public void retractIntake () {
+
   }
 }
