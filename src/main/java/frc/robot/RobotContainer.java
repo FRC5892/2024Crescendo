@@ -42,7 +42,8 @@ public class RobotContainer {
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
-                private final GroundIntake groundIntake = new GroundIntake();
+                private final GroundIntake s_GroundIntake = new GroundIntake();
+                private final Shooter s_Shooter = new Shooter();
                 // private final LedSub ledSub = new LedSub();
 
         /* Controls and buttons */
@@ -59,9 +60,11 @@ public class RobotContainer {
                         XboxController.Button.kRightBumper.value);
                 private final JoystickButton intakeButton = new JoystickButton(driver, 
                         XboxController.Button.kLeftBumper.value);
-
+                private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kX.value);
+                
         /*Commands */
-                private final Command intakeGamepiece = groundIntake.intakePieceCommand();
+                private final Command intakeGamepiece = s_GroundIntake.intakePieceCommand();
+                private final Command shootCommand = s_Shooter.shootCommand();
         
         /* Other */
                 /* SendableChooser */
@@ -72,7 +75,7 @@ public class RobotContainer {
          */
         public RobotContainer() {
                 /* Hardware and Logging */
-                DriverStation.silenceJoystickConnectionWarning(true);
+                        DriverStation.silenceJoystickConnectionWarning(true);
                         // TODO: add Camera when we have a camera
                         // CameraServer.startAutomaticCapture();
                         
@@ -116,9 +119,10 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+                /* Note Manipulation  */
                 intakeButton.onTrue(intakeGamepiece);
-                //intakeButton.onTrue(new InstantCommand(() -> groundIntake.runIntake()));
-        
+                shooterButton.onTrue(shootCommand);
         }
 
         private void configureSmartDashboard() {

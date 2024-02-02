@@ -35,10 +35,6 @@ public class TeleopSwerve extends Command {
     this.rotationSup = rotationSup;
     this.robotCentricSup = robotCentricSup;
   }
-  @Override
-  public void initialize() {
-    s_Swerve.getPreferences();
-  }
 
   @Override
   public void execute() {

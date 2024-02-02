@@ -262,6 +262,7 @@ public class Swerve extends SubsystemBase {
    * Resets each SwerveModule to the absolute position.
    */
   public void resetToAbsolute() {
+    getPreferences();
     for (SwerveModule mod : mSwerveMods) {
       mod.resetToAbsolute();
     }
