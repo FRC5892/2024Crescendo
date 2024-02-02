@@ -1,0 +1,26 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Swerve/SysId/dynamic backward": "Command",
+      "/SmartDashboard/Swerve/SysId/dynamic forward": "Command",
+      "/SmartDashboard/Swerve/SysId/quasistatic backward": "Command",
+      "/SmartDashboard/Swerve/SysId/quasistatic forward": "Command",
+      "/SmartDashboard/Swerve/subsytem": "Subsystem"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

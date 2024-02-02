@@ -1,0 +1,34 @@
+[
+  {
+    "name": "/Preferences/offset 0",
+    "type": "double",
+    "value": 331.69,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/offset 1",
+    "type": "double",
+    "value": -103.5,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/offset 2",
+    "type": "double",
+    "value": -161.89,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/offset 3",
+    "type": "double",
+    "value": 58.26,
+    "properties": {
+      "persistent": true
+    }
+  }
+]

@@ -37,24 +37,36 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftSparkMax = new CANSparkMax(ShooterConstants.leftMotorId, MotorType.kBrushless);
     rightSparkMax = new CANSparkMax(ShooterConstants.rightMotorId, MotorType.kBrushless);
+
+
+    //setup Pid
     leftController = leftSparkMax.getPIDController();
     rightController = rightSparkMax.getPIDController();
-    Utilities.setPID(leftController,ShooterConstants.leftPID);
-    Utilities.setPID(rightController,ShooterConstants.rightPID);
-
-    SmartDashboard.putData("Shooter/leftPID",new SparkPIDSendable(leftController));
-    SmartDashboard.putData("Shooter/rightPID",new SparkPIDSendable(rightController));
+    Utilities.setPID(leftController, ShooterConstants.leftPID);
+    Utilities.setPID(rightController, ShooterConstants.rightPID);
+    SmartDashboard.putData("Shooter/leftPID", new SparkPIDSendable(leftController));
+    SmartDashboard.putData("Shooter/rightPID", new SparkPIDSendable(rightController));
 
   }
 
   public void setLeftMotorSpeed(Measure<Velocity<Distance>> velocity) {
-    Measure<Velocity<Angle>> angularVelocity = Units.RadiansPerSecond
-        .of(velocity.in(Units.MetersPerSecond) / ShooterConstants.wheelDiameter.in(Units.Meters));
-    leftController.setReference(angularVelocity.in(Units.RPM),ControlType.kVelocity);
+    setMotorSpeedFromLinearVelocity(rightController, velocity);
+  }
+  public void setRightMotorSpeed(Measure<Velocity<Distance>> velocity) {
+    setMotorSpeedFromLinearVelocity(leftController, velocity);
+  }
+  public void stopRightMotor() {
+    setRightMotorSpeed(Units.MetersPerSecond.of(0));
+  }
+  public void stopLeftMotor() {
+    setLeftMotorSpeed(Units.MetersPerSecond.of(0));
   }
 
-  public void setRightMotorSpeed() {
-
+  public void setMotorSpeedFromLinearVelocity(SparkPIDController controller, Measure<Velocity<Distance>> linearVelocity) {
+    //Linear Velocity to RPM
+    Measure<Velocity<Angle>> angularVelocity = Units.RadiansPerSecond
+        .of(linearVelocity.in(Units.MetersPerSecond) / ShooterConstants.wheelDiameter.in(Units.Meters));
+    controller.setReference(angularVelocity.in(Units.RPM), ControlType.kVelocity);
   }
 
   @Override
