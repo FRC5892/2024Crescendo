@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +25,9 @@ public final class Constants {
     //TODO: change me
     public static final int leftMotorId = 15;
     public static final int rightMotorId = 16;
+    public static final PIDConstants leftPID = new PIDConstants(0.2, 0, 0);
+    public static final PIDConstants rightPID = new PIDConstants(0.2, 0, 0);
+
     public static final Measure<Distance> wheelDiameter = edu.wpi.first.units.Units.Inches.of(10);
   }
 
