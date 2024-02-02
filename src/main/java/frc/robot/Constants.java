@@ -4,14 +4,12 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
@@ -28,7 +26,7 @@ public final class Constants {
     public static final PIDConstants leftPID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants rightPID = new PIDConstants(0.2, 0, 0);
 
-    public static final Measure<Distance> wheelDiameter = edu.wpi.first.units.Units.Inches.of(10);
+    public static final Measure<Distance> wheelDiameter = Units.Inches.of(10);
   }
 
   public static final class Swerve {
@@ -39,9 +37,9 @@ public final class Constants {
     /* Autonomous Speeds */
     
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(20.5);
-    public static final double wheelBase = Units.inchesToMeters(20.5);
-    public static final double wheelDiameter = Units.inchesToMeters(4.0);
+    public static final double trackWidth = Units.Inches.of(20.5).in(Units.Meters);
+    public static final double wheelBase = Units.Inches.of(20.5).in(Units.Meters);
+    public static final double wheelDiameter = Units.Inches.of(4.0).in(Units.Meters);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double openLoopRamp = 2;
