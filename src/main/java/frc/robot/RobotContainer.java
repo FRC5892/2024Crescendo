@@ -129,9 +129,9 @@ public class RobotContainer {
 
                 /* Note Manipulation  */
                 intakeNoteButton.onTrue(intakeNote);
-                deployIntakeButton.onTrue(deployIntake);
-                retractIntakeButton.onTrue(retractIntake);
-                shooterButton.onTrue(shootCommand);
+                deployIntakeButton.whileTrue(deployIntake);
+                retractIntakeButton.whileTrue(retractIntake);
+                shooterButton.whileTrue(shootCommand);
         }
 
         private void configureSmartDashboard() {
