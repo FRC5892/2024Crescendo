@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command shootCommand() {
-    return new SequentialCommandGroup(defer(null))
+    // return new SequentialCommandGroup(defer(null));
     return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopLeftKickerMotor);
   }
   /*

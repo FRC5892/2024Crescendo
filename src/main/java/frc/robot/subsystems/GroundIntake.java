@@ -27,7 +27,7 @@ public class GroundIntake extends SubsystemBase {
 
   private RelativeEncoder deployEncoder;
 
-  /** Creates a new GroundIntake. */
+  /* Creates a new GroundIntake. */
   public GroundIntake() {
     intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
