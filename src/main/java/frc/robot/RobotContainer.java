@@ -29,7 +29,7 @@ This code is for the robot container and has a joy stick, joystick buttons, swer
 public class RobotContainer {
         /* Controllers */
                 public final static Joystick driver = new Joystick(0);
-                // private final Joystick coDriver = new Joystick(1);
+                private final Joystick codriver = new Joystick(1);
 
         /* Subsystems & Hardware */
                 //TODO: add compressor when we have a compressor 
@@ -55,12 +55,22 @@ public class RobotContainer {
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
-                private final JoystickButton intakeButton = new JoystickButton(driver, 
+
+                /* CoDriver Buttons */
+                private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
                         XboxController.Button.kLeftBumper.value);
-                private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kX.value);
+                private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
+                        XboxController.Button.kRightBumper.value);
+                private final JoystickButton retractIntakeButton = new JoystickButton(codriver, 
+                        XboxController.Axis.kRightTrigger.value);
+                private final JoystickButton shooterButton = new JoystickButton(codriver, 
+                        XboxController.Button.kX.value);
                 
         /*Commands */
-                private final Command intakeGamepiece = s_GroundIntake.intakePieceCommand();
+                private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
+                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
+                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
+
                 private final Command shootCommand = s_Shooter.shootCommand();
         
         /* Other */
@@ -118,7 +128,9 @@ public class RobotContainer {
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
                 /* Note Manipulation  */
-                intakeButton.onTrue(intakeGamepiece);
+                intakeNoteButton.onTrue(intakeNote);
+                deployIntakeButton.onTrue(deployIntake);
+                retractIntakeButton.onTrue(retractIntake);
                 shooterButton.onTrue(shootCommand);
         }
 

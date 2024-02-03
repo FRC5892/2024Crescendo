@@ -21,9 +21,6 @@ public class SparkPIDSendable implements Sendable {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        // builder.addDoubleProperty("p", controller::getP, controller::setP);
-        // builder.addDoubleProperty("i", controller::getI, controller::setI);
-        // builder.addDoubleProperty("d", controller::getD, controller::setD);
     builder.setSmartDashboardType("PIDController");
     builder.addDoubleProperty("p", controller::getP, controller::setP);
     builder.addDoubleProperty("i", controller::getI, controller::setI);

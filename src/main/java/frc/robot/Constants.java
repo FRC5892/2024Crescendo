@@ -13,16 +13,25 @@ import edu.wpi.first.units.Units;
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
+
+
   public static final class IntakeConstants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
     public static double intakeSpeed = 0.3;
     public static double deploySpeed = 0.3;
+    public static double retractSpeed = 0.3;
+    public static final PIDConstants intakePID = new PIDConstants(0.2, 0, 0);
+    public static final PIDConstants deployPID = new PIDConstants(0.2, 0, 0);
   }
+  
   public static final class ShooterConstants {
     //TODO: change me
-    public static final int leftMotorId = 15;
-    public static final int rightMotorId = 16;
+    public static final int leftKickerMotorId = 15;
+    public static final int rightKickerMotorId = 16;
+    public static final int leftFeederMotorID = 17;
+    public static final int rightFeederMotorId = 18;
+
     public static final PIDConstants leftPID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants rightPID = new PIDConstants(0.2, 0, 0);
 
