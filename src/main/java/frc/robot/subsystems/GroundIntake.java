@@ -22,7 +22,6 @@ public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  private SparkPIDController intakeController;
   private SparkPIDController deployController;
 
   private RelativeEncoder deployEncoder;
@@ -32,12 +31,10 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
     
-    intakeController = intakeMotor.getPIDController();
     deployController = deployMotor.getPIDController();
-    Utilities.setPID(intakeController, Constants.IntakeConstants.intakePID);
     Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
-    SmartDashboard.putData("Intake/intakePID", new SparkPIDSendable(intakeController));
-    SmartDashboard.putData("Intake/deployPID", new SparkPIDSendable(deployController));
+    // SmartDashboard.putData("Intake/intakePID", new SparkPIDSendable(intakeController));
+    // SmartDashboard.putData("Intake/deployPID", new SparkPIDSendable(deployController));
 
     
     
@@ -53,33 +50,36 @@ public class GroundIntake extends SubsystemBase {
 
 
   /* Intaking */
-  public void setIntakeSpeed(double speed) {
-    intakeController.setReference(speed, ControlType.kVelocity);
+  public void runIntake() {
+    intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
   public void stopIntake() {
-    setIntakeSpeed(0);
+        System.out.println("stopping");
+        intakeMotor.set(0);
+    ;
   }
   
 
   /* Deploying Intake */ 
   public void setDeploySpeed(double speed) {
-    deployController.setReference(speed, ControlType.kVelocity);
-
+    // deployController.setReference(speed, ControlType.kVelocity);
+    deployMotor.set(speed);
   }
   
   public void stopDeploy () {
+    System.out.println("stopping");
     setDeploySpeed(0);
   }
 
 
   /* Testing Commands */
   public Command intakeNoteCommand() {
-    return startEnd(()-> this.setIntakeSpeed(Constants.IntakeConstants.intakeSpeed), ()->this.stopIntake());
+    return startEnd(()-> this.runIntake(), ()->this.stopIntake());
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(()-> this.setDeploySpeed(-Constants.IntakeConstants.deploySpeed), ()-> this.stopDeploy());
+    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.retractSpeed), ()-> this.stopDeploy());
   }
 
   public Command deployIntakeCommand() {

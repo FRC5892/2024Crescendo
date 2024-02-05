@@ -60,9 +60,9 @@ public class RobotContainer {
                 private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
-                        XboxController.Button.kRightBumper.value);
+                        XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(codriver, 
-                        XboxController.Axis.kRightTrigger.value);
+                        XboxController.Button.kB.value);
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
                 
@@ -128,7 +128,7 @@ public class RobotContainer {
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
                 /* Note Manipulation  */
-                intakeNoteButton.onTrue(intakeNote);
+                intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
