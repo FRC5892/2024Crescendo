@@ -67,13 +67,6 @@ public class GroundIntake extends SubsystemBase {
     deployController.setReference(speed, ControlType.kVelocity);
 
   }
-  public void deployIntake () {
-    setDeploySpeed(Constants.IntakeConstants.deploySpeed);
-  }
-
-  public void retractIntake () {
-    setDeploySpeed(Constants.IntakeConstants.retractSpeed);
-  }
   
   public void stopDeploy () {
     setDeploySpeed(0);
@@ -86,10 +79,10 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(()-> this.retractIntake(), ()-> this.stopDeploy());
+    return startEnd(()-> this.setDeploySpeed(-Constants.IntakeConstants.deploySpeed), ()-> this.stopDeploy());
   }
 
   public Command deployIntakeCommand() {
-    return startEnd(()-> this.deployIntake(), ()-> this.stopDeploy());
+    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.deploySpeed), ()-> this.stopDeploy());
   }
 }
