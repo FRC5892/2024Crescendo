@@ -25,6 +25,7 @@ public class GroundIntake extends SubsystemBase {
   private SparkPIDController deployController;
 
   private RelativeEncoder deployEncoder;
+  private RelativeEncoder intakeEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
@@ -35,11 +36,10 @@ public class GroundIntake extends SubsystemBase {
     Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
     // SmartDashboard.putData("Intake/intakePID", new SparkPIDSendable(intakeController));
     // SmartDashboard.putData("Intake/deployPID", new SparkPIDSendable(deployController));
-
     
-    
-    //deploy
+    /* Encoders */
     deployEncoder = deployMotor.getEncoder();
+    intakeEncoder = intakeMotor.getEncoder();
   }
 
   @Override
@@ -54,6 +54,20 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
+  public void intakeNote() {
+    //TODO: add sensors
+    intakeEncoder.setPosition(0);
+    double encoderPosition = intakeEncoder.getPosition();
+    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (!noteIntaked){
+      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+    } else if (noteIntaked) {
+      stopDeploy();
+    }
+  }
+
   public void stopIntake() {
         System.out.println("stopping");
         intakeMotor.set(0);
@@ -66,10 +80,36 @@ public class GroundIntake extends SubsystemBase {
     // deployController.setReference(speed, ControlType.kVelocity);
     deployMotor.set(speed);
   }
-  
+
   public void stopDeploy () {
     System.out.println("stopping");
     setDeploySpeed(0);
+  }
+
+  public void deployIntake() {
+    deployEncoder.setPosition(0);
+    double encoderPosition = deployEncoder.getPosition();
+    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (!intakeDeployed){
+      deployMotor.set(Constants.IntakeConstants.deploySpeed);
+    } else if (intakeDeployed) {
+      stopDeploy();
+    }
+  }
+
+  public void retractIntake() {
+    double encoderPosition = deployEncoder.getPosition();
+    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
+
+    //if intake is deployed run motor 5 motor rotations backwards
+    if (intakeDeployed) {
+      deployMotor.set(Constants.IntakeConstants.retractSpeed);
+    } else if (intakeRetracted) {
+      stopDeploy();
+    }
   }
 
 

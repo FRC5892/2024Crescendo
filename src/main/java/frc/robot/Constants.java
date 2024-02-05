@@ -21,7 +21,12 @@ public final class Constants {
     public static double intakeSpeed = -0.2;
     public static double deploySpeed = -0.2;
     public static double retractSpeed = 0.2;
+    public static double intakeRotations;
     public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
+
+    //TODO: get the right rotations for deploy intake/intake note commands
+    public static final double deployRotations = -5;
+    public static final double retractRotations = 5;
   }
   
   public static final class ShooterConstants {
