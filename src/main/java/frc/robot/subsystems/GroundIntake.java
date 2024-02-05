@@ -56,6 +56,7 @@ public class GroundIntake extends SubsystemBase {
 
   public void intakeNote() {
     //TODO: add sensors
+
     intakeEncoder.setPosition(0);
     double encoderPosition = intakeEncoder.getPosition();
     boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
@@ -66,6 +67,7 @@ public class GroundIntake extends SubsystemBase {
     } else if (noteIntaked) {
       stopDeploy();
     }
+    
   }
 
   public void stopIntake() {
@@ -87,12 +89,15 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public void deployIntake() {
+    //retracted position is now 0
     deployEncoder.setPosition(0);
     double encoderPosition = deployEncoder.getPosition();
     boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
     
     //if intake is not deployed run motor until 5 motor rotations
-    if (!intakeDeployed){
+    if (intakeRetracted){
+      //TODO: switch with PID
       deployMotor.set(Constants.IntakeConstants.deploySpeed);
     } else if (intakeDeployed) {
       stopDeploy();
@@ -106,6 +111,7 @@ public class GroundIntake extends SubsystemBase {
 
     //if intake is deployed run motor 5 motor rotations backwards
     if (intakeDeployed) {
+      //TODO: switch with PID
       deployMotor.set(Constants.IntakeConstants.retractSpeed);
     } else if (intakeRetracted) {
       stopDeploy();
@@ -115,14 +121,14 @@ public class GroundIntake extends SubsystemBase {
 
   /* Testing Commands */
   public Command intakeNoteCommand() {
-    return startEnd(()-> this.runIntake(), ()->this.stopIntake());
+    return startEnd(()-> this.intakeNote(), ()->this.stopIntake());
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.retractSpeed), ()-> this.stopDeploy());
+    return startEnd(()-> this.retractIntake(), ()-> this.stopDeploy());
   }
 
   public Command deployIntakeCommand() {
-    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.deploySpeed), ()-> this.stopDeploy());
+    return startEnd(()-> this.deployIntake(), ()-> this.stopDeploy());
   }
 }

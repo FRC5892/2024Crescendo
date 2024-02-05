@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.GroundIntake;
 
 public class IntakeNote extends Command {
@@ -28,8 +29,11 @@ public class IntakeNote extends Command {
   @Override
   public void execute() {
     //TODO: get the right rotations for deploy intake/intake note commands
+    //TODO: make sure it sequences and finishes one task before next
     groundIntake.deployIntake();
+
     groundIntake.intakeNote();
+
     groundIntake.retractIntake();
 
     finish = true;

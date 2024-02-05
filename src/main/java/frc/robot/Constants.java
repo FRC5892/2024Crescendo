@@ -25,8 +25,8 @@ public final class Constants {
     public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
 
     //TODO: get the right rotations for deploy intake/intake note commands
-    public static final double deployRotations = -5;
-    public static final double retractRotations = 5;
+    public static final double deployRotations = -10;
+    public static final double retractRotations = 10;
   }
   
   public static final class ShooterConstants {
