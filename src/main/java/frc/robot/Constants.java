@@ -34,7 +34,7 @@ public final class Constants {
     public static final PIDConstants leftPID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants rightPID = new PIDConstants(0.2, 0, 0);
 
-    public static final Measure<Distance> wheelDiameter = Units.Inches.of(10);
+    public static final Measure<Distance> wheelRadius = Units.Inches.of(10/2);
   }
 
   public static final class Swerve {

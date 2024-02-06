@@ -50,20 +50,20 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void setLeftKickerMotorSpeed(Measure<Velocity<Distance>> velocity) {
-    setMotorSpeedFromLinearVelocity(rightController, velocity);
+  public void setLeftKickerMotorSpeed(Measure<Velocity<Angle>> velocity) {
+    leftController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
   }
 
-  public void setRightKickerMotorSpeed(Measure<Velocity<Distance>> velocity) {
-    setMotorSpeedFromLinearVelocity(leftController, velocity);
+  public void setRightKickerMotorSpeed(Measure<Velocity<Angle>> velocity) {
+  rightController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
   }
 
   public void stopRightKickerMotor() {
-    setRightKickerMotorSpeed(Units.MetersPerSecond.of(0));
+    setRightKickerMotorSpeed(Units.RPM.of(0));
   }
 
   public void stopLeftKickerMotor() {
-    setLeftKickerMotorSpeed(Units.MetersPerSecond.of(0));
+    setLeftKickerMotorSpeed(Units.RPM.of(0));
   }
 
   public void stopKickerMotors() {
@@ -71,20 +71,12 @@ public class Shooter extends SubsystemBase {
     stopRightKickerMotor();
   }
 
-  public void setMotorSpeedFromLinearVelocity(SparkPIDController controller,
-      Measure<Velocity<Distance>> linearVelocity) {
-    // Linear Velocity to RPM
-    Measure<Velocity<Angle>> angularVelocity = Units.RadiansPerSecond
-        .of(linearVelocity.in(Units.MetersPerSecond) / ShooterConstants.wheelDiameter.in(Units.Meters));
-    controller.setReference(angularVelocity.in(Units.RPM), ControlType.kVelocity);
-  }
   private void setKickerSpeedsFromSmartDashboard() {
-    setLeftKickerMotorSpeed(Units.MetersPerSecond.of(SmartDashboard.getNumber("Shooter/leftSpeed", 0)));
-    setRightKickerMotorSpeed(Units.MetersPerSecond.of(SmartDashboard.getNumber("Shooter/rightSpeed", 0)));
+    setLeftKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/leftSpeed", 0)));
+    setRightKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/rightSpeed", 0)));
   }
 
   public Command shootCommand() {
-    // return new SequentialCommandGroup(defer(null));
     return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopLeftKickerMotor);
   }
   /*
