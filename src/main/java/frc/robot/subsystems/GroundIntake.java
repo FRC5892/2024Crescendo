@@ -24,6 +24,7 @@ public class GroundIntake extends SubsystemBase {
   private SparkPIDController deployController;
 
   private RelativeEncoder deployEncoder;
+  private RelativeEncoder intakeEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
@@ -37,6 +38,7 @@ public class GroundIntake extends SubsystemBase {
     
     //deploy
     deployEncoder = deployMotor.getEncoder();
+    intakeEncoder = intakeMotor.getEncoder();
   }
 
   @Override
@@ -51,6 +53,22 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
+  public void intakeNote() {
+    //TODO: add sensors
+
+    intakeEncoder.setPosition(0);
+    double encoderPosition = intakeEncoder.getPosition();
+    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (!noteIntaked){
+      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+    } else if (noteIntaked) {
+      stopDeploy();
+    }
+    
+  }
+
   public void stopIntake() {
         System.out.println("stopping");
         intakeMotor.set(0);
@@ -63,23 +81,53 @@ public class GroundIntake extends SubsystemBase {
     // deployController.setReference(speed, ControlType.kVelocity);
     deployMotor.set(speed);
   }
-  
+
   public void stopDeploy () {
     System.out.println("stopping");
     setDeploySpeed(0);
   }
 
+  public void deployIntake() {
+    //retracted position is now 0
+    deployEncoder.setPosition(0);
+    double encoderPosition = deployEncoder.getPosition();
+    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (intakeRetracted){
+      //TODO: switch with PID
+      deployMotor.set(Constants.IntakeConstants.deploySpeed);
+    } else if (intakeDeployed) {
+      stopDeploy();
+    }
+  }
+
+  public void retractIntake() {
+    double encoderPosition = deployEncoder.getPosition();
+    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
+
+    //if intake is deployed run motor 5 motor rotations backwards
+    if (intakeDeployed) {
+      //TODO: switch with PID
+      deployMotor.set(Constants.IntakeConstants.retractSpeed);
+    } else if (intakeRetracted) {
+      stopDeploy();
+    }
+  }
+
 
   /* Testing Commands */
   public Command intakeNoteCommand() {
-    return startEnd(()-> this.runIntake(), ()->this.stopIntake());
+    return startEnd(()-> this.intakeNote(), ()->this.stopIntake());
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.retractSpeed), ()-> this.stopDeploy());
+    return startEnd(()-> this.retractIntake(), ()-> this.stopDeploy());
   }
 
   public Command deployIntakeCommand() {
-    return startEnd(()-> this.setDeploySpeed(Constants.IntakeConstants.deploySpeed), ()-> this.stopDeploy());
+    return startEnd(()-> this.deployIntake(), ()-> this.stopDeploy());
   }
 }
