@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.SparkPIDSendable;
 import frc.lib.Utilities;
 import frc.robot.Constants.ShooterConstants;
 
@@ -46,9 +45,6 @@ public class Shooter extends SubsystemBase {
     rightController = rightKicker.getPIDController();
     Utilities.setPID(leftController, ShooterConstants.leftPID);
     Utilities.setPID(rightController, ShooterConstants.rightPID);
-    SmartDashboard.putData("Shooter/leftPID", new SparkPIDSendable(leftController));
-    SmartDashboard.putData("Shooter/rightPID", new SparkPIDSendable(rightController));
-
 
     SmartDashboard.putData("Shooter/subsystem",this);
 
