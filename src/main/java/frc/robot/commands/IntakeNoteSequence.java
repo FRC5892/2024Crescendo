@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.GroundIntake;
 
@@ -13,12 +14,22 @@ import frc.robot.subsystems.GroundIntake;
 public class IntakeNoteSequence extends SequentialCommandGroup {
   GroundIntake groundIntake;
 
+  /* when i add a lot */
+  // IntakeNote intakeNote;
+  // DeployIntake deployIntake;
+  // RetractIntake retractIntake;
+
+  /* when i don't */
+  private final Command intakeNote = groundIntake.intakeNoteCommand();
+  private final Command deployIntake = groundIntake.deployIntakeCommand();
+  private final Command retractIntake = groundIntake.retractIntakeCommand();
+
+   
   /** Creates a new IntakeNote2. */
   public IntakeNoteSequence() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    //TODO: Figure out how to do
-    // addCommands(groundIntake.deployIntakeCommand(), groundIntake.intakeNoteCommand(), groundIntake.retractIntake());
+    addCommands(intakeNote, deployIntake, retractIntake);
   }
 }
