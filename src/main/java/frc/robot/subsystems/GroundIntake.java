@@ -13,7 +13,9 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.SparkPIDSendable;
 import frc.lib.Utilities;
 import frc.robot.Constants;
 
@@ -30,15 +32,16 @@ public class GroundIntake extends SubsystemBase {
   public GroundIntake() {
     intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
+    intakeEncoder = intakeMotor.getEncoder();
+    deployEncoder = deployMotor.getEncoder();
     
     deployController = deployMotor.getPIDController();
     Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
+    SmartDashboard.putData("Intake/deployPID", new SparkPIDSendable(deployController));
 
     
     
     //deploy
-    deployEncoder = deployMotor.getEncoder();
-    intakeEncoder = intakeMotor.getEncoder();
   }
 
   @Override
