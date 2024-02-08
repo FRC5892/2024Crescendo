@@ -76,8 +76,10 @@ public class RobotContainer {
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
                 //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
-                private final IntakeNote intakeNoteSequence = new IntakeNote(s_GroundIntake);
-        
+                private final Comamnd intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
+                
+                
+                
         /* Other */
                 /* SendableChooser */
                 public final SendableChooser<Command> autoChooser;

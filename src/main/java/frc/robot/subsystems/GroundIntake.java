@@ -5,19 +5,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.HeroSparkPID;
-import frc.lib.Utilities;
 import frc.robot.Constants;
 
 public class GroundIntake extends SubsystemBase {
@@ -74,9 +68,8 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public void stopIntake() {
-        System.out.println("stopping");
         intakeMotor.set(0);
-    ;
+
   }
   
 
@@ -124,7 +117,12 @@ public class GroundIntake extends SubsystemBase {
 
   /* Testing Commands */
   public Command intakeNoteCommand() {
-    return startEnd(()-> this.intakeNote(), ()->this.stopIntake());
+    return run(this::deployIntake)
+          .alongWith(new WaitCommand(1))
+          .andThen(run(this::intakeNote)
+                  .alongWith(new WaitCommand(1)))
+          .andThen(run(this::retractIntake))
+          .alongWith(new WaitCommand(1));
   }
 
   public Command retractIntakeCommand() {
