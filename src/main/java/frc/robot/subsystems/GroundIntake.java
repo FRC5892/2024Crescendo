@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,7 +24,7 @@ public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  private SparkPIDController deployController;
+  private HeroSparkPID deployController;
 
   private RelativeEncoder deployEncoder;
   private RelativeEncoder intakeEncoder;
@@ -35,9 +36,9 @@ public class GroundIntake extends SubsystemBase {
     intakeEncoder = intakeMotor.getEncoder();
     deployEncoder = deployMotor.getEncoder();
     
-    deployController = deployMotor.getPIDController();
-    Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
-    SmartDashboard.putData("Intake/deployPID", new HeroSparkPID(deployController));
+    deployController = new HeroSparkPID(deployMotor);
+    deployController.setPID(Constants.IntakeConstants.deployPID);
+    SmartDashboard.putData("Intake/deployPID", deployController);
 
     
     

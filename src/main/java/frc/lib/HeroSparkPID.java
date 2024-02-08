@@ -102,15 +102,19 @@ public class HeroSparkPID implements Sendable {
     }
 
     public boolean atSetpoint() {
+        //TODO: this might work?
+        double velocity;
         if (controlType.equals(CANSparkBase.ControlType.kVelocity)) {
-            double velocity = Math.abs(spark.getEncoder().getVelocity());
-            double precision = reference * 0.05;
-            return velocity+precision>=reference;
+            velocity = Math.abs(spark.getEncoder().getVelocity());
+        } else if (controlType.equals(CANSparkBase.ControlType.kPosition)) {
+            velocity = Math.abs(spark.getEncoder().getPosition());
+        } else {
+            throw new RuntimeException("unimplemented");
         }
-
-
-        return false;
+        double precision = reference * 0.05;
+        return velocity+precision>=reference && velocity-precision<=reference;
     }
+
 
     public REVLibError setReference(double value, CANSparkBase.ControlType ctrl) {
         this.reference = value;
