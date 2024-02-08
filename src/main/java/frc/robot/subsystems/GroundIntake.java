@@ -17,6 +17,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,8 +32,8 @@ public class GroundIntake extends SubsystemBase {
   private SparkPIDController deployController;
   private double setPoint;
 
-  //TODO: do we even have a quadrature or hall sensor encoder on the shaft???
-  public AbsoluteEncoder deployEncoder;
+  //Through Bore encoder btw
+  public DutyCycleEncoder deployEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
@@ -41,8 +42,9 @@ public class GroundIntake extends SubsystemBase {
     
     
     //deploy
-    //deployEncoder = new AbsoluteEncoder()
-    //deployEncoder.setPosition(0);
+    deployEncoder = new DutyCycleEncoder(IntakeConstants.boreEncoderPort);
+    deployEncoder.reset();
+    //deployEncoder.setDistancePerRotation(1);
 
     deployController = deployMotor.getPIDController();
     deployController.setP(IntakeConstants.deployPIDF[0]);
@@ -87,13 +89,13 @@ public class GroundIntake extends SubsystemBase {
     System.out.println(setpoint);
   }
 
-  public double getDeployVelocity() {
-    return deployEncoder.getVelocity();
-  }
+  // public double getDeployVelocity() {
+  //   return deployEncoder.getVelocity();
+  // }
 
-  public boolean deployAtSetpoint() {
-    return (Math.abs(setPoint - deployEncoder.getVelocity()) < IntakeConstants.deployRotations);
-  }
+  // public boolean deployAtSetpoint() {
+  //   return (Math.abs(setPoint - deployEncoder.getVelocity()) < IntakeConstants.deployRotations);
+  // }
 
   public void stopDeploy () {
     System.out.println("stopping");
@@ -101,22 +103,22 @@ public class GroundIntake extends SubsystemBase {
   }
 
   //TODO: this doesn't work no matter how much I want it to so lets fix that tmr
-  public void deployIntake() {
-    double encoderPosition = deployEncoder.getPosition();
-    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= 0;
+  // public void deployIntake() {
+  //   double encoderPosition = deployEncoder.getPosition();
+  //   boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+  //   boolean intakeRetracted = encoderPosition <= 0;
     
 
-    //if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted){
-      //TODO: switch with PID
-      deployMotor.set(Constants.IntakeConstants.deploySpeed);
-    } 
+  //   //if intake is not deployed run motor until 5 motor rotations
+  //   if (intakeRetracted){
+  //     //TODO: switch with PID
+  //     deployMotor.set(Constants.IntakeConstants.deploySpeed);
+  //   } 
 
-    if (intakeDeployed) {
-      stopDeploy();
-    }
-  }
+  //   if (intakeDeployed) {
+  //     stopDeploy();
+  //   }
+  // }
 
   public void retractIntake() {
     deployMotor.set(Constants.IntakeConstants.retractSpeed);

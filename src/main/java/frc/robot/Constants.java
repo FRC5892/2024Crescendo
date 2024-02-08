@@ -27,8 +27,9 @@ public final class Constants {
     public static final double deployRotations = -10;
     public static final double retractRotations = 10;
     public static final int beamBreakPort = 0;
-    public static final int retractLimitSwitchPort = 1;
-    public static final int deployLimitSwitchPort = 2;
+    public static final int boreEncoderPort = 2;
+    public static final int retractLimitSwitchPort = 3;
+    public static final int deployLimitSwitchPort = 4;
   }
   
   public static final class ShooterConstants {
