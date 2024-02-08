@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.pathplanner.lib.util.PIDConstants;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -31,7 +32,7 @@ public class GroundIntake extends SubsystemBase {
   private double setPoint;
 
   //TODO: do we even have a quadrature or hall sensor encoder on the shaft???
-  public RelativeEncoder deployEncoder;
+  public AbsoluteEncoder deployEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
@@ -40,8 +41,8 @@ public class GroundIntake extends SubsystemBase {
     
     
     //deploy
-    deployEncoder = deployMotor.getEncoder();
-    deployEncoder.setPosition(0);
+    //deployEncoder = new AbsoluteEncoder()
+    //deployEncoder.setPosition(0);
 
     deployController = deployMotor.getPIDController();
     deployController.setP(IntakeConstants.deployPIDF[0]);

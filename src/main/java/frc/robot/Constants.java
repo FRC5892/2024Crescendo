@@ -53,8 +53,8 @@ public final class Constants {
     
     /* Drivetrain Constants */
     //TODO: verify this is correct
-    public static final double trackWidth = Units.Inches.of(20.5).in(Units.Meters);
-    public static final double wheelBase = Units.Inches.of(20.5).in(Units.Meters);
+    public static final double trackWidth = Units.Inches.of(29).in(Units.Meters);
+    public static final double wheelBase = Units.Inches.of(29).in(Units.Meters);
     public static final double wheelDiameter = Units.Inches.of(4.0).in(Units.Meters);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -135,6 +135,7 @@ public final class Constants {
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 10;
+
       public static final double offsetDegree = -103.5;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);
@@ -151,6 +152,7 @@ public final class Constants {
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
+
       public static final double offsetDegree = -161.89;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree + 45);
@@ -167,8 +169,8 @@ public final class Constants {
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 11;
-      public static final double offsetDegree = 58.26;
 
+      public static final double offsetDegree = 58.26;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(offsetDegree);
       public static final Rotation2d balanceOffset = Rotation2d.fromDegrees(offsetDegree - 45);
       public static final double conversionFactor = 0.060509807;
@@ -196,7 +198,4 @@ public final class Constants {
     public static final int LED_PORT = 0;
     public static final int LED_LENGTH = 105;
   }
-
-  
-
 }
