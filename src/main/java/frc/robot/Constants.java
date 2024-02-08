@@ -21,15 +21,14 @@ public final class Constants {
     public static double intakeSpeed = -0.2;
     public static double deploySpeed = -0.2;
     public static double retractSpeed = 0.2;
-    public static double intakeRotations;
     public static final double[] deployPIDF = {0.0, 0.0, 0.0, 0.0};
-    // public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
 
     //TODO: get the right rotations for deploy intake/intake note commands
     public static final double deployRotations = -10;
     public static final double retractRotations = 10;
     public static final int beamBreakPort = 0;
-    public static final int limitSwitchPort = 0;
+    public static final int retractLimitSwitchPort = 1;
+    public static final int deployLimitSwitchPort = 2;
   }
   
   public static final class ShooterConstants {

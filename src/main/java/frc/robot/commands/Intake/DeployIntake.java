@@ -4,19 +4,23 @@
 
 package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.GroundIntake;
 
 public class DeployIntake extends Command {
   private GroundIntake groundIntake;
   private boolean finish;
+  private DigitalInput limitSwitch;
   private Timer timer;
 
   /** Creates a new DeployIntake. */
   public DeployIntake(GroundIntake groundIntake) {
     this.groundIntake = groundIntake;
+    limitSwitch = new DigitalInput(Constants.IntakeConstants.deployLimitSwitchPort);
     finish = false;
     timer = new Timer();
 
@@ -36,12 +40,22 @@ public class DeployIntake extends Command {
   @Override
   public void execute() {
     //TODO: fix timer
-    groundIntake.setDeploySetPoint(IntakeConstants.deploySpeed);
+    // groundIntake.setDeploySetPoint(IntakeConstants.deploySpeed);
 
-    if (timer.get() > 1) {
+    // if (timer.get() > 1) {
+    //   groundIntake.stopDeploy();
+    //   finish = true;
+    // }
+
+    //if the beam break is tripped, stop retract
+    if (limitSwitch.get()) {
       groundIntake.stopDeploy();
       finish = true;
+      timer.stop();
+    } else {
+      groundIntake.setDeploySetPoint(IntakeConstants.deploySpeed);
     }
+
   }
 
   // Called once the command ends or is interrupted.
