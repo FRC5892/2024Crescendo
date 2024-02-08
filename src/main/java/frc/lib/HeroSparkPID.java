@@ -4,24 +4,29 @@
 
 package frc.lib;
 
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.REVLibError;
 
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 /** Add your docs here. */
-public class SparkPIDSendable implements Sendable {
+public class HeroSparkPID implements Sendable {
     SparkPIDController controller;
+    CANSparkBase spark;
     double p;
     double i;
     double d;
     double iZone;
+    double reference;
+    CANSparkBase.ControlType controlType;
+    public HeroSparkPID(CANSparkBase spark) {
 
-    public SparkPIDSendable(SparkPIDController controller) {
-        this.controller = controller;
+        this.spark = spark;
+        this.controller = spark.getPIDController();
         p = controller.getP();
         i = controller.getI();
         d = controller.getD();
@@ -40,6 +45,7 @@ public class SparkPIDSendable implements Sendable {
     private double getD() {
         return d;
     }
+
     private double getIZone() {
         return iZone;
     }
@@ -48,26 +54,28 @@ public class SparkPIDSendable implements Sendable {
         if (newP != p) {
             controller.setP(newP);
             p = newP;
-        }   
+        }
     }
+
     private void setI(double newI) {
         if (newI != i) {
             controller.setI(newI);
             i = newI;
-        }   
+        }
     }
+
     private void setD(double newD) {
         if (newD != d) {
             controller.setD(newD);
             d = newD;
-        }   
+        }
     }
 
     private void setIZone(double newIZone) {
         if (newIZone != iZone) {
             controller.setIZone(newIZone);
             iZone = newIZone;
-        }   
+        }
     }
 
     @Override
@@ -91,6 +99,30 @@ public class SparkPIDSendable implements Sendable {
         });
         // pid setter
         // (double s)-> controller.setReference(s, CANSparkBase.ControlType.kVelocity)
+    }
+
+    public boolean atSetpoint() {
+        if (controlType.equals(CANSparkBase.ControlType.kVelocity)) {
+            double velocity = Math.abs(spark.getEncoder().getVelocity());
+            double precision = reference * 0.05;
+            return velocity+precision>=reference;
+        }
+
+
+        return false;
+    }
+
+    public REVLibError setReference(double value, CANSparkBase.ControlType ctrl) {
+        this.reference = value;
+        this.controlType = ctrl;
+
+        return controller.setReference(value, ctrl, 0, 0);
+    }
+
+    public final void setPID(PIDConstants pidConstants) {
+        setP(pidConstants.kP);
+        setI(pidConstants.kI);
+        setD(pidConstants.kD);
     }
 
 }

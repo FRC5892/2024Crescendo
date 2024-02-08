@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.SparkPIDSendable;
+import frc.lib.HeroSparkPID;
 import frc.lib.Utilities;
 import frc.robot.Constants;
 
@@ -37,7 +37,7 @@ public class GroundIntake extends SubsystemBase {
     
     deployController = deployMotor.getPIDController();
     Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
-    SmartDashboard.putData("Intake/deployPID", new SparkPIDSendable(deployController));
+    SmartDashboard.putData("Intake/deployPID", new HeroSparkPID(deployController));
 
     
     
