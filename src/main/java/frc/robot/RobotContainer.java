@@ -19,6 +19,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.autos.*;
 import frc.robot.commands.*;
+import frc.robot.commands.Intake.DeployIntake;
+import frc.robot.commands.Intake.IntakeNote;
+import frc.robot.commands.Intake.IntakeNoteSequence;
+import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.subsystems.*;
 
 /* 
@@ -35,13 +39,13 @@ public class RobotContainer {
                 //TODO: add compressor when we have a compressor 
                 /* Compressor */
                 // private Compressor compressor;
+                
                 /* Gyro Sensor */
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
                 private final GroundIntake s_GroundIntake = new GroundIntake();
                 private final Shooter s_Shooter = new Shooter();
-                // private final LedSub ledSub = new LedSub();
 
         /* Controls and buttons */
                 /* Drive Controls */
@@ -69,14 +73,13 @@ public class RobotContainer {
                         XboxController.Button.kX.value);
                 
         /*Commands */
-                private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
-                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
-                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
 
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
-                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
-                private final IntakeNote intakeNoteSequence = new IntakeNote(s_GroundIntake);
+                private final DeployIntake deployIntake = new DeployIntake(s_GroundIntake);
+                private final IntakeNote intakeNote = new IntakeNote(s_GroundIntake);
+                private final RetractIntake retractIntake = new RetractIntake(s_GroundIntake);
+                private final IntakeNoteSequence intakeNoteSequence = new IntakeNoteSequence();
         
         /* Other */
                 /* SendableChooser */

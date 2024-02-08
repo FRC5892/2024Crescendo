@@ -11,34 +11,48 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Utilities;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 
 public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private SparkPIDController deployController;
+  private double setPoint;
 
-  private RelativeEncoder deployEncoder;
-  private RelativeEncoder intakeEncoder;
+  //TODO: do we even have a quadrature or hall sensor encoder on the shaft???
+  public RelativeEncoder deployEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
-    intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
-    deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
-    
-    deployController = deployMotor.getPIDController();
-    Utilities.setPID(deployController, Constants.IntakeConstants.deployPID);
-
+    intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
+    deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     
     
     //deploy
     deployEncoder = deployMotor.getEncoder();
-    intakeEncoder = intakeMotor.getEncoder();
+    deployEncoder.setPosition(0);
+
+    deployController = deployMotor.getPIDController();
+    deployController.setP(IntakeConstants.deployPIDF[0]);
+    deployController.setI(IntakeConstants.deployPIDF[1]);
+    deployController.setD(IntakeConstants.deployPIDF[2]);
+    deployController.setFF(IntakeConstants.deployPIDF[3]);
+    deployMotor.burnFlash();
+
+    SmartDashboard.putNumber("Deploy P", IntakeConstants.deployPIDF[0]);
+    SmartDashboard.putNumber("Deploy I", IntakeConstants.deployPIDF[1]);
+    SmartDashboard.putNumber("Deploy D", IntakeConstants.deployPIDF[2]);
   }
 
   @Override
@@ -53,22 +67,6 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
-  public void intakeNote() {
-    //TODO: add sensors
-
-    intakeEncoder.setPosition(0);
-    double encoderPosition = intakeEncoder.getPosition();
-    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
-    
-    //if intake is not deployed run motor until 5 motor rotations
-    if (!noteIntaked){
-      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
-    } else if (noteIntaked) {
-      stopDeploy();
-    }
-    
-  }
-
   public void stopIntake() {
         System.out.println("stopping");
         intakeMotor.set(0);
@@ -76,58 +74,51 @@ public class GroundIntake extends SubsystemBase {
   }
   
 
-  /* Deploying Intake */ 
-  public void setDeploySpeed(double speed) {
-    // deployController.setReference(speed, ControlType.kVelocity);
-    deployMotor.set(speed);
+  /* Deploying Intake via Michael*/ 
+  // public void setDeploySpeed(Measure<Velocity<Angle>> velocity) {
+  //   deployController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
+  // }
+
+  /* via Chloe */
+  public void setDeploySetPoint(double setpoint) {
+    setpoint = setpoint;
+    deployController.setReference(setpoint, ControlType.kVelocity);
+    System.out.println(setpoint);
+  }
+
+  public double getDeployVelocity() {
+    return deployEncoder.getVelocity();
+  }
+
+  public boolean deployAtSetpoint() {
+    return (Math.abs(setPoint - deployEncoder.getVelocity()) < IntakeConstants.deployRotations);
   }
 
   public void stopDeploy () {
     System.out.println("stopping");
-    setDeploySpeed(0);
+    setDeploySetPoint(0);
   }
 
+  //TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
-    //retracted position is now 0
-    deployEncoder.setPosition(0);
     double encoderPosition = deployEncoder.getPosition();
     boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
     boolean intakeRetracted = encoderPosition <= 0;
     
+
     //if intake is not deployed run motor until 5 motor rotations
     if (intakeRetracted){
       //TODO: switch with PID
       deployMotor.set(Constants.IntakeConstants.deploySpeed);
-    } else if (intakeDeployed) {
+    } 
+
+    if (intakeDeployed) {
       stopDeploy();
     }
   }
 
   public void retractIntake() {
-    double encoderPosition = deployEncoder.getPosition();
-    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= 0;
-
-    //if intake is deployed run motor 5 motor rotations backwards
-    if (intakeDeployed) {
-      //TODO: switch with PID
-      deployMotor.set(Constants.IntakeConstants.retractSpeed);
-    } else if (intakeRetracted) {
-      stopDeploy();
-    }
+    deployMotor.set(Constants.IntakeConstants.retractSpeed);
   }
 
-
-  /* Testing Commands */
-  public Command intakeNoteCommand() {
-    return startEnd(()-> this.intakeNote(), ()->this.stopIntake());
-  }
-
-  public Command retractIntakeCommand() {
-    return startEnd(()-> this.retractIntake(), ()-> this.stopDeploy());
-  }
-
-  public Command deployIntakeCommand() {
-    return startEnd(()-> this.deployIntake(), ()-> this.stopDeploy());
-  }
 }

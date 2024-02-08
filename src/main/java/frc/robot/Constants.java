@@ -22,11 +22,14 @@ public final class Constants {
     public static double deploySpeed = -0.2;
     public static double retractSpeed = 0.2;
     public static double intakeRotations;
-    public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
+    public static final double[] deployPIDF = {0.0, 0.0, 0.0, 0.0};
+    // public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
 
     //TODO: get the right rotations for deploy intake/intake note commands
     public static final double deployRotations = -10;
     public static final double retractRotations = 10;
+    public static final int beamBreakPort = 0;
+    public static final int limitSwitchPort = 0;
   }
   
   public static final class ShooterConstants {
@@ -50,6 +53,7 @@ public final class Constants {
     /* Autonomous Speeds */
     
     /* Drivetrain Constants */
+    //TODO: verify this is correct
     public static final double trackWidth = Units.Inches.of(20.5).in(Units.Meters);
     public static final double wheelBase = Units.Inches.of(20.5).in(Units.Meters);
     public static final double wheelDiameter = Units.Inches.of(4.0).in(Units.Meters);
@@ -58,7 +62,7 @@ public final class Constants {
     public static final double openLoopRamp = 2;
     public static final double closedLoopRamp = 0.0; // seem to be useless
 
-    public static final double driveGearRatio = (5.14 / 1.0); // 6.75:1 for L2
+    public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1 for L2
 
     public static final double angleGearRatio = (12.8 / 1.0); // 12.8:1 for all L's
 
@@ -76,19 +80,19 @@ public final class Constants {
     public static final int driveContinuousCurrentLimit = 50;
 
     /* TODO: test Angle Motor PID Values (these are default, may tune if needed) */
-    public static final double angleKP = 0.02;
+    public static final double angleKP = 0.01;
     public static final double angleKI = 0.0;
     public static final double angleKD = 0.0;
     public static final double angleKFF = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.02; // TODO: Tune after charactarization
+    public static final double driveKP = 0.0; // TODO: Tune after charactarization
     public static final double driveKI = 0.0; // leave
     public static final double driveKD = 0.0; // leave
     public static final double driveKFF = 0.0; // leave
 
     /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
-    public static final double driveKS = 0.02;
+    public static final double driveKS = 0.0;
     public static final double driveKV = 0.0;
     public static final double driveKA = 0.0;
 
