@@ -19,8 +19,8 @@ public class DeployIntake extends Command {
   /** Creates a new DeployIntake. */
   public DeployIntake(GroundIntake groundIntake) {
     this.groundIntake = groundIntake;
-    limitSwitch = new DigitalInput(Constants.IntakeConstants.deployLimitSwitchPort);
     finish = false;
+    limitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(groundIntake);
@@ -30,6 +30,7 @@ public class DeployIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    finish = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +38,14 @@ public class DeployIntake extends Command {
   public void execute() {
 
     groundIntake.deployIntake();
+
+    double encoderPosition = groundIntake.deployEncoder.getDistance();
+    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;    
+
+    if (intakeDeployed) {
+      groundIntake.stopDeploy();
+      finish = true;
+    }
 
     //if the beam break is tripped, stop retract
     if (limitSwitch.get()) {

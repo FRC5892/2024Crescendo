@@ -18,17 +18,17 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
-    public static double intakeSpeed = -0.2;
+    public static double intakeSpeed = -0.6;
     public static double deploySpeed = -0.2;
     public static double retractSpeed = 0.2;
     public static final double[] deployPIDF = {0.0, 0.0, 0.0, 0.0};
 
     //TODO: get the right rotations for deploy intake/intake note commands
-    public static final double deployRotations = -10;
+    public static final double deployRotations = 0.63;
+    public static final double retractRotations = -0.17;
     public static final int beamBreakPort = 0;
-    public static final int boreEncoderPort = 2;
-    public static final int retractLimitSwitchPort = 3;
-    public static final int deployLimitSwitchPort = 4;
+    //public static final int retractLimitSwitchPort = 3;
+    public static final int deployLimitSwitchPort = 1;
   }
   
   public static final class ShooterConstants {

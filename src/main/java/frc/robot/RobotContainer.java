@@ -45,7 +45,7 @@ public class RobotContainer {
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
                 private final GroundIntake s_GroundIntake = new GroundIntake();
-                private final Shooter s_Shooter = new Shooter();
+                // private final Shooter s_Shooter = new Shooter();
 
         /* Controls and buttons */
                 /* Drive Controls */
@@ -65,6 +65,8 @@ public class RobotContainer {
                         XboxController.Button.kRightBumper.value);
                 private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
                         XboxController.Button.kLeftBumper.value);
+                private final JoystickButton outtakeButton = new JoystickButton(codriver, 
+                XboxController.Button.kA.value);
                 private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
                         XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(codriver, 
@@ -74,12 +76,13 @@ public class RobotContainer {
                 
         /*Commands */
 
-                private final Command shootCommand = s_Shooter.shootCommand();
+                // private final Command shootCommand = s_Shooter.shootCommand();
                 
                 private final DeployIntake deployIntake = new DeployIntake(s_GroundIntake);
                 private final IntakeNote intakeNote = new IntakeNote(s_GroundIntake);
                 private final RetractIntake retractIntake = new RetractIntake(s_GroundIntake);
-                private final IntakeNoteSequence intakeNoteSequence = new IntakeNoteSequence();
+                private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
+                //private final IntakeNoteSequence intakeNoteSequence = new IntakeNoteSequence();
         
         /* Other */
                 /* SendableChooser */
@@ -136,11 +139,12 @@ public class RobotContainer {
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
                 /* Note Manipulation  */
-                intakeNoteSequenceButton.onTrue(intakeNoteSequence);
+                //intakeNoteSequenceButton.onTrue(intakeNoteSequence);
+                outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
-                shooterButton.whileTrue(shootCommand);
+                // shooterButton.whileTrue(shootCommand);
         }
 
         private void configureSmartDashboard() {

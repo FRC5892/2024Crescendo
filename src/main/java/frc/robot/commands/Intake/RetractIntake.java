@@ -15,13 +15,12 @@ import frc.robot.subsystems.GroundIntake;
 public class RetractIntake extends Command {
   private GroundIntake groundIntake;
   private boolean finish;
-  private DigitalInput limitSwitch;
 
   /** Creates a new DeployIntake. */
   public RetractIntake(GroundIntake groundIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.groundIntake = groundIntake;
-    limitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
+    //limitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
     addRequirements(groundIntake);
     finish = false;
   }
@@ -29,20 +28,29 @@ public class RetractIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    finish = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     
+    double encoderPosition = groundIntake.deployEncoder.getDistance();
+    boolean intakeRetracted = encoderPosition <= 0.2;
+
     groundIntake.retractIntake();
 
-    //if the beam break is tripped, stop retract
-    if (limitSwitch.get()) {
+    if (intakeRetracted){
+      //TODO: switch with PID
       groundIntake.stopDeploy();
       finish = true;
     } 
+
+    //if the beam break is tripped, stop retract
+    // if (limitSwitch.get()) {
+    //   groundIntake.stopDeploy();
+    //   finish = true;
+    // } 
 
   }
 

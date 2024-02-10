@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkMaxAlternateEncoder.Type;
 import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
@@ -31,20 +32,18 @@ public class GroundIntake extends SubsystemBase {
   private CANSparkMax deployMotor;
   private SparkPIDController deployController;
   private double setPoint;
+  // private RelativeEncoder deployEncoder;
+  public DutyCycleEncoder deployEncoder;
 
   //Through Bore encoder btw
-  public DutyCycleEncoder deployEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
-    
-    
-    //deploy
-    deployEncoder = new DutyCycleEncoder(IntakeConstants.boreEncoderPort);
+    deployEncoder = new DutyCycleEncoder(2);
     deployEncoder.reset();
-    //deployEncoder.setDistancePerRotation(1);
+    // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192); 
 
     deployController = deployMotor.getPIDController();
     deployController.setP(IntakeConstants.deployPIDF[0]);
@@ -60,6 +59,8 @@ public class GroundIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("DeployRotations", deployEncoder.getDistance());
+
     // This method will be called once per scheduler run
   }
 
@@ -70,17 +71,15 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
+  public void outtakeNote() {
+    intakeMotor.set(-IntakeConstants.intakeSpeed);
+  }
+
   public void stopIntake() {
         System.out.println("stopping");
         intakeMotor.set(0);
     ;
   }
-  
-
-  /* Deploying Intake via Michael*/ 
-  // public void setDeploySpeed(Measure<Velocity<Angle>> velocity) {
-  //   deployController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
-  // }
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
@@ -91,14 +90,14 @@ public class GroundIntake extends SubsystemBase {
 
   public void stopDeploy () {
     System.out.println("stopping");
-    setDeploySetPoint(0);
+    deployMotor.set(0);
   }
 
   //TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
-    double encoderPosition = deployEncoder.get();
-    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= 0;
+    double encoderPosition = deployEncoder.getDistance();
+    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= IntakeConstants.retractRotations;
     
 
     //if intake is not deployed run motor until 5 motor rotations
@@ -113,24 +112,25 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public void retractIntake() {
-    double encoderPosition = deployEncoder.get();
-    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= 0;
+    
+    deployMotor.set(IntakeConstants.retractSpeed);
+
+    // double encoderPosition = deployEncoder.getDistance();
+    // boolean intakeDeployed = encoderPosition >= 0.6;
+    // boolean intakeRetracted = encoderPosition <= 0.2;
+
+    // if (intakeDeployed) {
+    //   deployMotor.set(IntakeConstants.retractSpeed);
+    // } else if (intakeRetracted){
+    //   //TODO: switch with PID
+    //   stopDeploy();
+    // } 
     
 
-    //if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted){
-      //TODO: switch with PID
-      stopDeploy();
-    } 
-
-    if (intakeDeployed) {
-      deployMotor.set(IntakeConstants.retractSpeed);
-    }
   }
 
-  // public void retractIntake() {
-  //   deployMotor.set(Constants.IntakeConstants.retractSpeed);
-  // }
+  public Command outtakeNoteCommand () {
+    return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+  }
 
 }
