@@ -14,13 +14,18 @@ import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
 
+  public static final class ClimbConstants {
+    public static final int leftClimbMotorID = 19;
+    public static final int rightClimbMotorID = 20;
+    public static final double climbSpeed = 1;
+  }
 
   public static final class IntakeConstants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
-    public static double intakeSpeed = -0.2;
-    public static double deploySpeed = -0.2;
-    public static double retractSpeed = 0.2;
+    public static final double intakeSpeed = -0.2;
+    public static final double deploySpeed = -0.2;
+    public static final double retractSpeed = 0.2;
     public static double intakeRotations;
     public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
 
@@ -191,8 +196,7 @@ public final class Constants {
   /* LED Ports */
   public static final class LEDConstants {
     public static final int LED_PORT = 0;
-    public static final int LED_LENGTH = 105;
-  }
+   }
 
   
 

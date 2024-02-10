@@ -40,7 +40,10 @@ public class RobotContainer {
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
                 private final GroundIntake s_GroundIntake = new GroundIntake();
-                private final Shooter s_Shooter = new Shooter();
+                private final Shooter s_Shooter = new Shooter(); 
+                private final Climb s_Climb = new Climb();
+                
+                
                 // private final LedSub ledSub = new LedSub();
 
         /* Controls and buttons */
@@ -49,7 +52,7 @@ public class RobotContainer {
                 private static final int strafeAxis = XboxController.Axis.kLeftX.value;
                 private static final int rotationAxis = XboxController.Axis.kRightX.value;
                 private double SPEED_MULTIPLIER = 1.0;
-
+                
                 
                 /* Driver Buttons */
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -76,7 +79,7 @@ public class RobotContainer {
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
                 //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
-                private final Comamnd intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
+                private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 
                 
                 
