@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
@@ -123,6 +124,9 @@ public class GroundIntake extends SubsystemBase {
     if (intakeDeployed) {
       deployMotor.set(IntakeConstants.retractSpeed);
     }
+  }
+    public Command outtakeNoteCommand () {
+    return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
   }
 
   // public void retractIntake() {
