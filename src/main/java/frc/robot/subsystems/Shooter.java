@@ -7,18 +7,15 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.Utilities;
+import frc.lib.HeroSparkPID;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
@@ -28,8 +25,8 @@ public class Shooter extends SubsystemBase {
   CANSparkMax leftFeederMotor;
   CANSparkMax rightFeederMotor;
 
-  SparkPIDController leftController;
-  SparkPIDController rightController;
+  HeroSparkPID leftController;
+  HeroSparkPID rightController;
 
   public Shooter() {
     leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
@@ -41,12 +38,15 @@ public class Shooter extends SubsystemBase {
 
 
     // setup Pid
-    leftController = leftKicker.getPIDController();
-    rightController = rightKicker.getPIDController();
-    Utilities.setPID(leftController, ShooterConstants.leftPID);
-    Utilities.setPID(rightController, ShooterConstants.rightPID);
+    leftController = new HeroSparkPID(leftKicker);
+    rightController = new HeroSparkPID(rightKicker);
+    leftController.setPID(ShooterConstants.leftPID);
+    rightController.setPID(ShooterConstants.rightPID);
 
     SmartDashboard.putData("Shooter/subsystem",this);
+    SmartDashboard.putData("Shooter/leftPID",leftController);
+    SmartDashboard.putData("Shooter/rightPID",rightController);
+
 
   }
 

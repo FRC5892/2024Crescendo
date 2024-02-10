@@ -5,11 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -21,7 +19,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.Utilities;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -29,33 +28,26 @@ public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  private SparkPIDController deployController;
-  private double setPoint;
+  RelativeEncoder intakeEncoder;
+  private HeroSparkPID deployController;
+  private double setPoint = 0;
 
   //Through Bore encoder btw
   public DutyCycleEncoder deployEncoder;
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
-    intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
-    deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, MotorType.kBrushless);
+    deployMotor = new CANSparkMax(Constants.IntakeConstants.deployMotorID, MotorType.kBrushless);
+    deployController = new HeroSparkPID(deployMotor);
+    deployController.setPID(Constants.IntakeConstants.deployPID);
+    intakeEncoder = intakeMotor.getEncoder();
+
+    SmartDashboard.putData("Intake/deployPID", deployController);
+
     
     
     //deploy
-    deployEncoder = new DutyCycleEncoder(IntakeConstants.boreEncoderPort);
-    deployEncoder.reset();
-    //deployEncoder.setDistancePerRotation(1);
-
-    deployController = deployMotor.getPIDController();
-    deployController.setP(IntakeConstants.deployPIDF[0]);
-    deployController.setI(IntakeConstants.deployPIDF[1]);
-    deployController.setD(IntakeConstants.deployPIDF[2]);
-    deployController.setFF(IntakeConstants.deployPIDF[3]);
-    deployMotor.burnFlash();
-
-    SmartDashboard.putNumber("Deploy P", IntakeConstants.deployPIDF[0]);
-    SmartDashboard.putNumber("Deploy I", IntakeConstants.deployPIDF[1]);
-    SmartDashboard.putNumber("Deploy D", IntakeConstants.deployPIDF[2]);
   }
 
   @Override
@@ -69,11 +61,25 @@ public class GroundIntake extends SubsystemBase {
   public void runIntake() {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
+  public void intakeNote() {
+    //TODO: add sensors
+
+    intakeEncoder.setPosition(0);
+    double encoderPosition = intakeEncoder.getPosition();
+    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (!noteIntaked){
+      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+    } else if (noteIntaked) {
+      stopDeploy();
+    }
+    
+  }
 
   public void stopIntake() {
-        System.out.println("stopping");
         intakeMotor.set(0);
-    ;
+
   }
   
 
@@ -122,15 +128,25 @@ public class GroundIntake extends SubsystemBase {
     if (intakeRetracted){
       //TODO: switch with PID
       stopDeploy();
-    } 
-
-    if (intakeDeployed) {
-      deployMotor.set(IntakeConstants.retractSpeed);
     }
   }
 
-  // public void retractIntake() {
-  //   deployMotor.set(Constants.IntakeConstants.retractSpeed);
-  // }
 
+  /* Testing Commands */
+  public Command intakeNoteCommand() {
+    return run(this::deployIntake)
+          .alongWith(new WaitCommand(1))
+          .andThen(run(this::intakeNote)
+                  .alongWith(new WaitCommand(1)))
+          .andThen(run(this::retractIntake))
+          .alongWith(new WaitCommand(1));
+  }
+
+  public Command retractIntakeCommand() {
+    return startEnd(()-> this.retractIntake(), ()-> this.stopDeploy());
+  }
+
+  public Command deployIntakeCommand() {
+    return startEnd(()-> this.deployIntake(), ()-> this.stopDeploy());
+  }
 }
