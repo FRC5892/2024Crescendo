@@ -9,9 +9,5 @@ import com.revrobotics.SparkPIDController;
 
 /** Add your docs here. */
 public class Utilities {
-    public static final void setPID(SparkPIDController controller, PIDConstants pidConstants) {
-        controller.setP(pidConstants.kP);
-        controller.setI(pidConstants.kI);
-        controller.setD(pidConstants.kD);
-    }
+    
 }

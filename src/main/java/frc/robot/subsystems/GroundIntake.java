@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.Utilities;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -30,8 +31,9 @@ public class GroundIntake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
+  RelativeEncoder intakeEncoder;
   private SparkPIDController deployController;
-  private double setPoint;
+  private double setPoint = 0;
   // private RelativeEncoder deployEncoder;
   public DutyCycleEncoder deployEncoder;
 
@@ -46,10 +48,10 @@ public class GroundIntake extends SubsystemBase {
     // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192); 
 
     deployController = deployMotor.getPIDController();
-    deployController.setP(IntakeConstants.deployPIDF[0]);
-    deployController.setI(IntakeConstants.deployPIDF[1]);
-    deployController.setD(IntakeConstants.deployPIDF[2]);
-    deployController.setFF(IntakeConstants.deployPIDF[3]);
+    // deployController.setP(IntakeConstants.deployPIDF[0]);
+    // deployController.setI(IntakeConstants.deployPIDF[1]);
+    // deployController.setD(IntakeConstants.deployPIDF[2]);
+    // deployController.setFF(IntakeConstants.deployPIDF[3]);
     deployMotor.burnFlash();
 
     SmartDashboard.putNumber("Deploy P", IntakeConstants.deployPIDF[0]);
@@ -70,15 +72,29 @@ public class GroundIntake extends SubsystemBase {
   public void runIntake() {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
+  public void intakeNote() {
+    //TODO: add sensors
+
+    intakeEncoder.setPosition(0);
+    double encoderPosition = intakeEncoder.getPosition();
+    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
+    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (!noteIntaked){
+      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+    } else if (noteIntaked) {
+      stopDeploy();
+    }
+    
+  }
 
   public void outtakeNote() {
     intakeMotor.set(-IntakeConstants.intakeSpeed);
   }
 
   public void stopIntake() {
-        System.out.println("stopping");
         intakeMotor.set(0);
-    ;
+
   }
 
   /* via Chloe */
@@ -119,18 +135,19 @@ public class GroundIntake extends SubsystemBase {
     // boolean intakeDeployed = encoderPosition >= 0.6;
     // boolean intakeRetracted = encoderPosition <= 0.2;
 
-    // if (intakeDeployed) {
-    //   deployMotor.set(IntakeConstants.retractSpeed);
-    // } else if (intakeRetracted){
-    //   //TODO: switch with PID
-    //   stopDeploy();
-    // } 
-    
+    //if intake is not deployed run motor until 5 motor rotations
+    if (intakeRetracted){
+      //TODO: switch with PID
+      stopDeploy();
+    } 
 
+    if (intakeDeployed) {
+      deployMotor.set(IntakeConstants.retractSpeed);
+    }
   }
 
-  public Command outtakeNoteCommand () {
-    return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
-  }
+  // public void retractIntake() {
+  //   deployMotor.set(Constants.IntakeConstants.retractSpeed);
+  // }
 
 }
