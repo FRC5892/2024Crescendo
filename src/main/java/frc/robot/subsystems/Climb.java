@@ -46,23 +46,21 @@ public class Climb extends SubsystemBase {
   public void climbMotorsForward() {
     leftClimb.set(Constants.ClimbConstants.climbSpeed);
   }
-  
-  public void climbMotorReverse() {
+    
+  public void climbMotorsReverse() {
     leftClimb.set(-Constants.ClimbConstants.climbSpeed);
   }
 
-  public void climbMotorStop() {
+  public void climbMotorsStop() {
     leftClimb.set(0);
   }
 
-  
   public Command climbUp() {
-    return runEnd(this::climbMotorForward, th climbMotorStop);
-    
+    return runEnd(this::climbMotorsForward, this::climbMotorsStop);
   }
 
   public Command climbDown() {
-    return runEnd(this::climbMotorReverse, this::climbMotorStop);
+    return runEnd(this::climbMotorsReverse, this::climbMotorsStop);
   }
 
 }
