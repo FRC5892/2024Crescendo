@@ -84,18 +84,10 @@ public class GroundIntake extends SubsystemBase {
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    setpoint = setpoint;
+    this.setPoint = setpoint;
     deployController.setReference(setpoint, ControlType.kVelocity);
     System.out.println(setpoint);
   }
-
-  // public double getDeployVelocity() {
-  //   return deployEncoder.getVelocity();
-  // }
-
-  // public boolean deployAtSetpoint() {
-  //   return (Math.abs(setPoint - deployEncoder.getVelocity()) < IntakeConstants.deployRotations);
-  // }
 
   public void stopDeploy () {
     System.out.println("stopping");
@@ -103,25 +95,42 @@ public class GroundIntake extends SubsystemBase {
   }
 
   //TODO: this doesn't work no matter how much I want it to so lets fix that tmr
-  // public void deployIntake() {
-  //   double encoderPosition = deployEncoder.getPosition();
-  //   boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
-  //   boolean intakeRetracted = encoderPosition <= 0;
+  public void deployIntake() {
+    double encoderPosition = deployEncoder.get();
+    boolean intakeDeployed = encoderPosition >= Constants.IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
     
 
-  //   //if intake is not deployed run motor until 5 motor rotations
-  //   if (intakeRetracted){
-  //     //TODO: switch with PID
-  //     deployMotor.set(Constants.IntakeConstants.deploySpeed);
-  //   } 
+    //if intake is not deployed run motor until 5 motor rotations
+    if (intakeRetracted){
+      //TODO: switch with PID
+      deployMotor.set(IntakeConstants.deploySpeed);
+    } 
 
-  //   if (intakeDeployed) {
-  //     stopDeploy();
-  //   }
-  // }
+    if (intakeDeployed) {
+      stopDeploy();
+    }
+  }
 
   public void retractIntake() {
-    deployMotor.set(Constants.IntakeConstants.retractSpeed);
+    double encoderPosition = deployEncoder.get();
+    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
+    boolean intakeRetracted = encoderPosition <= 0;
+    
+
+    //if intake is not deployed run motor until 5 motor rotations
+    if (intakeRetracted){
+      //TODO: switch with PID
+      stopDeploy();
+    } 
+
+    if (intakeDeployed) {
+      deployMotor.set(IntakeConstants.retractSpeed);
+    }
   }
+
+  // public void retractIntake() {
+  //   deployMotor.set(Constants.IntakeConstants.retractSpeed);
+  // }
 
 }

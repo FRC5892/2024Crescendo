@@ -15,14 +15,12 @@ public class DeployIntake extends Command {
   private GroundIntake groundIntake;
   private boolean finish;
   private DigitalInput limitSwitch;
-  private Timer timer;
 
   /** Creates a new DeployIntake. */
   public DeployIntake(GroundIntake groundIntake) {
     this.groundIntake = groundIntake;
     limitSwitch = new DigitalInput(Constants.IntakeConstants.deployLimitSwitchPort);
     finish = false;
-    timer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(groundIntake);
@@ -32,36 +30,25 @@ public class DeployIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO: fix timer
-    // groundIntake.setDeploySetPoint(IntakeConstants.deploySpeed);
 
-    // if (timer.get() > 1) {
-    //   groundIntake.stopDeploy();
-    //   finish = true;
-    // }
+    groundIntake.deployIntake();
 
     //if the beam break is tripped, stop retract
     if (limitSwitch.get()) {
       groundIntake.stopDeploy();
       finish = true;
-      timer.stop();
-    } else {
-      groundIntake.setDeploySetPoint(IntakeConstants.deploySpeed);
-    }
+    } 
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
   }
 
   // Returns true when the command should end.
