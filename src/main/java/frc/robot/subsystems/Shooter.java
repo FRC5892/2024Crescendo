@@ -14,7 +14,10 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants.ShooterConstants;
 
@@ -31,8 +34,6 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
     rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
-    leftFeederMotor = new CANSparkMax(ShooterConstants.leftFeederMotorID, MotorType.kBrushless);
-    rightFeederMotor = new CANSparkMax(ShooterConstants.rightFeederMotorId, MotorType.kBrushless);
 
     rightFeederMotor.follow(leftFeederMotor, false);
 
@@ -59,11 +60,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void stopRightKickerMotor() {
-    setRightKickerMotorSpeed(Units.RPM.of(0));
+    rightKicker.set(0);
   }
 
   public void stopLeftKickerMotor() {
-    setLeftKickerMotorSpeed(Units.RPM.of(0));
+    leftKicker.set(0);
   }
 
   public void stopKickerMotors() {
@@ -72,6 +73,7 @@ public class Shooter extends SubsystemBase {
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
+    //TODO: do math here
     setLeftKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/leftSpeed", 0)));
     setRightKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/rightSpeed", 0)));
   }
@@ -79,6 +81,14 @@ public class Shooter extends SubsystemBase {
   public Command shootCommand() {
     return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopLeftKickerMotor);
   }
+  public boolean ready() {
+    return leftController.atSetpoint() && rightController.atSetpoint();
+  }
+  public boolean hasShot() {
+    //TODO: implement me
+    return false;
+  }
+
   /*
    * speed form 0 -1
    */
@@ -87,6 +97,18 @@ public class Shooter extends SubsystemBase {
   }
   public void stopFeedMotor() {
     setFeedMotorSpeed(0);
+  }
+
+  public Command fullShooter(GroundIntake intake) {
+    return this.shootCommand()                    // shoot
+            .alongWith(                           // as well as
+                new WaitUntilCommand(this::ready)  // wait for motor to get to speed
+                .withTimeout(3)             // or for 3 seconds to pass
+                .andThen(intake.outtakeNoteCommand())//then outtake into shooter
+            )
+            .until(this::hasShot)                   //until it has shot
+            .withTimeout(2);                //or 2 seconds pass 
+                                                    //then interrupt all commands, stopping outtake and shooter
   }
 
   @Override
