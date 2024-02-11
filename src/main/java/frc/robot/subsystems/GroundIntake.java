@@ -81,7 +81,7 @@ public class GroundIntake extends SubsystemBase {
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
     // this.setPoint = setpoint;
-    deployController.setReference(setpoint, ControlType.kVelocity);
+    deployController.setReference(setpoint, ControlType.kPosition);
     System.out.println(setpoint);
   }
 
@@ -106,6 +106,11 @@ public class GroundIntake extends SubsystemBase {
       stopDeploy();
     }
   }
+  // should be working deploy once we get pid working
+  // public Command deployCommand() {
+  //   return runEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations),this::stopDeploy).until(deployController::atSetpoint);
+    
+  // }
 
   public void retractIntake() {
 
