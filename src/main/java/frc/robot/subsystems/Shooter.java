@@ -69,7 +69,7 @@ public class Shooter extends SubsystemBase {
 
   public void stopKickerMotors() {
     stopLeftKickerMotor();
-    stopRightKickerMotor();
+    stopRightKickerMotor(); 
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
