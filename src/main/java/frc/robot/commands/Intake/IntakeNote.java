@@ -5,7 +5,6 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -25,7 +24,7 @@ public class IntakeNote extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(groundIntake);
-        SmartDashboard.putData("breambreak",beamBreak);
+        SmartDashboard.putData("beambreak",beamBreak);
     SmartDashboard.putData(this);
 
     System.out.println("init");

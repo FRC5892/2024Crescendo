@@ -80,14 +80,14 @@ public class RobotContainer {
                 
         /*Commands */
 
-                // private final Command shootCommand = s_Shooter.shootCommand();
+                private final Command shootCommand = s_Shooter.shootCommand();
                 
                 private final DeployIntake deployIntake = new DeployIntake(s_GroundIntake);
                 private final IntakeNote intakeNote = new IntakeNote(s_GroundIntake);
                 private final RetractIntake retractIntake = new RetractIntake(s_GroundIntake);
         
-                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
+                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
                 //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 
                 
@@ -152,7 +152,7 @@ public class RobotContainer {
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
-                // shooterButton.whileTrue(shootCommand);
+                shooterButton.whileTrue(shootCommand);
         }
 
         private void configureSmartDashboard() {
