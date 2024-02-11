@@ -51,12 +51,12 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void setLeftKickerMotorSpeed(Measure<Velocity<Angle>> velocity) {
-    leftController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
+  public void setLeftKickerMotorSpeedRPM(double velocity) {
+    leftController.setReference(velocity, ControlType.kVelocity);
   }
 
-  public void setRightKickerMotorSpeed(Measure<Velocity<Angle>> velocity) {
-  rightController.setReference(velocity.in(Units.RPM), ControlType.kVelocity);
+  public void setRightKickerMotorSpeedRPM(double velocity) {
+  rightController.setReference(velocity, ControlType.kVelocity);
   }
 
   public void stopRightKickerMotor() {
@@ -74,8 +74,8 @@ public class Shooter extends SubsystemBase {
 
   private void setKickerSpeedsFromSmartDashboard() {
     //TODO: do math here
-    setLeftKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/leftSpeed", 0)));
-    setRightKickerMotorSpeed(Units.RPM.of(SmartDashboard.getNumber("Shooter/rightSpeed", 0)));
+    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 0));
+    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 0));
   }
 
   public Command shootCommand() {
