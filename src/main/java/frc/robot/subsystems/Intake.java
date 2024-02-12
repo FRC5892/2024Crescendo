@@ -17,7 +17,7 @@ import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
-public class GroundIntake extends SubsystemBase {
+public class Intake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
@@ -29,10 +29,10 @@ public class GroundIntake extends SubsystemBase {
     If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
   If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
     (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
-    public DutyCycleEncoder deployEncoder; 
+    private DutyCycleEncoder deployEncoder; 
 
   /* Creates a new GroundIntake. */
-  public GroundIntake() {
+  public Intake() {
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     deployEncoder = new DutyCycleEncoder(2);
@@ -47,8 +47,7 @@ public class GroundIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("DeployRotations", deployEncoder.getDistance());
-
+    SmartDashboard.putNumber("DeployRotations", getDeployRotation());
   }
 
   /* Intaking */
@@ -56,7 +55,12 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
+  public double getDeployRotation() {
+    return deployEncoder.getDistance();
+  }
+
   public void intakeNote() {
+    
     // TODO: add sensors
 
     intakeEncoder.setPosition(0);
@@ -95,6 +99,11 @@ public class GroundIntake extends SubsystemBase {
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
+    System.out.println("hi3");
+
+    SmartDashboard.putNumber("hi3", getDeployRotation());
+
+
     deployMotor.set(IntakeConstants.deploySpeed);
 
     // double encoderPosition = deployEncoder.getDistance();

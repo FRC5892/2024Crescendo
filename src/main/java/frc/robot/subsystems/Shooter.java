@@ -32,21 +32,21 @@ public class Shooter extends SubsystemBase {
   HeroSparkPID rightController;
 
   public Shooter() {
-    leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
-    rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
+    // leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
+    // rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
 
-    rightFeederMotor.follow(leftFeederMotor, false);
+    // rightFeederMotor.follow(leftFeederMotor, false);
 
 
     // setup Pid
-    leftController = new HeroSparkPID(leftKicker);
-    rightController = new HeroSparkPID(rightKicker);
-    leftController.setPID(ShooterConstants.leftPID);
-    rightController.setPID(ShooterConstants.rightPID);
+    // leftController = new HeroSparkPID(leftKicker);
+    // rightController = new HeroSparkPID(rightKicker);
+    // leftController.setPID(ShooterConstants.leftPID);
+    // rightController.setPID(ShooterConstants.rightPID);
 
-    SmartDashboard.putData("Shooter/subsystem",this);
-    SmartDashboard.putData("Shooter/leftPID",leftController);
-    SmartDashboard.putData("Shooter/rightPID",rightController);
+    // SmartDashboard.putData("Shooter/subsystem",this);
+    // SmartDashboard.putData("Shooter/leftPID",leftController);
+    // SmartDashboard.putData("Shooter/rightPID",rightController);
 
 
   }
@@ -99,7 +99,7 @@ public class Shooter extends SubsystemBase {
     setFeedMotorSpeed(0);
   }
 
-  public Command fullShooter(GroundIntake intake) {
+  public Command fullShooter(Intake intake) {
     return this.shootCommand()                    // shoot
             .alongWith(                           // as well as
                 new WaitUntilCommand(this::ready)  // wait for motor to get to speed

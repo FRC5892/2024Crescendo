@@ -44,7 +44,7 @@ public class RobotContainer {
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
-                private final GroundIntake s_GroundIntake = new GroundIntake();
+                private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
                 

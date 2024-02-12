@@ -6,14 +6,14 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.GroundIntake;
+import frc.robot.subsystems.Intake;
 
 public class RetractIntake extends Command {
-  private GroundIntake groundIntake;
+  private Intake groundIntake;
   private boolean finish;
 
   /** Creates a new DeployIntake. */
-  public RetractIntake(GroundIntake groundIntake) {
+  public RetractIntake(Intake groundIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.groundIntake = groundIntake;
     //limitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
@@ -31,12 +31,11 @@ public class RetractIntake extends Command {
   @Override
   public void execute() {
     
-    double encoderPosition = groundIntake.deployEncoder.getDistance();
-    boolean intakeRetracted = encoderPosition <= 0.1;
+    double encoderPosition = groundIntake.getDeployRotation();
 
     groundIntake.retractIntake();
 
-    if (intakeRetracted){
+    if (encoderPosition <= 0.2){
       //TODO: switch with PID
       groundIntake.stopDeploy();
       finish = true;

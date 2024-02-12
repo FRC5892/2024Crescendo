@@ -5,17 +5,18 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.GroundIntake;
+import frc.robot.subsystems.Intake;
 
 public class DeployIntake extends Command {
-  private GroundIntake groundIntake;
+  private Intake groundIntake;
   private boolean finish;
   private DigitalInput limitSwitch;
 
   /** Creates a new DeployIntake. */
-  public DeployIntake(GroundIntake groundIntake) {
+  public DeployIntake(Intake groundIntake) {
     this.groundIntake = groundIntake;
     finish = false;
     limitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
@@ -34,22 +35,26 @@ public class DeployIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("hi2");
+    
+    SmartDashboard.putNumber("hi2", groundIntake.getDeployRotation());
 
-    groundIntake.deployIntake();
-
-    double encoderPosition = groundIntake.deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations - 0.1;    
-
-    if (intakeDeployed) {
+    if (groundIntake.getDeployRotation() >= 0.5) {
+      SmartDashboard.putBoolean("hi", true);
       groundIntake.stopDeploy();
       finish = true;
+    } else {
+      SmartDashboard.putBoolean("hi", false);
+      System.out.println("deployintakefromcommand");
+
+      groundIntake.deployIntake();
     }
 
     //if the beam break is tripped, stop retract
-    if (limitSwitch.get()) {
-      groundIntake.stopDeploy();
-      finish = true;
-    } 
+    // if (!limitSwitch.get()) {
+    //   groundIntake.stopDeploy();
+    //   finish = true;
+    // } 
 
   }
 

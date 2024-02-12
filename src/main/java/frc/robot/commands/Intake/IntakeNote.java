@@ -8,15 +8,15 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.GroundIntake;
+import frc.robot.subsystems.Intake;
 
 public class IntakeNote extends Command {
-  private GroundIntake groundIntake;
+  private Intake groundIntake;
   private boolean finish;
   private DigitalInput beamBreak;
 
   /** Creates a new IntakeNote. */
-  public IntakeNote(GroundIntake groundIntake) {
+  public IntakeNote(Intake groundIntake) {
     this.groundIntake = groundIntake;
     
     beamBreak = new DigitalInput(Constants.IntakeConstants.beamBreakPort);
