@@ -9,9 +9,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
@@ -21,8 +24,9 @@ public class Intake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  RelativeEncoder intakeEncoder;
+  private RelativeEncoder intakeEncoder;
   private HeroSparkPID deployController;
+  private DigitalInput beamBreak;
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
     If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
@@ -35,7 +39,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
-    deployEncoder = new DutyCycleEncoder(2);
+    beamBreak = new DigitalInput(2);
+    deployEncoder = new DutyCycleEncoder(IntakeConstants.beamBreakPort);
     deployEncoder.reset();
     // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192);
 
@@ -47,7 +52,8 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("DeployRotations", getDeployRotation());
+    SmartDashboard.putNumber("DeployRotations", this.getDeployRotation());
+
   }
 
   /* Intaking */
@@ -103,43 +109,37 @@ public class Intake extends SubsystemBase {
 
     SmartDashboard.putNumber("hi3", getDeployRotation());
 
-
     deployMotor.set(IntakeConstants.deploySpeed);
-
-    // double encoderPosition = deployEncoder.getDistance();
-    // boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
-    // boolean intakeRetracted = encoderPosition <= IntakeConstants.retractRotations;
-
-    // // if intake is not deployed run motor until 5 motor rotations
-    // if (intakeRetracted) {
-    //   // TODO: switch with PID
-    //   deployMotor.set(IntakeConstants.deploySpeed);
-    // }
-
-    // if (intakeDeployed) {
-    //   stopDeploy();
-    // }
   }
 
   public void retractIntake() {
     deployMotor.set(IntakeConstants.retractSpeed);
-
-    // double encoderPosition = deployEncoder.getDistance();
-    // boolean intakeDeployed = encoderPosition >= 0.6;
-    // boolean intakeRetracted = encoderPosition <= 0.2;
-
-    // // if intake is not deployed run motor until 5 motor rotations
-    // if (intakeRetracted) {
-    //   // TODO: switch with PID
-    //   stopDeploy();
-    // }
   }
-    public Command outtakeNoteCommand () {
+
+
+
+
+  /* Commands */
+
+  public Command deployIntakeCommand() {
+    return startEnd(() -> {deployMotor.set(IntakeConstants.deploySpeed);}, this::stopDeploy).until(() -> getDeployRotation()>=0.5);
+  }
+
+  public Command retractIntakeCommand() {
+    return startEnd(() -> {deployMotor.set(IntakeConstants.retractSpeed);}, this::stopDeploy).until(() -> getDeployRotation() <=0.2);
+  }
+
+  public Command intakeNoteCommand() {
+    return startEnd(() -> this.intakeNote(), ()-> this.stopIntake()).until(()-> beamBreak.get());
+  }
+
+  public Command intakeNoteSequence () {
+    return deployIntakeCommand().andThen(intakeNoteCommand()).andThen(retractIntakeCommand());
+  }
+
+  public Command outtakeNoteCommand () {
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
   }
 
-  // public void retractIntake() {
-  // deployMotor.set(Constants.IntakeConstants.retractSpeed);
-  // }
 
 }
