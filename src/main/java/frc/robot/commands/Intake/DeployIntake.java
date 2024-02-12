@@ -38,7 +38,7 @@ public class DeployIntake extends Command {
     groundIntake.deployIntake();
 
     double encoderPosition = groundIntake.deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;    
+    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations - 0.1;    
 
     if (intakeDeployed) {
       groundIntake.stopDeploy();

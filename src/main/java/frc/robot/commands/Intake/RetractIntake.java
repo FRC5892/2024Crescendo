@@ -5,6 +5,7 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.GroundIntake;
 
 public class RetractIntake extends Command {
@@ -31,7 +32,7 @@ public class RetractIntake extends Command {
   public void execute() {
     
     double encoderPosition = groundIntake.deployEncoder.getDistance();
-    boolean intakeRetracted = encoderPosition <= 0.2;
+    boolean intakeRetracted = encoderPosition <= 0.1;
 
     groundIntake.retractIntake();
 

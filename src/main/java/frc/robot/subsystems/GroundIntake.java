@@ -23,10 +23,13 @@ public class GroundIntake extends SubsystemBase {
   private CANSparkMax deployMotor;
   RelativeEncoder intakeEncoder;
   private HeroSparkPID deployController;
-  // private RelativeEncoder deployEncoder;
-  public DutyCycleEncoder deployEncoder;
 
-  // Through Bore encoder btw
+  /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
+    If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
+    If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
+  If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
+    (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
+    public DutyCycleEncoder deployEncoder; 
 
   /* Creates a new GroundIntake. */
   public GroundIntake() {
@@ -92,38 +95,35 @@ public class GroundIntake extends SubsystemBase {
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
-    double encoderPosition = deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= IntakeConstants.retractRotations;
+    deployMotor.set(IntakeConstants.deploySpeed);
 
-    // if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted) {
-      // TODO: switch with PID
-      deployMotor.set(IntakeConstants.deploySpeed);
-    }
+    // double encoderPosition = deployEncoder.getDistance();
+    // boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
+    // boolean intakeRetracted = encoderPosition <= IntakeConstants.retractRotations;
 
-    if (intakeDeployed) {
-      stopDeploy();
-    }
+    // // if intake is not deployed run motor until 5 motor rotations
+    // if (intakeRetracted) {
+    //   // TODO: switch with PID
+    //   deployMotor.set(IntakeConstants.deploySpeed);
+    // }
+
+    // if (intakeDeployed) {
+    //   stopDeploy();
+    // }
   }
 
   public void retractIntake() {
-
     deployMotor.set(IntakeConstants.retractSpeed);
 
-    double encoderPosition = deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= 0.6;
-    boolean intakeRetracted = encoderPosition <= 0.2;
+    // double encoderPosition = deployEncoder.getDistance();
+    // boolean intakeDeployed = encoderPosition >= 0.6;
+    // boolean intakeRetracted = encoderPosition <= 0.2;
 
-    // if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted) {
-      // TODO: switch with PID
-      stopDeploy();
-    }
-
-    if (intakeDeployed) {
-      deployMotor.set(IntakeConstants.retractSpeed);
-    }
+    // // if intake is not deployed run motor until 5 motor rotations
+    // if (intakeRetracted) {
+    //   // TODO: switch with PID
+    //   stopDeploy();
+    // }
   }
     public Command outtakeNoteCommand () {
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
