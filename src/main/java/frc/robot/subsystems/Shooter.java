@@ -8,15 +8,9 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants.ShooterConstants;
@@ -108,7 +102,7 @@ public class Shooter extends SubsystemBase {
             )
             .until(this::hasShot)                   //until it has shot
             .withTimeout(2);                //or 2 seconds pass 
-                                                    //then interrupt all commands, stopping outtake and shooter
+    //then interrupt all commands, stopping outtake and shooter
   }
 
   @Override
