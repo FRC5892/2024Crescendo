@@ -102,7 +102,7 @@ public class Shooter extends SubsystemBase {
             )
             .until(this::hasShot)                   //until it has shot
             .withTimeout(2);                //or 2 seconds pass 
-                                                    //then interrupt all commands, stopping outtake and shooter
+    //then interrupt all commands, stopping outtake and shooter
   }
 
   @Override
