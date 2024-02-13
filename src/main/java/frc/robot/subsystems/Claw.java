@@ -18,11 +18,6 @@ public class Claw extends SubsystemBase {
     this.clawMotor = new CANSparkMax(Constants.ClawConstants.clawMotor,MotorType.kBrushless);
   }
 
-public void openclaw(){
-    clawMotor.set(1);
-    
-}
-
 
 
 
@@ -61,7 +56,13 @@ public void openclaw(){
   }
   
   public void closeClaw(){
-      clawMotor.set(1);
+      clawMotor.set(0);
     };
+
+    public void openclaw(){
+    clawMotor.set(1);
+    
+}
+
 }
 

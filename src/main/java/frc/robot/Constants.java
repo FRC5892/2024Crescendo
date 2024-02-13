@@ -204,4 +204,8 @@ public final class Constants {
     public static final int LED_PORT = 0;
     public static final int LED_LENGTH = 105;
   }
+  public static final class ClawConstants{
+  public static final int clawMotor = 50; 
+
+  }
 }

@@ -47,7 +47,7 @@ public class RobotContainer {
                 private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
-                
+                private final Claw s_Claw = new Claw();
                 
                 // private final LedSub ledSub = new LedSub();
 
@@ -78,6 +78,9 @@ public class RobotContainer {
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
                 
+                private final JoystickButton openClawButton = new JoystickButton(codriver,XboxController.Button.kLeftStick.value);
+                private final JoystickButton closeClawButton = new JoystickButton(codriver,XboxController.Button.kRightStick.value);
+
         /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
