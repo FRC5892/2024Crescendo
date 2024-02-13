@@ -90,6 +90,9 @@ public class RobotContainer {
                 private final RetractIntake retractIntake = new RetractIntake(s_GroundIntake);
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
+                
+                private final Command openClawCommand = s_Claw.openClawCommand();
+                private final Command closeClawCommand = s_Claw.closeClawCommand();
                 //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
                 //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 
@@ -156,6 +159,8 @@ public class RobotContainer {
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
+                openClawButton.onTrue(openClawCommand);
+                closeClawButton.onTrue(closeClawCommand);
         }
 
         private void configureSmartDashboard() {
