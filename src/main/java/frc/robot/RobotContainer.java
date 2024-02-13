@@ -159,8 +159,8 @@ public class RobotContainer {
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
-                openClawButton.onTrue(openClawCommand);
-                closeClawButton.onTrue(closeClawCommand);
+                openClawButton.whileTrue(openClawCommand);
+                closeClawButton.whileTrue(closeClawCommand);
         }
 
         private void configureSmartDashboard() {
