@@ -16,13 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.autos.*;
 import frc.robot.commands.*;
-import frc.robot.commands.Intake.DeployIntake;
-import frc.robot.commands.Intake.IntakeNote;
-import frc.robot.commands.Intake.IntakeNoteSequence;
-import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.subsystems.*;
 
 /* 
@@ -44,7 +41,7 @@ public class RobotContainer {
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
-                private final GroundIntake s_GroundIntake = new GroundIntake();
+                private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
                 
@@ -82,13 +79,12 @@ public class RobotContainer {
 
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
-                private final DeployIntake deployIntake = new DeployIntake(s_GroundIntake);
-                private final IntakeNote intakeNote = new IntakeNote(s_GroundIntake);
-                private final RetractIntake retractIntake = new RetractIntake(s_GroundIntake);
+                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
+                private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
+                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
-                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
-                //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
+                private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
                 
                 
                 
@@ -146,12 +142,12 @@ public class RobotContainer {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-                /* Note Manipulation  */
-                //intakeNoteSequenceButton.onTrue(intakeNoteSequence);
+                /* Note Manipulation */
+                intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
-                deployIntakeButton.whileTrue(deployIntake);
-                retractIntakeButton.whileTrue(retractIntake);
+                deployIntakeButton.onTrue(deployIntake);
+                retractIntakeButton.onTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
         }
 

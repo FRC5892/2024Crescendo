@@ -9,30 +9,38 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
-public class GroundIntake extends SubsystemBase {
+public class Intake extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  RelativeEncoder intakeEncoder;
+  private RelativeEncoder intakeEncoder;
   private HeroSparkPID deployController;
-  // private RelativeEncoder deployEncoder;
-  public DutyCycleEncoder deployEncoder;
+  private DigitalInput beamBreak;
 
-  // Through Bore encoder btw
+  /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
+    If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
+    If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
+  If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
+    (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
+    private DutyCycleEncoder deployEncoder; 
 
   /* Creates a new GroundIntake. */
-  public GroundIntake() {
+  public Intake() {
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
-    deployEncoder = new DutyCycleEncoder(2);
+    beamBreak = new DigitalInput(2);
+    deployEncoder = new DutyCycleEncoder(IntakeConstants.beamBreakPort);
     deployEncoder.reset();
     // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192);
 
@@ -44,7 +52,7 @@ public class GroundIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("DeployRotations", deployEncoder.getDistance());
+    SmartDashboard.putNumber("DeployRotations", this.getDeployRotation());
 
   }
 
@@ -53,7 +61,12 @@ public class GroundIntake extends SubsystemBase {
     intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
   }
 
+  public double getDeployRotation() {
+    return deployEncoder.getDistance();
+  }
+
   public void intakeNote() {
+    
     // TODO: add sensors
 
     intakeEncoder.setPosition(0);
@@ -92,19 +105,11 @@ public class GroundIntake extends SubsystemBase {
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
-    double encoderPosition = deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= IntakeConstants.deployRotations;
-    boolean intakeRetracted = encoderPosition <= IntakeConstants.retractRotations;
+    System.out.println("hi3");
 
-    // if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted) {
-      // TODO: switch with PID
-      deployMotor.set(IntakeConstants.deploySpeed);
-    }
+    SmartDashboard.putNumber("hi3", getDeployRotation());
 
-    if (intakeDeployed) {
-      stopDeploy();
-    }
+    deployMotor.set(IntakeConstants.deploySpeed);
   }
   // should be working deploy once we get pid working
   // public Command deployCommand() {
@@ -113,29 +118,33 @@ public class GroundIntake extends SubsystemBase {
   // }
 
   public void retractIntake() {
-
     deployMotor.set(IntakeConstants.retractSpeed);
-
-    double encoderPosition = deployEncoder.getDistance();
-    boolean intakeDeployed = encoderPosition >= 0.6;
-    boolean intakeRetracted = encoderPosition <= 0.2;
-
-    // if intake is not deployed run motor until 5 motor rotations
-    if (intakeRetracted) {
-      // TODO: switch with PID
-      stopDeploy();
-    }
-
-    if (intakeDeployed) {
-      deployMotor.set(IntakeConstants.retractSpeed);
-    }
   }
-    public Command outtakeNoteCommand () {
+
+
+
+
+  /* Commands */
+
+  public Command deployIntakeCommand() {
+    return startEnd(() -> {deployMotor.set(IntakeConstants.deploySpeed);}, this::stopDeploy).until(() -> getDeployRotation()>=0.5);
+  }
+
+  public Command retractIntakeCommand() {
+    return startEnd(() -> {deployMotor.set(IntakeConstants.retractSpeed);}, this::stopDeploy).until(() -> getDeployRotation() <=0.2);
+  }
+
+  public Command intakeNoteCommand() {
+    return startEnd(() -> this.intakeNote(), ()-> this.stopIntake()).until(()-> beamBreak.get());
+  }
+
+  public Command intakeNoteSequence () {
+    return deployIntakeCommand().andThen(intakeNoteCommand()).andThen(retractIntakeCommand());
+  }
+
+  public Command outtakeNoteCommand () {
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
   }
 
-  // public void retractIntake() {
-  // deployMotor.set(Constants.IntakeConstants.retractSpeed);
-  // }
 
 }
