@@ -67,13 +67,13 @@ public class RobotContainer {
                 private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton outtakeButton = new JoystickButton(codriver, 
-                XboxController.Button.kA.value);
-                private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
-                        XboxController.Button.kY.value);
+                        XboxController.Button.kA.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(codriver, 
                         XboxController.Button.kB.value);
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
+                private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
+                        XboxController.Button.kY.value);
                 
                 private final JoystickButton openClawButton = new JoystickButton(codriver,XboxController.Button.kLeftStick.value);
                 private final JoystickButton closeClawButton = new JoystickButton(codriver,XboxController.Button.kRightStick.value);
