@@ -44,6 +44,7 @@ public class RobotContainer {
                 private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
+                private final Vision s_Vision = new Vision();
                 
                 
                 // private final LedSub ledSub = new LedSub();
@@ -75,7 +76,7 @@ public class RobotContainer {
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
                 
-        /*Commands */
+        /* Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
@@ -85,6 +86,7 @@ public class RobotContainer {
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
+                private final AddVisionPose addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
                 
                 
@@ -115,7 +117,7 @@ public class RobotContainer {
                                         () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
                                         () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
                                         () -> robotCentric.getAsBoolean()));
-                
+                        s_Vision.setDefaultCommand(addVisionPose);
                                         
                                         
                 /* Others */

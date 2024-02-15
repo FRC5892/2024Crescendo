@@ -53,7 +53,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("DeployRotations", this.getDeployRotation());
-
   }
 
   /* Intaking */
@@ -99,15 +98,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void stopDeploy() {
-    System.out.println("stopping");
     deployMotor.set(0);
   }
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
   public void deployIntake() {
-    System.out.println("hi3");
 
-    SmartDashboard.putNumber("hi3", getDeployRotation());
 
     deployMotor.set(IntakeConstants.deploySpeed);
   }
@@ -127,23 +123,23 @@ public class Intake extends SubsystemBase {
   /* Commands */
 
   public Command deployIntakeCommand() {
-    return startEnd(() -> {deployMotor.set(IntakeConstants.deploySpeed);}, this::stopDeploy).until(() -> getDeployRotation()>=0.5);
+    return startEnd(() -> {deployMotor.set(IntakeConstants.deploySpeed);}, this::stopDeploy).until(() -> getDeployRotation() >= 0.5);
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(() -> {deployMotor.set(IntakeConstants.retractSpeed);}, this::stopDeploy).until(() -> getDeployRotation() <=0.2);
+    return startEnd(() -> {deployMotor.set(IntakeConstants.retractSpeed);}, this::stopDeploy).until(() -> getDeployRotation() <= 0.2);
   }
 
   public Command intakeNoteCommand() {
-    return startEnd(() -> this.intakeNote(), ()-> this.stopIntake()).until(()-> beamBreak.get());
+    return startEnd(() -> this.intakeNote(), () -> this.stopIntake()).until(() -> beamBreak.get());
   }
 
-  public Command intakeNoteSequence () {
+  public Command intakeNoteSequence() {
     return deployIntakeCommand().andThen(intakeNoteCommand()).andThen(retractIntakeCommand());
   }
 
-  public Command outtakeNoteCommand () {
-    return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+  public Command outtakeNoteCommand() {
+    return startEnd(() -> this.outtakeNote(), () -> this.stopIntake());
   }
 
 
