@@ -244,7 +244,7 @@ public class Swerve extends SubsystemBase {
    * @return The pose of the robot in meters.
    */
   public Pose2d getPose() {
-    return swerveOdometry.getPoseMeters();
+    return swerveOdometry.getEstimatedPosition();
   }
 
   /**
