@@ -31,6 +31,7 @@ public class RobotContainer {
         /* Controllers */
                 public final static Joystick driver = new Joystick(0);
                 private final Joystick codriver = new Joystick(1);
+                private final Joystick testdriver = new Joystick(2);
 
         /* Subsystems & Hardware */
                 //TODO: add compressor when we have a compressor 
@@ -61,7 +62,7 @@ public class RobotContainer {
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
 
-                /* CoDriver Buttons */
+                /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
                         XboxController.Button.kRightBumper.value);
                 private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
@@ -75,6 +76,12 @@ public class RobotContainer {
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
                 
+                /* Test-Driver buttons */
+                private final JoystickButton climbUpButton = new JoystickButton(testdriver, 
+                        XboxController.Button.kY.value);
+                private final JoystickButton climbDownButton = new JoystickButton(testdriver, 
+                        XboxController.Button.kB.value);
+                
         /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -86,7 +93,8 @@ public class RobotContainer {
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
                 
-                
+                private final Command climbUp = s_Climb.climbUp();
+                private final Command climbDown = s_Climb.climbDown();
                 
         /* Other */
                 /* SendableChooser */
@@ -149,6 +157,8 @@ public class RobotContainer {
                 deployIntakeButton.onTrue(deployIntake);
                 retractIntakeButton.onTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
+                climbUpButton.whileTrue(climbUp);
+                climbDownButton.whileTrue(climbDown);
         }
 
         private void configureSmartDashboard() {

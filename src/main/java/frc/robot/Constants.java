@@ -15,9 +15,9 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class ClimbConstants {
-    public static final int leftClimbMotorID = 19;
+    public static final int leftClimbMotorID = 1;
     public static final int rightClimbMotorID = 20;
-    public static final double climbSpeed = 1;
+    public static final double climbSpeed = 0.2;
   }
 
   public static final class IntakeConstants {
@@ -120,7 +120,7 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
-      public static final int driveMotorID = 1;
+      public static final int driveMotorID = 40;
       public static final int angleMotorID = 2;
       public static final int canCoderID = 9;
 

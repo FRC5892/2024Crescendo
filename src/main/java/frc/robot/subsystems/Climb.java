@@ -17,8 +17,8 @@ public class Climb extends SubsystemBase {
 
   /** Creates a new Climb. */
   public Climb() {
-    leftClimb = new CANSparkMax(Constants.ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
-    rightClimb = new CANSparkMax(Constants.ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
+    leftClimb = new CANSparkMax(Constants.ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushed);
+    rightClimb = new CANSparkMax(Constants.ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushed);
 
     rightClimb.setIdleMode(IdleMode.kBrake);
     leftClimb.setIdleMode(IdleMode.kBrake);
@@ -32,11 +32,11 @@ public class Climb extends SubsystemBase {
   }
   
   public void climbMotorsForward() {
-    leftClimb.set(Constants.ClimbConstants.climbSpeed);
+    leftClimb.set(-Constants.ClimbConstants.climbSpeed);
   }
     
   public void climbMotorsReverse() {
-    leftClimb.set(-Constants.ClimbConstants.climbSpeed);
+    leftClimb.set(Constants.ClimbConstants.climbSpeed);
   }
 
   public void climbMotorsStop() {
