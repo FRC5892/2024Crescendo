@@ -93,14 +93,14 @@ public class Shooter extends SubsystemBase {
 
   public Command fullShooter(Intake intake) {
     return this.shootCommand()                    // shoot
-      .alongWith(                                 // as well as
-        new WaitUntilCommand(this::ready)         // wait for motor to get to speed
-          .withTimeout(3)                         // or for 3 seconds to pass
-          .andThen(intake.outtakeNoteCommand())   //then outtake into shooter
-      )
-    .until(this::hasShot)                      //until it has shot
-    .withTimeout(2);                    //or 2 seconds pass 
-                                                  //then interrupt all commands, stopping outtake and shooter
+            .alongWith(                           // as well as
+                new WaitUntilCommand(this::ready)  // wait for motor to get to speed
+                .withTimeout(3)             // or for 3 seconds to pass
+                .andThen(intake.outtakeNoteCommand())//then outtake into shooter
+            )
+            .until(this::hasShot)                   //until it has shot
+            .withTimeout(2);                //or 2 seconds pass 
+                                                    //then interrupt all commands, stopping outtake and shooter
   }
 
   @Override

@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import frc.robot.autos.*;
 import frc.robot.commands.*;
+// import frc.robot.autos.*;
 import frc.robot.subsystems.*;
 
 /* 
@@ -46,6 +46,7 @@ public class RobotContainer {
                 private final Climb s_Climb = new Climb();
                 private final Vision s_Vision = new Vision();
                 
+                private final Claw s_Claw = new Claw();
                 
                 // private final LedSub ledSub = new LedSub();
 
@@ -68,15 +69,18 @@ public class RobotContainer {
                 private final JoystickButton intakeNoteButton = new JoystickButton(codriver, 
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton outtakeButton = new JoystickButton(codriver, 
-                XboxController.Button.kA.value);
-                private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
-                        XboxController.Button.kY.value);
+                        XboxController.Button.kA.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(codriver, 
                         XboxController.Button.kB.value);
                 private final JoystickButton shooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
+                private final JoystickButton deployIntakeButton = new JoystickButton(codriver,
+                        XboxController.Button.kY.value);
                 
-        /* Commands */
+                private final JoystickButton openClawButton = new JoystickButton(codriver,XboxController.Button.kLeftStick.value);
+                private final JoystickButton closeClawButton = new JoystickButton(codriver,XboxController.Button.kRightStick.value);
+
+        /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
                 
@@ -85,6 +89,12 @@ public class RobotContainer {
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
+
+                
+                private final Command openClawCommand = s_Claw.openClawCommand();
+                private final Command closeClawCommand = s_Claw.closeClawCommand();
+                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
+                //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
                 private final AddVisionPose addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
@@ -151,6 +161,8 @@ public class RobotContainer {
                 deployIntakeButton.onTrue(deployIntake);
                 retractIntakeButton.onTrue(retractIntake);
                 shooterButton.whileTrue(shootCommand);
+                openClawButton.whileTrue(openClawCommand);
+                closeClawButton.whileTrue(closeClawCommand);
         }
 
         private void configureSmartDashboard() {
