@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
@@ -13,6 +14,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 
@@ -21,14 +23,15 @@ public class Climb extends SubsystemBase {
   CANSparkMax leftClimb;
   CANSparkMax rightClimb;
   RelativeEncoder rightClimbEncoder;
-  SparkPIDController pidController;
+  HeroSparkPID pidController;
 
   /** Creates a new Climb. */
   public Climb() {
     leftClimb = new CANSparkMax(Constants.ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
     rightClimb = new CANSparkMax(Constants.ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
+    pidController = new HeroSparkPID(leftClimb);
 
-    pidController.setP(0.02);
+    pidController.setPID(ClimbConstants.climbPID);
     rightClimbEncoder = rightClimb.getEncoder();
 
     rightClimb.setIdleMode(IdleMode.kBrake);
@@ -43,17 +46,15 @@ public class Climb extends SubsystemBase {
   }
   
   public void climbMotorsForward() {
-    // pidController.setReference(
-    //     ClimbConstants.rotations, 
-    //     CANSparkBase.ControlType.kPosition);
-    //leftClimb.set(Constants.ClimbConstants.climbSpeed);
+    pidController.setReference(
+        ClimbConstants.rotations, 
+        CANSparkBase.ControlType.kPosition);
   }
     
   public void climbMotorsReverse() {
-    // pidController.setReference(
-    //         -ClimbConstants.rotations, 
-    //         CANSparkBase.ControlType.kPosition);
-    // leftClimb.set(-Constants.ClimbConstants.climbSpeed);
+    pidController.setReference(
+            -ClimbConstants.rotations, 
+            CANSparkBase.ControlType.kPosition);
   }
 
   public void climbMotorsStop() {

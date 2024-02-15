@@ -26,7 +26,9 @@ public final class Constants {
   public static final class ClimbConstants {
     public static final int leftClimbMotorID = 1;
     public static final int rightClimbMotorID = 20;
+    public static final PIDConstants climbPID = new PIDConstants(0.02);
     public static final double climbSpeed = 0.2;
+    public static final double rotations = 0.2;
   }
 
   public static final class IntakeConstants {

@@ -11,9 +11,14 @@ Energy HERO'S Crescendo code
 |Button|Value|
 |-|-|
 |Right Bumper|Intake Note Sequence|
-|Left Bumper|Intake Note*|
-|A|Outtake*|
-|B|Retract Intake*|
 |X|Shoot|
-|Y|Deploy Intake*|
 \* = subject to change / backup only
+### Test Driver
+|Button|Value|
+|-|-|
+|X|Intake Note|
+|A|Outtake|
+|B|Retract Intake|
+|Y|Deploy Intake|
+|Left Bumper|Climb Up|
+|Right Bumper| Climb Down|
