@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.HeroSparkPID;
-import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -83,13 +81,13 @@ public class Shooter extends SubsystemBase {
     return false;
   }
 
-  /*
+  /**
    * speed form 0 -1
    */
   public void setFeedMotorSpeed(double speed) {
     leftFeederMotor.set(speed);
   }
-  public void stopFeedMotor() {
+  public void stopFeedMotor() { 
     setFeedMotorSpeed(0);
   }
 
@@ -102,7 +100,7 @@ public class Shooter extends SubsystemBase {
             )
             .until(this::hasShot)                   //until it has shot
             .withTimeout(2);                //or 2 seconds pass 
-    //then interrupt all commands, stopping outtake and shooter
+                                                    //then interrupt all commands, stopping outtake and shooter
   }
 
   @Override
