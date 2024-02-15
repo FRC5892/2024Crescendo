@@ -4,21 +4,32 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimbConstants;
 
 public class Climb extends SubsystemBase {
+  
   CANSparkMax leftClimb;
   CANSparkMax rightClimb;
+  RelativeEncoder rightClimbEncoder;
+  SparkPIDController pidController;
 
   /** Creates a new Climb. */
   public Climb() {
-    leftClimb = new CANSparkMax(Constants.ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushed);
-    rightClimb = new CANSparkMax(Constants.ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushed);
+    leftClimb = new CANSparkMax(Constants.ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
+    rightClimb = new CANSparkMax(Constants.ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
+
+    pidController.setP(0.02);
+    rightClimbEncoder = rightClimb.getEncoder();
 
     rightClimb.setIdleMode(IdleMode.kBrake);
     leftClimb.setIdleMode(IdleMode.kBrake);
@@ -32,11 +43,17 @@ public class Climb extends SubsystemBase {
   }
   
   public void climbMotorsForward() {
-    leftClimb.set(-Constants.ClimbConstants.climbSpeed);
+    // pidController.setReference(
+    //     ClimbConstants.rotations, 
+    //     CANSparkBase.ControlType.kPosition);
+    //leftClimb.set(Constants.ClimbConstants.climbSpeed);
   }
     
   public void climbMotorsReverse() {
-    leftClimb.set(Constants.ClimbConstants.climbSpeed);
+    // pidController.setReference(
+    //         -ClimbConstants.rotations, 
+    //         CANSparkBase.ControlType.kPosition);
+    // leftClimb.set(-Constants.ClimbConstants.climbSpeed);
   }
 
   public void climbMotorsStop() {
