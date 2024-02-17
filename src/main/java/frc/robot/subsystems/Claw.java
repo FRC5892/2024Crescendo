@@ -17,8 +17,8 @@ import frc.robot.Constants;
 public class Claw extends SubsystemBase {
     /** Creates a new ExampleSubsystem. */
     CANSparkMax clawMotor;
-    DigitalInput toplimitSwitch = new DigitalInput(0);
-    DigitalInput bottomlimitSwitch = new DigitalInput(1);
+    DigitalInput toplimitSwitch = new DigitalInput(5);
+    DigitalInput bottomlimitSwitch = new DigitalInput(6);
     
     public Claw() {
         this.clawMotor = new CANSparkMax(Constants.ClawConstants.clawMotor,MotorType.kBrushless);

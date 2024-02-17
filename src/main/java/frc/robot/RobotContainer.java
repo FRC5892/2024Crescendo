@@ -67,7 +67,7 @@ public class RobotContainer {
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
-                private final JoystickButton shooterButton = new JoystickButton(codriver, 
+                private final JoystickButton fullShooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kY.value);
                         
                 private final JoystickButton intakeClawButton = new JoystickButton(codriver,
@@ -88,7 +88,7 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton climbDownButton = new JoystickButton(testDriver, 
                         XboxController.Button.kRightBumper.value);
-                
+                private final JoystickButton shootButton = new JoystickButton(testDriver, XboxController.Button.kLeftStick.value);
         /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -105,7 +105,7 @@ public class RobotContainer {
                 //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
                 //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
-                private final AddVisionPose addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
+                private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
                 private final Command climbUp = s_Climb.climbUp();
                 private final Command climbDown = s_Climb.climbDown();
@@ -125,7 +125,7 @@ public class RobotContainer {
                         
                         // TODO: add compressor when we have a compressor 
                         // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-
+                        SmartDashboard.putData("Shooter/shootCommand",shootCommand);
 
                 /* Default Commands */
 
@@ -170,11 +170,12 @@ public class RobotContainer {
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.onTrue(deployIntake);
                 retractIntakeButton.onTrue(retractIntake);
-                shooterButton.whileTrue(shootCommand);
+                fullShooterButton.whileTrue(shootCommand);
                 intakeClawButton.whileTrue(openClawCommand);
                 outtakeClawButton.whileTrue(closeClawCommand);
                 climbUpButton.whileTrue(climbUp);
                 climbDownButton.whileTrue(climbDown);
+                shootButton.whileTrue(shootCommand);
         }
 
         private void configureSmartDashboard() {

@@ -128,5 +128,8 @@ public class HeroSparkPID implements Sendable {
         setI(pidConstants.kI);
         setD(pidConstants.kD);
     }
+    public SparkPIDController getPIDController() {
+        return controller;
+    }
 
 }

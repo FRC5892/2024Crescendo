@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.ShooterConstants;
 import frc.lib.HeroSparkPID;
 
 public class Shooter extends SubsystemBase {
@@ -24,21 +26,23 @@ public class Shooter extends SubsystemBase {
   HeroSparkPID rightController;
 
   public Shooter() {
-    // leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
-    // rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
+    leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
+    rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
 
     // rightFeederMotor.follow(leftFeederMotor, false);
 
 
     // setup Pid
-    // leftController = new HeroSparkPID(leftKicker);
-    // rightController = new HeroSparkPID(rightKicker);
+    leftController = new HeroSparkPID(leftKicker);
+    rightController = new HeroSparkPID(rightKicker);
     // leftController.setPID(ShooterConstants.leftPID);
     // rightController.setPID(ShooterConstants.rightPID);
+    SmartDashboard.putNumber("Shooter/leftSpeed", 0);
+    SmartDashboard.putNumber("Shooter/rightSpeed", 0);
 
-    // SmartDashboard.putData("Shooter/subsystem",this);
-    // SmartDashboard.putData("Shooter/leftPID",leftController);
-    // SmartDashboard.putData("Shooter/rightPID",rightController);
+    SmartDashboard.putData("Shooter/subsystem",this);
+    SmartDashboard.putData("Shooter/leftPID",leftController);
+    SmartDashboard.putData("Shooter/rightPID",rightController);
 
 
   }
@@ -66,12 +70,12 @@ public class Shooter extends SubsystemBase {
 
   private void setKickerSpeedsFromSmartDashboard() {
     //TODO: do math here
-    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 0));
-    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 0));
+    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 100));
+    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 100));
   }
 
   public Command shootCommand() {
-    return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopLeftKickerMotor);
+    return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopKickerMotors);
   }
   public boolean ready() {
     return leftController.atSetpoint() && rightController.atSetpoint();
