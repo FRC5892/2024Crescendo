@@ -12,13 +12,17 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,12 +30,11 @@ import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
-public class Intake extends SubsystemBase {
+public class Intake extends PIDSubsystem {
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private RelativeEncoder intakeEncoder;
-  private HeroSparkPID deployController;
   private DigitalInput beamBreak;
 
 
@@ -40,28 +43,29 @@ public class Intake extends SubsystemBase {
     If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
   If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
     (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
-    private RelativeEncoder deployEncoder; 
+    private DutyCycleEncoder deployEncoder; 
 
   /* Creates a new GroundIntake. */
   public Intake() {
+    super(new PIDController(IntakeConstants.deployPID.kP, IntakeConstants.deployPID.kI, IntakeConstants.deployPID.kD));
+
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
 
-    //deployEncoder = new DutyCycleEncoder(IntakeConstants.encoderPort);
+    deployEncoder = new DutyCycleEncoder(IntakeConstants.deployEncoderPort);
     //deployEncoder.reset();
-    deployEncoder = deployMotor.getAlternateEncoder(8192);
+    // deployEncoder = deployMotor.getAlternateEncoder(8192);
     // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192);
 
-    deployController = new HeroSparkPID(deployMotor);
 
-    deployController.setPID(IntakeConstants.deployPID);
-    SmartDashboard.putData(deployController);
+    SmartDashboard.putData("Intake/subsystem",this);
+    SmartDashboard.putData("Intake/pid",super.getController());
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("DeployRotations", this.getDeployRotation());
+    SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
 
   }
 
@@ -71,7 +75,7 @@ public class Intake extends SubsystemBase {
   }
 
   public double getDeployRotation() {
-    return deployEncoder.getPosition();
+    return deployEncoder.getAbsolutePosition();
   }
 
   public void intakeNote() {
@@ -92,7 +96,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void outtakeNote() {
-    intakeMotor.set(-IntakeConstants.intakeSpeed);
+    intakeMotor.set(IntakeConstants.outtakeSpeed);
   }
 
   public void stopIntake() {
@@ -102,26 +106,23 @@ public class Intake extends SubsystemBase {
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
+    super.enable();
     // this.setPoint = setpoint;
-    deployController.setReference(setpoint, ControlType.kPosition);
-    System.out.println(setpoint);
+    super.setSetpoint(setpoint);
   }
 
   public void stopDeploy() {
-    System.out.println("stopping");
     deployMotor.set(0);
+    super.disable();
   }
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
-  public void deployIntake() {
 
-    deployMotor.set(IntakeConstants.deploySpeed);
+
+  public void coastMode() {
+    deployMotor.setIdleMode(IdleMode.kCoast);
   }
   // should be working deploy once we get pid working
-  // public Command deployCommand() {
-  //   return runEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations),this::stopDeploy).until(deployController::atSetpoint);
-    
-  // }
 
   public void retractIntake() {
     deployMotor.set(IntakeConstants.retractSpeed);
@@ -133,11 +134,11 @@ public class Intake extends SubsystemBase {
   /* Commands */
 
   public Command deployIntakeCommand() {
-    return startEnd(() -> {deployMotor.set(IntakeConstants.deploySpeed);}, this::stopDeploy).until(() -> getDeployRotation()>=0.5);
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> super.getController().atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(() -> {deployMotor.set(IntakeConstants.retractSpeed);}, this::stopDeploy).until(() -> getDeployRotation() <=0.2);
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() -> super.getController().atSetpoint());
   }
 
   public Command intakeNoteCommand() {
@@ -145,12 +146,21 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeNoteSequence() {
-    
     return deployIntakeCommand().andThen(new PrintCommand("deploy done"), intakeNoteCommand()).andThen(new PrintCommand("intake done"), retractIntakeCommand());
   }
 
   public Command outtakeNoteCommand () {
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    deployMotor.setVoltage(output);
+  }
+
+  @Override
+  protected double getMeasurement() {
+    return deployEncoder.getAbsolutePosition();
   }
 
 

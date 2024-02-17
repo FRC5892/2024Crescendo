@@ -8,6 +8,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.REVLibError;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.util.sendable.Sendable;
@@ -17,6 +18,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 public class HeroSparkPID implements Sendable {
     SparkPIDController controller;
     CANSparkBase spark;
+    RelativeEncoder encoder;
     double p;
     double i;
     double d;
@@ -26,6 +28,7 @@ public class HeroSparkPID implements Sendable {
     public HeroSparkPID(CANSparkBase spark) {
 
         this.spark = spark;
+        this.encoder = spark.getEncoder();
         this.controller = spark.getPIDController();
         p = controller.getP();
         i = controller.getI();
@@ -130,6 +133,9 @@ public class HeroSparkPID implements Sendable {
     }
     public SparkPIDController getPIDController() {
         return controller;
+    }
+    public double getSpeed() {
+        return encoder.getVelocity();
     }
 
 }

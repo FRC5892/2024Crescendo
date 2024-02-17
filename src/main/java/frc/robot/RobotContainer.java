@@ -92,7 +92,7 @@ public class RobotContainer {
         /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
-                
+                private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
                 private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
@@ -170,7 +170,7 @@ public class RobotContainer {
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.onTrue(deployIntake);
                 retractIntakeButton.onTrue(retractIntake);
-                fullShooterButton.whileTrue(shootCommand);
+                fullShooterButton.whileTrue(fullShootCommand);
                 intakeClawButton.whileTrue(openClawCommand);
                 outtakeClawButton.whileTrue(closeClawCommand);
                 climbUpButton.whileTrue(climbUp);

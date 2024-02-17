@@ -18,7 +18,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
-
+import edu.wpi.first.wpilibj.DutyCycle;
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
@@ -35,18 +35,19 @@ public final class Constants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
     public static final double intakeSpeed = -0.6;
+    public static final double outtakeSpeed = 1;
     public static final double deploySpeed = -0.2;
     public static final double retractSpeed = 0.2;
     public static double intakeRotations;
-    public static final PIDConstants deployPID = new PIDConstants(0, 0, 0);
+    public static final PIDConstants deployPID = new PIDConstants(0.02, 0, 0);
 
     // TODO: get the right rotations for deploy intake/intake note commands
-    public static final double deployRotations = 0.1;
-    public static final double retractRotations = 0.4;
+    public static final double deployRotations = 0.67;
+    public static final double retractRotations = 0.04;
     public static final int beamBreakPort = 0;
     //public static final int encoderPort = 0;
     // public static final int retractLimitSwitchPort = 3;
-    public static final int deployLimitSwitchPort = 1;
+    public static final int deployEncoderPort = 1;
   }
 
   public static final class ShooterConstants {
