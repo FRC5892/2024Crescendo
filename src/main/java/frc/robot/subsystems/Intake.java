@@ -60,11 +60,15 @@ public class Intake extends PIDSubsystem {
 
 
     SmartDashboard.putData("Intake/subsystem",this);
-    SmartDashboard.putData("Intake/pid",super.getController());
+    SmartDashboard.putData("Intake/pid",m_controller);
   }
 
   @Override
   public void periodic() {
+    // stolen from super
+    if (m_enabled) {
+      useOutput(m_controller.calculate(getMeasurement()), getSetpoint());
+    }
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
 
   }
@@ -106,14 +110,14 @@ public class Intake extends PIDSubsystem {
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    super.enable();
+    enable();
     // this.setPoint = setpoint;
-    super.setSetpoint(setpoint);
+    setSetpoint(setpoint);
   }
 
   public void stopDeploy() {
+    disable();
     deployMotor.set(0);
-    super.disable();
   }
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
@@ -134,11 +138,11 @@ public class Intake extends PIDSubsystem {
   /* Commands */
 
   public Command deployIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> super.getController().atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> m_controller.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() -> super.getController().atSetpoint());
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  m_controller.atSetpoint());
   }
 
   public Command intakeNoteCommand() {
