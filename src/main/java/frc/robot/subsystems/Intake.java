@@ -29,6 +29,7 @@ public class Intake extends SubsystemBase{
   private RelativeEncoder intakeEncoder;
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
+  private DigitalInput deployLimitSwitch;
 
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
@@ -44,11 +45,14 @@ public class Intake extends SubsystemBase{
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
+    deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
     
 
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
     deployController.setPID(IntakeConstants.deployPID);
+    
+    deployMotor.burnFlash();
 
     SmartDashboard.putData("Intake/subsystem",this);
     SmartDashboard.putData("Intake/pid",deployController);
@@ -119,13 +123,13 @@ public class Intake extends SubsystemBase{
   /* Commands */
 
   public Command deployIntakeCommand() {
-    //return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-    return startEnd(()->this.setDeploySpeed(0.2), this::stopDeploy).until(() -> getDeployRotation() < IntakeConstants.deployRotations);
+    // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(()->this.setDeploySpeed(-0.2), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }
 
   public Command retractIntakeCommand() {
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-    return startEnd(()->this.setDeploySpeed(-0.2), this::stopDeploy).until(() -> getDeployRotation() > IntakeConstants.retractRotations);
+    return startEnd(()->this.setDeploySpeed(0.2), this::stopDeploy).until(() -> getDeployRotation() >= IntakeConstants.retractRotations);
   }
 
   public Command intakeNoteCommand() {

@@ -37,8 +37,8 @@ public class Shooter extends SubsystemBase {
     rightController = new HeroSparkPID(rightKicker);
     // leftController.setPID(ShooterConstants.leftPID);
     // rightController.setPID(ShooterConstants.rightPID);
-    SmartDashboard.putNumber("Shooter/leftSpeed", 0);
-    SmartDashboard.putNumber("Shooter/rightSpeed", 0);
+    SmartDashboard.putNumber("Shooter/leftSpeed", 6000);
+    SmartDashboard.putNumber("Shooter/rightSpeed", -6000);
 
     SmartDashboard.putData("Shooter/subsystem",this);
     SmartDashboard.putData("Shooter/leftPID",leftController);
@@ -49,10 +49,14 @@ public class Shooter extends SubsystemBase {
 
   public void setLeftKickerMotorSpeedRPM(double velocity) {
     leftController.setReference(velocity, ControlType.kVelocity);
+    // leftKicker.set(velocity);  
+
   }
 
   public void setRightKickerMotorSpeedRPM(double velocity) {
-  rightController.setReference(velocity, ControlType.kVelocity);
+    rightController.setReference(velocity, ControlType.kVelocity);
+    // rightKicker.set(velocity);  
+
   }
 
   public void stopRightKickerMotor() {
@@ -70,8 +74,8 @@ public class Shooter extends SubsystemBase {
 
   private void setKickerSpeedsFromSmartDashboard() {
     //TODO: do math here
-    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 100));
-    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 100));
+    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 0));
+    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 0));
   }
 
   public Command shootCommand() {
@@ -100,7 +104,7 @@ public class Shooter extends SubsystemBase {
             .alongWith(                           // as well as
                 // new WaitUntilCommand(this::ready)  // wait for motor to get to speed
                 // .withTimeout(3)             // or for 3 seconds to pass
-                Commands.waitSeconds(1)             // or for 3 seconds to pass
+                Commands.waitSeconds(.5)             // or for 3 seconds to pass
                 .andThen(intake.outtakeNoteCommand())//then outtake into shooter
             )
             .until(this::hasShot)                   //until it has shot

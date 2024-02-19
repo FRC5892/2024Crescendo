@@ -126,6 +126,8 @@ public class RobotContainer {
                         // TODO: add compressor when we have a compressor 
                         // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
                         SmartDashboard.putData("IntakeCommand",deployIntake);
+                        SmartDashboard.putData("ShootCommand",shootCommand);
+
 
                 /* Default Commands */
 
