@@ -42,12 +42,12 @@ public final class Constants {
     public static final PIDConstants deployPID = new PIDConstants(0.02, 0, 0);
 
     // TODO: get the right rotations for deploy intake/intake note commands
-    public static final double deployRotations = 0.67;
-    public static final double retractRotations = 0.04;
-    public static final int beamBreakPort = 0;
+    public static final double deployRotations = 0.04;
+    public static final double retractRotations = 0.67;
+    public static final int beamBreakPort = 1;
     //public static final int encoderPort = 0;
     // public static final int retractLimitSwitchPort = 3;
-    public static final int deployEncoderPort = 1;
+    public static final int deployEncoderPort = 0;
   }
 
   public static final class ShooterConstants {

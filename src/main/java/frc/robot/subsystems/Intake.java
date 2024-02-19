@@ -4,27 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
@@ -52,9 +44,11 @@ public class Intake extends SubsystemBase{
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
+    
 
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
+    deployController.setPID(IntakeConstants.deployPID);
 
     SmartDashboard.putData("Intake/subsystem",this);
     SmartDashboard.putData("Intake/pid",deployController);
@@ -64,6 +58,7 @@ public class Intake extends SubsystemBase{
   public void periodic() {
     // stolen from super
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
+
   }
 
   /* Intaking */
@@ -76,19 +71,8 @@ public class Intake extends SubsystemBase{
   }
 
   public void intakeNote() {
-    
-    // TODO: add sensors
 
-    intakeEncoder.setPosition(0);
-    double encoderPosition = intakeEncoder.getPosition();
-    boolean noteIntaked = encoderPosition >= Constants.IntakeConstants.intakeRotations;
-
-    // if intake is not deployed run motor until 5 motor rotations
-    if (!noteIntaked) {
       intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
-    } else if (noteIntaked) {
-      stopDeploy();
-    }
 
   }
 
@@ -104,12 +88,16 @@ public class Intake extends SubsystemBase{
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
     // this.setPoint = setpoint;
-    deployController.setReference(setpoint, ControlType.kVelocity);
+    deployController.setReference(setpoint, ControlType.kPosition);
+  }
+
+  public void setDeploySpeed (double speed) {
+    deployMotor.set(speed);
   }
 
   public void stopDeploy() {
     deployMotor.set(0);
-    deployController.setReference(0, ControlType.kVelocity);
+    deployController.setReference(0, ControlType.kPosition);
 
   }
 
@@ -131,15 +119,17 @@ public class Intake extends SubsystemBase{
   /* Commands */
 
   public Command deployIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    //return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(()->this.setDeploySpeed(0.2), this::stopDeploy).until(() -> getDeployRotation() < IntakeConstants.deployRotations);
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  m_controller.atSetpoint());
+    // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
+    return startEnd(()->this.setDeploySpeed(-0.2), this::stopDeploy).until(() -> getDeployRotation() > IntakeConstants.retractRotations);
   }
 
   public Command intakeNoteCommand() {
-    return startEnd(() -> this.intakeNote(), ()-> this.stopIntake()).until(()-> beamBreak.get());
+    return startEnd(() -> this.intakeNote(), this::stopIntake).until(()-> beamBreak.get());
   }
 
   public Command intakeNoteSequence() {

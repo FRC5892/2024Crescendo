@@ -125,7 +125,7 @@ public class RobotContainer {
                         
                         // TODO: add compressor when we have a compressor 
                         // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-                        SmartDashboard.putData("Shooter/shootCommand",shootCommand);
+                        SmartDashboard.putData("IntakeCommand",deployIntake);
 
                 /* Default Commands */
 
@@ -168,8 +168,8 @@ public class RobotContainer {
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
-                deployIntakeButton.onTrue(deployIntake);
-                retractIntakeButton.onTrue(retractIntake);
+                deployIntakeButton.whileTrue(deployIntake);
+                retractIntakeButton.whileTrue(retractIntake);
                 fullShooterButton.whileTrue(fullShootCommand);
                 intakeClawButton.whileTrue(openClawCommand);
                 outtakeClawButton.whileTrue(closeClawCommand);
