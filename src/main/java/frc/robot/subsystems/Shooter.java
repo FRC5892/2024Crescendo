@@ -8,10 +8,15 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ShooterConstants;
 import frc.lib.HeroSparkPID;
 
@@ -22,6 +27,9 @@ public class Shooter extends SubsystemBase {
   CANSparkMax leftFeederMotor;
   CANSparkMax rightFeederMotor;
 
+  SysIdRoutine lShootRoutine;
+  SysIdRoutine rShootRoutine;
+
   HeroSparkPID leftController;
   HeroSparkPID rightController;
 
@@ -30,8 +38,12 @@ public class Shooter extends SubsystemBase {
     rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
 
     // rightFeederMotor.follow(leftFeederMotor, false);
-
-
+    lShootRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(this::lShootVoltage, null, this));
+    rShootRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(this::rShootVoltage, null, this));
     // setup Pid
     leftController = new HeroSparkPID(leftKicker);
     rightController = new HeroSparkPID(rightKicker);
@@ -43,9 +55,39 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putData("Shooter/subsystem",this);
     SmartDashboard.putData("Shooter/leftPID",leftController);
     SmartDashboard.putData("Shooter/rightPID",rightController);
+    SmartDashboard.putData("Shooter/SysId/left/dynamic forward", lSysIdDynamic(Direction.kForward));
+    SmartDashboard.putData("Shooter/SysId/left/dynamic backward", lSysIdDynamic(Direction.kReverse));
+    SmartDashboard.putData("Shooter/SysId/left/quasistatic forward", lSysIdQuasistatic(Direction.kForward));
+    SmartDashboard.putData("Shooter/SysId/left/quasistatic backward", lSysIdQuasistatic(Direction.kReverse));
+    SmartDashboard.putData("Shooter/SysId/right/dynamic forward", rSysIdDynamic(Direction.kForward));
+    SmartDashboard.putData("Shooter/SysId/right/dynamic backward", rSysIdDynamic(Direction.kReverse));
+    SmartDashboard.putData("Shooter/SysId/right/quasistatic forward", rSysIdQuasistatic(Direction.kForward));
+    SmartDashboard.putData("Shooter/SysId/right/quasistatic backward", rSysIdQuasistatic(Direction.kReverse));
 
 
   }
+  public void lShootVoltage(Measure<Voltage> volt) {
+    leftKicker.setVoltage(volt.in(Units.Volts));
+  }
+  public void rShootVoltage(Measure<Voltage> volt) {
+    rightKicker.setVoltage(volt.in(Units.Volts));
+  }
+  public Command lSysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return lShootRoutine.quasistatic(direction);
+  }
+
+  public Command lSysIdDynamic(SysIdRoutine.Direction direction) {
+    return lShootRoutine.dynamic(direction);
+  }
+  public Command rSysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return rShootRoutine.quasistatic(direction);
+  }
+
+  public Command rSysIdDynamic(SysIdRoutine.Direction direction) {
+    return rShootRoutine.dynamic(direction);
+  }
+
+
 
   public void setLeftKickerMotorSpeedRPM(double velocity) {
     leftController.setReference(velocity, ControlType.kVelocity);
@@ -114,8 +156,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("shooter/leftRealSpeed",leftController.getSpeed());
-    SmartDashboard.putNumber("shooter/rightRealSpeed",rightController.getSpeed());
+    SmartDashboard.putNumber("Shooter/leftRealSpeed",leftController.getSpeed());
+    SmartDashboard.putNumber("Shooter/rightRealSpeed",rightController.getSpeed());
 
     // This method will be called once per scheduler run
   }
