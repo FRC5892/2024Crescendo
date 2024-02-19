@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,7 +42,6 @@ public class Intake extends SubsystemBase{
 
   /* Creates a new GroundIntake. */
   public Intake() {
-
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
@@ -91,8 +91,9 @@ public class Intake extends SubsystemBase{
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    // this.setPoint = setpoint;
-    deployController.setReference(setpoint, ControlType.kPosition);
+    deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
+
+    // deployController.setReference(setpoint, ControlType.kPosition);
   }
 
   public void setDeploySpeed (double speed) {
@@ -123,6 +124,7 @@ public class Intake extends SubsystemBase{
   /* Commands */
 
   public Command deployIntakeCommand() {
+
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
     return startEnd(()->this.setDeploySpeed(-0.2), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }

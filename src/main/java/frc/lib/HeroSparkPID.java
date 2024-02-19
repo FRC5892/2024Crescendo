@@ -14,6 +14,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.math.MathSharedStore;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
@@ -30,6 +31,15 @@ public class HeroSparkPID implements Sendable {
     double iZone;
     double reference;
     CANSparkBase.ControlType controlType;
+
+    double setpoint;
+    double measurement;
+    double prevError;
+    double positionError;
+    double totalError;
+    double period = 0.02;
+    double velocityError;
+
 
     public HeroSparkPID(CANSparkBase spark) {
 
@@ -153,6 +163,33 @@ public class HeroSparkPID implements Sendable {
         absoluteEncoder = spark.getAbsoluteEncoder(Type.kDutyCycle);
         controller.setFeedbackDevice(absoluteEncoder);
         return this;
+    }
+
+    /**
+    * Returns the next output of the PID controller.
+    *
+    * @param measurement The current measurement of the process variable.
+    * @param setpoint The new setpoint of the controller.
+    * @return The next controller output.
+    */
+    public double calculate(double measurement, double setpoint) {
+        //i think this works?? - chloe
+        this.setpoint = setpoint;
+        this.measurement = measurement;
+        prevError = positionError;
+
+
+        positionError = MathUtil.inputModulus(setpoint - measurement, -1, 1);
+
+        velocityError = (positionError - prevError) / period;
+
+        totalError =
+          MathUtil.clamp(
+              totalError + positionError * 0.02,
+              -1 / i,
+              1 / i);
+
+        return p * positionError + i * totalError + d * velocityError;
     }
 
 }
