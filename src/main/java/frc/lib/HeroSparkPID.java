@@ -28,6 +28,7 @@ public class HeroSparkPID implements Sendable {
     double i;
     double d;
     double iZone;
+    double ff;
     double reference;
     CANSparkBase.ControlType controlType;
 
@@ -58,6 +59,9 @@ public class HeroSparkPID implements Sendable {
     private double getIZone() {
         return iZone;
     }
+    private double getFF() {
+        return ff;
+    }
 
     private void setP(double newP) {
         if (newP != p) {
@@ -86,6 +90,12 @@ public class HeroSparkPID implements Sendable {
             iZone = newIZone;
         }
     }
+    private void setFF(double newFF) {
+        if (newFF != ff) {
+            controller.setIZone(newFF);
+            ff = newFF;
+        }
+    }
 
     @Override
     public void initSendable(SendableBuilder builder) {
@@ -104,8 +114,7 @@ public class HeroSparkPID implements Sendable {
                     }
                 });
         // FIXME: how do we get setpoint?
-        builder.addDoubleProperty("setpoint", () -> 0, (double d) -> {
-        });
+        builder.addDoubleProperty("setpoint", this::getFF, this::setFF);
         // pid setter
         // (double s)-> controller.setReference(s, CANSparkBase.ControlType.kVelocity)
     }
