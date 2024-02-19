@@ -30,12 +30,13 @@ import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
-public class Intake extends PIDSubsystem {
+public class Intake extends SubsystemBase{
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private RelativeEncoder intakeEncoder;
   private DigitalInput beamBreak;
+  private HeroSparkPID deployController;
 
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
@@ -43,34 +44,26 @@ public class Intake extends PIDSubsystem {
     If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
   If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
     (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
-    private DutyCycleEncoder deployEncoder; 
+    private SparkAbsoluteEncoder deployEncoder; 
 
   /* Creates a new GroundIntake. */
   public Intake() {
-    super(new PIDController(IntakeConstants.deployPID.kP, IntakeConstants.deployPID.kI, IntakeConstants.deployPID.kD));
 
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
 
-    deployEncoder = new DutyCycleEncoder(IntakeConstants.deployEncoderPort);
-    //deployEncoder.reset();
-    // deployEncoder = deployMotor.getAlternateEncoder(8192);
-    // deployEncoder = deployMotor.getAlternateEncoder(Type.kQuadrature, 8192);
-
+    deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
 
     SmartDashboard.putData("Intake/subsystem",this);
-    SmartDashboard.putData("Intake/pid",m_controller);
+    SmartDashboard.putData("Intake/pid",deployController);
   }
 
   @Override
   public void periodic() {
     // stolen from super
-    if (m_enabled) {
-      useOutput(m_controller.calculate(getMeasurement()), getSetpoint());
-    }
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
-
   }
 
   /* Intaking */
@@ -79,7 +72,7 @@ public class Intake extends PIDSubsystem {
   }
 
   public double getDeployRotation() {
-    return deployEncoder.getAbsolutePosition();
+    return deployEncoder.getPosition();
   }
 
   public void intakeNote() {
@@ -110,14 +103,14 @@ public class Intake extends PIDSubsystem {
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    enable();
     // this.setPoint = setpoint;
-    setSetpoint(setpoint);
+    deployController.setReference(setpoint, ControlType.kVelocity);
   }
 
   public void stopDeploy() {
-    disable();
     deployMotor.set(0);
+    deployController.setReference(0, ControlType.kVelocity);
+
   }
 
   // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
@@ -138,7 +131,7 @@ public class Intake extends PIDSubsystem {
   /* Commands */
 
   public Command deployIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> m_controller.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
   }
 
   public Command retractIntakeCommand() {
@@ -157,15 +150,6 @@ public class Intake extends PIDSubsystem {
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
   }
 
-  @Override
-  protected void useOutput(double output, double setpoint) {
-    deployMotor.setVoltage(output);
-  }
-
-  @Override
-  protected double getMeasurement() {
-    return deployEncoder.getAbsolutePosition();
-  }
 
 
 }

@@ -6,9 +6,12 @@ package frc.lib;
 
 import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.util.sendable.Sendable;
@@ -19,12 +22,15 @@ public class HeroSparkPID implements Sendable {
     SparkPIDController controller;
     CANSparkBase spark;
     RelativeEncoder encoder;
+    SparkAbsoluteEncoder absoluteEncoder;
+    boolean isAbsolute;
     double p;
     double i;
     double d;
     double iZone;
     double reference;
     CANSparkBase.ControlType controlType;
+
     public HeroSparkPID(CANSparkBase spark) {
 
         this.spark = spark;
@@ -105,19 +111,18 @@ public class HeroSparkPID implements Sendable {
     }
 
     public boolean atSetpoint() {
-        //TODO: this might work?
+        // TODO: this might work?
         double velocity;
         if (controlType.equals(CANSparkBase.ControlType.kVelocity)) {
-            velocity = Math.abs(spark.getEncoder().getVelocity());
+            velocity = Math.abs(getSpeed());
         } else if (controlType.equals(CANSparkBase.ControlType.kPosition)) {
-            velocity = Math.abs(spark.getEncoder().getPosition());
+            velocity = Math.abs(getPosition());
         } else {
             throw new RuntimeException("unimplemented");
         }
         double precision = reference * 0.05;
-        return velocity+precision>=reference && velocity-precision<=reference;
+        return velocity + precision >= reference && velocity - precision <= reference;
     }
-
 
     public REVLibError setReference(double value, CANSparkBase.ControlType ctrl) {
         this.reference = value;
@@ -131,11 +136,23 @@ public class HeroSparkPID implements Sendable {
         setI(pidConstants.kI);
         setD(pidConstants.kD);
     }
+
     public SparkPIDController getPIDController() {
         return controller;
     }
+
     public double getSpeed() {
-        return encoder.getVelocity();
+        return isAbsolute ? absoluteEncoder.getVelocity() : encoder.getVelocity();
+    }
+
+    public double getPosition() {
+        return isAbsolute ? absoluteEncoder.getPosition() : encoder.getPosition();
+    }
+
+    public HeroSparkPID useAbsoluteEncoder() {
+        absoluteEncoder = spark.getAbsoluteEncoder(Type.kDutyCycle);
+        controller.setFeedbackDevice(absoluteEncoder);
+        return this;
     }
 
 }
