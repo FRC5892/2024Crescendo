@@ -62,6 +62,8 @@ public class Intake extends SubsystemBase{
   public void periodic() {
     // stolen from super
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
+    SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
+    SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition());
 
   }
 
@@ -91,9 +93,8 @@ public class Intake extends SubsystemBase{
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
-
-    // deployController.setReference(setpoint, ControlType.kPosition);
+    // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
+    deployController.setReference(setpoint, ControlType.kPosition);
   }
 
   public void setDeploySpeed (double speed) {
@@ -125,13 +126,13 @@ public class Intake extends SubsystemBase{
 
   public Command deployIntakeCommand() {
 
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-    return startEnd(()->this.setDeploySpeed(-0.2), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    // return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }
 
   public Command retractIntakeCommand() {
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-    return startEnd(()->this.setDeploySpeed(0.2), this::stopDeploy).until(() -> getDeployRotation() >= IntakeConstants.retractRotations);
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
+    // return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy).until(() -> getDeployRotation() >= IntakeConstants.retractRotations);
   }
 
   public Command intakeNoteCommand() {
