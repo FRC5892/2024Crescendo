@@ -75,7 +75,8 @@ public class Intake extends SubsystemBase{
 
       setpoint = profile.calculate(0.02, new TrapezoidProfile.State(getDeployRotation(),deployEncoder.getVelocity()), goal);
       // deployController.setReference(setpoint.velocity, ControlType.kVelocity);
-      deployController.setReference(setpoint.position, ControlType.kPosition);
+      // deployController.setReference(setpoint.position, ControlType.kPosition);
+      deployMotor.set(setpoint.velocity/);
 
 
     }
