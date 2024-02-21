@@ -131,7 +131,7 @@ public class Intake extends SubsystemBase{
 
   public Command deployIntakeCommand() {
 
-    return runOnce(()-> {goal = new TrapezoidProfile.State(0, 0);}).andThen(trapezoidCommand).finallyDo(this::stopDeploy);
+    return runOnce(()-> {goal = new TrapezoidProfile.State(0, 0);}).andThen(trapezoidCommand).until(deployLimitSwitch::get).finallyDo(this::stopDeploy);
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
     // return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }

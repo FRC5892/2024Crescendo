@@ -56,3 +56,11 @@ Energy HERO'S Crescendo code
 |16|Right Shooter Motor|
 |19|Left Climb Motor|
 |20|Right Climb Motor|
+## Rio devices:
+|Id|Type|Usage|
+|-|-|-|
+|0|DIO|deploy Limit Switch|
+|1|DIO|intake Beam Break|
+|||
+|||
+
