@@ -38,6 +38,9 @@ public final class Constants {
     public static final double outtakeSpeed = 1;
     public static final double deploySpeed = -0.36;
     public static final double retractSpeed = 0.36;
+    public static final double maxVelocity = 1.75;
+    public static final double maxAcceleration = 0.75;
+
     public static double intakeRotations;
     public static final PIDConstants deployPID = new PIDConstants(0.02, 0, 0);
 

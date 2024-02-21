@@ -13,6 +13,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,9 +33,14 @@ public class Intake extends SubsystemBase{
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
 
+  private boolean profileEnabled = false;
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private final TrapezoidProfile profile =
+    new TrapezoidProfile(new TrapezoidProfile.Constraints(IntakeConstants.maxVelocity, IntakeConstants.maxAcceleration));
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
-    If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
+    If you use through bore encoder as a quad rature / relative encoder, use the Encoder class.
     If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
   If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
     (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
@@ -65,6 +71,14 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition());
 
+    if (profileEnabled) {
+
+      setpoint = profile.calculate(0.02, new TrapezoidProfile.State(getDeployRotation(),deployEncoder.getVelocity()), goal);
+      // deployController.setReference(setpoint.velocity, ControlType.kVelocity);
+      deployController.setReference(setpoint.position, ControlType.kPosition);
+
+
+    }
   }
 
   /* Intaking */
@@ -93,8 +107,10 @@ public class Intake extends SubsystemBase{
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
-    deployController.setReference(setpoint, ControlType.kPosition);
+    profileEnabled = true;
+    goal =  new TrapezoidProfile.State(5, 0);
+
+    deployController.setReference(setpoint, ControlType.kVelocity);
   }
 
   public void setDeploySpeed (double speed) {
