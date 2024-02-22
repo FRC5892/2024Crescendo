@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
@@ -31,6 +33,7 @@ public class Intake extends SubsystemBase{
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
+  private DigitalInput retractLimitSwitch;
 
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
@@ -46,6 +49,9 @@ public class Intake extends SubsystemBase{
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
     deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
+    retractLimitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
+
+
     
 
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -131,13 +137,17 @@ public class Intake extends SubsystemBase{
 
   public Command deployIntakeCommand() {
 
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-    // return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
+    // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||deployLimitSwitch.get());
   }
 
   public Command retractIntakeCommand() {
-    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-    // return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy).until(() -> getDeployRotation() >= IntakeConstants.retractRotations);
+    // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
+    return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
+    .alongWith(
+      intakeNoteCommand()
+      .withTimeout(0.25)
+    ).until(() -> getDeployRotation() >= IntakeConstants.retractRotations||retractLimitSwitch.get());
   }
 
   public Command intakeNoteCommand() {
@@ -145,7 +155,9 @@ public class Intake extends SubsystemBase{
   }
 
   public Command intakeNoteSequence() {
-    return deployIntakeCommand().andThen(intakeNoteCommand()).andThen(retractIntakeCommand());
+    return deployIntakeCommand()
+    .andThen(intakeNoteCommand())
+    .andThen(retractIntakeCommand());
   }
 
   public Command outtakeNoteCommand () {

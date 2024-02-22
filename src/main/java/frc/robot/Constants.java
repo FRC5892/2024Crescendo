@@ -48,9 +48,11 @@ public final class Constants {
     // TODO: get the right rotations for deploy intake/intake note commands
     public static final double deployRotations = 0.1;
     public static final double retractRotations = 0.5;
-    public static final int beamBreakPort = 1;
+    public static final int beamBreakPort = 0;
     //public static final int encoderPort = 0;
-    public static final int deployLimitSwitchPort = 0;
+    public static final int deployLimitSwitchPort = 1;
+    public static final int retractLimitSwitchPort = 2;
+
   }
 
   public static final class ShooterConstants {
