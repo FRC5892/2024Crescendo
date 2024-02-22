@@ -13,15 +13,12 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -35,12 +32,9 @@ public class Intake extends SubsystemBase{
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
 
-  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
-  private final TrapezoidProfile profile =
-    new TrapezoidProfile(new TrapezoidProfile.Constraints(IntakeConstants.maxVelocity, IntakeConstants.maxAcceleration));
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
-    If you use through bore encoder as a quad rature / relative encoder, use the Encoder class.
+    If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
     If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
   If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
     (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
@@ -58,6 +52,7 @@ public class Intake extends SubsystemBase{
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
     deployController.setPID(IntakeConstants.deployPID);
     
+    deployMotor.burnFlash();
 
     SmartDashboard.putData("Intake/subsystem",this);
     SmartDashboard.putData("Intake/pid",deployController);
@@ -66,9 +61,12 @@ public class Intake extends SubsystemBase{
   @Override
   public void periodic() {
     // stolen from super
+
+
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
     SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
-    SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
+    SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
   }
 
   /* Intaking */
@@ -97,9 +95,8 @@ public class Intake extends SubsystemBase{
 
   /* via Chloe */
   public void setDeploySetPoint(double setpoint) {
-    goal =  new TrapezoidProfile.State(5, 0);
-
-    deployController.setReference(setpoint, ControlType.kVelocity);
+    // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
+    deployController.setReference(setpoint, ControlType.kPosition);
   }
 
   public void setDeploySpeed(double speed) {
@@ -108,7 +105,7 @@ public class Intake extends SubsystemBase{
 
   public void stopDeploy() {
     deployMotor.set(0);
-    // deployController.setReference(0, ControlType.kPosition);
+    deployController.setReference(0, ControlType.kPosition);
 
   }
 
@@ -128,17 +125,18 @@ public class Intake extends SubsystemBase{
 
 
   /* Commands */
+  public Command intakeSequenceCommand() {
+    return deployIntakeCommand().andThen(intakeNoteCommand());
+  }
 
   public Command deployIntakeCommand() {
 
-    return runOnce(()-> {goal = new TrapezoidProfile.State(0, 0);}).andThen(trapezoidCommand).until(deployLimitSwitch::get).finallyDo(this::stopDeploy);
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy);//.until(() -> deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
     // return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }
 
   public Command retractIntakeCommand() {
-    return runOnce(()-> {goal = new TrapezoidProfile.State(0.6, 0);}).andThen(trapezoidCommand).finallyDo(this::stopDeploy);
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy);//.until(() ->  deployController.atSetpoint()).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
+    return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
     // return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy).until(() -> getDeployRotation() >= IntakeConstants.retractRotations);
   }
 
@@ -154,12 +152,12 @@ public class Intake extends SubsystemBase{
     return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
   }
 
-  public final Command trapezoidCommand = new TrapezoidProfileCommand(
-    profile,
-    (state)->setDeploySpeed(state.velocity),
-    ()->goal,
-    ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
-    this);
+  // public final Command trapezoidCommand = new TrapezoidProfileCommand(
+  //   profile,
+  //   (state)->setDeploySpeed(state.velocity),
+  //   ()->goal,
+  //   ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
+  //   this);
 
 
 

@@ -157,6 +157,7 @@ public class HeroSparkPID implements Sendable {
     }
 
     public SparkPIDController getPIDController() {
+        
         return controller;
     }
 
@@ -166,6 +167,9 @@ public class HeroSparkPID implements Sendable {
 
     public double getPosition() {
         return isAbsolute ? absoluteEncoder.getPosition() : encoder.getPosition();
+    }
+    public double getReference() {
+        return reference;
     }
 
     public HeroSparkPID useAbsoluteEncoder() {
