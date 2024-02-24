@@ -28,9 +28,9 @@ This code is for the robot container and has a joy stick, joystick buttons, swer
 
 public class RobotContainer {
         /* Controllers */
-                public final static Joystick driver = new Joystick(0);
-                private final Joystick codriver = new Joystick(1);
-                private final Joystick testDriver = new Joystick(2);
+                public final static XboxController driver = new XboxController(0);
+                public final static XboxController codriver = new XboxController(1);
+                public final static XboxController testDriver = new XboxController(2);
 
         /* Subsystems & Hardware */
                 //TODO: add compressor when we have a compressor 
@@ -106,8 +106,8 @@ public class RobotContainer {
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
                 private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
-                private final Command climbUp = s_Climb.climbUp();
-                private final Command climbDown = s_Climb.climbDown();
+                // private final Command climbUp = s_Climb.climbUp();
+                // private final Command climbDown = s_Climb.climbDown();
                 
         /* Other */
                 /* SendableChooser */
@@ -174,8 +174,8 @@ public class RobotContainer {
                 fullShooterButton.whileTrue(fullShootCommand);
                 intakeClawButton.whileTrue(openClawCommand);
                 outtakeClawButton.whileTrue(closeClawCommand);
-                climbUpButton.whileTrue(climbUp);
-                climbDownButton.whileTrue(climbDown);
+                // climbUpButton.whileTrue(climbUp);
+                // climbDownButton.whileTrue(climbDown);
                 shootButton.whileTrue(shootCommand);
         }
 
