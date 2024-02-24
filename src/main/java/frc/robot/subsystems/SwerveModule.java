@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -153,16 +154,37 @@ public class SwerveModule {
     driveMotor.setIdleMode(Constants.Swerve.driveNeutralMode);
     driveEncoder.setPositionConversionFactor(0.060509807);
     driveEncoder.setVelocityConversionFactor(Constants.Swerve.driveConversionVelocityFactor);
-    driveController.setP(Constants.Swerve.angleKP);
-    driveController.setI(Constants.Swerve.angleKI);
-    driveController.setD(Constants.Swerve.angleKD);
-    driveController.setFF(Constants.Swerve.angleKFF);
+    // driveController.setP(Constants.Swerve.angleKP);
+    // driveController.setI(Constants.Swerve.angleKI);
+    // driveController.setD(Constants.Swerve.angleKD);
+    // driveController.setFF(Constants.Swerve.angleKFF);
     driveMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-    driveMotor.burnFlash();
+    burnFlash(1);
     driveEncoder.setPosition(0.0);
 
     // driveMotor.setInverted(Constants.Swerve.driveInvert);
   }
+
+  private boolean burnFlash(int attempt) {
+      driveController.setP(Constants.Swerve.angleKP);
+      driveController.setI(Constants.Swerve.angleKI);
+      driveController.setD(Constants.Swerve.angleKD);
+      driveController.setFF(Constants.Swerve.angleKFF);
+      try {
+          Thread.sleep(300);
+          driveMotor.burnFlash();
+          Thread.sleep(300);
+      } catch (Exception e) {
+          return false;
+      }
+      if (driveController.getP()==Constants.Swerve.angleKP&&driveController.getI()==Constants.Swerve.angleKI&&driveController.getD()==Constants.Swerve.angleKD) {
+          return true;
+      } else {  
+          if (attempt >= 5) return false;
+          return burnFlash(attempt+1);
+      }
+  }
+
   public SwerveModuleState getDesiredState() {
     return desiredState;
   }
