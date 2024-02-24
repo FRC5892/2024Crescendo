@@ -6,7 +6,6 @@ package frc.lib;
 
 import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
-import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.REVLibError;

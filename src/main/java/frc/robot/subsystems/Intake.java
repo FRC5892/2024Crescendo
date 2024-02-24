@@ -8,18 +8,12 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
@@ -29,7 +23,6 @@ public class Intake extends SubsystemBase{
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  private RelativeEncoder intakeEncoder;
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;

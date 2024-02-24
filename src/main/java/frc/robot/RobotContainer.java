@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 // import frc.robot.autos.*;
@@ -45,7 +44,7 @@ public class RobotContainer {
                 private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
-                private final Vision s_Vision = null;//new Vision();
+                private final Vision s_Vision = new Vision();
                 
                 private final Claw s_Claw = new Claw();
                 
@@ -105,7 +104,7 @@ public class RobotContainer {
                 //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
                 //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
-                // private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
+                private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
                 private final Command climbUp = s_Climb.climbUp();
                 private final Command climbDown = s_Climb.climbDown();
@@ -139,7 +138,7 @@ public class RobotContainer {
                                         () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
                                         () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
                                         () -> robotCentric.getAsBoolean()));
-                        // s_Vision.setDefaultCommand(addVisionPose);
+                        s_Vision.setDefaultCommand(addVisionPose);
                                         
                                         
                 /* Others */
