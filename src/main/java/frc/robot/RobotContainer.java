@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 // import frc.robot.autos.*;
 import frc.robot.subsystems.*;
@@ -73,6 +74,12 @@ public class RobotContainer {
                         XboxController.Button.kLeftStick.value);
                 private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
                         XboxController.Button.kRightStick.value);
+                private final JoystickButton climbUpButton = new JoystickButton(codriver,
+                        XboxController.Button.kLeftBumper.value);
+                private final JoystickButton climbDownButton = new JoystickButton(codriver,
+                        XboxController.Button.kRightBumper.value);
+                private final int tiltLeftButton = XboxController.Axis.kLeftTrigger.value;
+                private final int tiltRightButton = XboxController.Axis.kRightTrigger.value;
                         
                 /* Test-Driver buttons */
                 private final JoystickButton intakeNoteButton = new JoystickButton(testDriver, 
@@ -83,10 +90,6 @@ public class RobotContainer {
                         XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kB.value);
-                private final JoystickButton climbUpButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kLeftBumper.value);
-                private final JoystickButton climbDownButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kRightBumper.value);
                 private final JoystickButton shootButton = new JoystickButton(testDriver, XboxController.Button.kLeftStick.value);
         /*Commands */
 
@@ -95,6 +98,10 @@ public class RobotContainer {
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
                 private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
+                private final Command climbUp = s_Climb.climbUp();
+                private final Command climbDown = s_Climb.climbDown();
+                private final Command tiltLeft = s_Climb.tiltLeft();
+                private final Command tiltRight = s_Climb.tiltRight();
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
 
@@ -139,6 +146,7 @@ public class RobotContainer {
                                         () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
                                         () -> robotCentric.getAsBoolean()));
                         s_Vision.setDefaultCommand(addVisionPose);
+
                                         
                                         
                 /* Others */
@@ -174,9 +182,9 @@ public class RobotContainer {
                 fullShooterButton.whileTrue(fullShootCommand);
                 intakeClawButton.whileTrue(openClawCommand);
                 outtakeClawButton.whileTrue(closeClawCommand);
-                // climbUpButton.whileTrue(climbUp);
-                // climbDownButton.whileTrue(climbDown);
                 shootButton.whileTrue(shootCommand);
+                new Trigger(() -> codriver.getRawAxis(tiltLeftButton) >= 0.5).whileTrue(tiltLeft);
+                new Trigger(() -> codriver.getRawAxis(tiltRightButton) >= 0.5).whileTrue(tiltRight);
         }
 
         private void configureSmartDashboard() {

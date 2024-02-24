@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,9 +19,6 @@ public class Climb extends SubsystemBase {
   private CANSparkMax leftClimb;
   private CANSparkMax rightClimb;
   private RelativeEncoder leftClimbEncoder;
-  private SparkPIDController leftPIDController;
-  private SparkPIDController rightPIDController;
-  private double elevatorRotations;
   private double leftTriggerAxis;
   private double rightTriggerAxis;
   private boolean leftBumper;
@@ -30,14 +26,8 @@ public class Climb extends SubsystemBase {
 
   /** Creates a new Climb. */
   public Climb() {
-
     leftClimb = new CANSparkMax(ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
     rightClimb = new CANSparkMax(ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
-
-    // leftPIDController = leftClimb.getPIDController();
-    // rightPIDController = rightClimb.getPIDController();
-    // leftPIDController.setP(0.02);
-    // rightPIDController.setP(0.02);
 
     leftClimbEncoder = leftClimb.getEncoder();
     leftClimbEncoder.setPositionConversionFactor(0.50);
@@ -46,60 +36,36 @@ public class Climb extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("elevator rotations", this.getElevatorRotation());
-    elevatorRotations = leftClimbEncoder.getPosition();
-
-    leftTriggerAxis = RobotContainer.codriver.getLeftTriggerAxis();
-    rightTriggerAxis = RobotContainer.codriver.getRightTriggerAxis();
-    leftBumper = RobotContainer.codriver.getLeftBumper();
-    rightBumper = RobotContainer.codriver.getRightBumper();
-    if (leftTriggerAxis == 1) {
-      climbLeftMotor(); climbRightMotor();
-    } else if (rightTriggerAxis == 1) {
-      retractLeftMotor(); retractRightMotor();
-    } else if (leftBumper) {
-      climbLeftMotor(); retractRightMotor();
-    } else if (rightBumper) {
-      climbRightMotor(); retractLeftMotor();
-    } else {
-      stopLeft(); stopRight();
-    }
-
-  }
-
-  public double getElevatorRotation() {
-    return leftClimbEncoder.getPosition();
+    // leftTriggerAxis = RobotContainer.codriver.getLeftTriggerAxis();
+    // rightTriggerAxis = RobotContainer.codriver.getRightTriggerAxis();
+    // leftBumper = RobotContainer.codriver.getLeftBumper();
+    // rightBumper = RobotContainer.codriver.getRightBumper();
+    // if (leftTriggerAxis == 1) {
+    //   climbLeftMotor(); climbRightMotor();
+    // } else if (rightTriggerAxis == 1) {
+    //   retractLeftMotor(); retractRightMotor();
+    // } else if (leftBumper) {
+    //   climbLeftMotor(); retractRightMotor();
+    // } else if (rightBumper) {
+    //   climbRightMotor(); retractLeftMotor();
+    // } else {
+    //   stopLeft(); stopRight();
+    // }
   }
 
   public void climbRightMotor() {
-      // rightPIDController.setReference(
-      //   ClimbConstants.rotations, 
-      //   CANSparkBase.ControlType.kPosition);
-    
     rightClimb.set(Constants.ClimbConstants.climbSpeed);
   }
 
   public void climbLeftMotor() {
-      // leftPIDController.setReference(
-      //   ClimbConstants.rotations, 
-      //   CANSparkBase.ControlType.kPosition);    
-    
     leftClimb.set(Constants.ClimbConstants.climbSpeed);
   }
 
   public void retractRightMotor() {
-      // rightPIDController.setReference(
-      //   -ClimbConstants.rotations, 
-      //   CANSparkBase.ControlType.kPosition);
-
     rightClimb.set(-Constants.ClimbConstants.climbSpeed);
   }
 
   public void retractLeftMotor() {
-    // leftPIDController.setReference(
-    //     -ClimbConstants.rotations,
-    //     CANSparkBase.ControlType.kPosition);
-
     leftClimb.set(-Constants.ClimbConstants.climbSpeed);
   }
 
@@ -127,19 +93,19 @@ public class Climb extends SubsystemBase {
   }
 
   /* Commands */
-  // public Command climbLeft() {
-  //   return runEnd(this::climbMotors, this::stopMotors);
-  // }
+  public Command climbUp() {
+    return runEnd(this::climbMotors, this::stopMotors);
+  }
 
-  // public Command climbRight() {
-  //   return runEnd(this::climbRightMotor, this::stopMotors);
-  // }
+  public Command climbDown() {
+    return runEnd(this::retractMotors, this::stopMotors);
+  }
 
-  // public Command retractLeft() {
-  //   return runEnd(this::retractLeftMotor, this::stopLeft);
-  // }
+  public Command tiltLeft() {
+    return runEnd(this::retractLeftMotor, this::stopLeft);
+  }
 
-  // public Command retractRight() {
-  //   return runEnd(this::retractRightMotor, this::stopRight);
-  // }
+  public Command tiltRight() {
+    return runEnd(this::retractRightMotor, this::stopRight);
+  }
 }
