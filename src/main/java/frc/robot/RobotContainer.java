@@ -70,10 +70,10 @@ public class RobotContainer {
                 private final JoystickButton fullShooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kY.value);
                         
-                private final JoystickButton intakeClawButton = new JoystickButton(codriver,
-                        XboxController.Button.kLeftStick.value);
-                private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
-                        XboxController.Button.kRightStick.value);
+                // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
+                //         XboxController.Button.kLeftStick.value);
+                // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
+                //         XboxController.Button.kRightStick.value);
                 private final JoystickButton climbUpButton = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton climbDownButton = new JoystickButton(codriver,
@@ -180,8 +180,8 @@ public class RobotContainer {
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
                 fullShooterButton.whileTrue(fullShootCommand);
-                intakeClawButton.whileTrue(openClawCommand);
-                outtakeClawButton.whileTrue(closeClawCommand);
+                // intakeClawButton.whileTrue(openClawCommand);
+                // outtakeClawButton.whileTrue(closeClawCommand);
                 shootButton.whileTrue(shootCommand);
                 new Trigger(() -> codriver.getRawAxis(tiltLeftButton) >= 0.5).whileTrue(tiltLeft);
                 new Trigger(() -> codriver.getRawAxis(tiltRightButton) >= 0.5).whileTrue(tiltRight);
