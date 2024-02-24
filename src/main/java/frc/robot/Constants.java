@@ -23,11 +23,13 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class ClimbConstants {
-    public static final int leftClimbMotorID = 19;
-    public static final int rightClimbMotorID = 20;
-    public static final PIDConstants climbPID = new PIDConstants(0.02);
-    public static final double climbSpeed = 0.2;
-    public static final double rotations = 0.2;
+    public static final int elevatorMotorID = 1;
+    public static final int leftClimbMotorID = 3;
+    public static final int rightClimbMotorID = 2;
+    public static final double elevatorSpeed = 0.5;
+    public static final double climbSpeed = 0.5;
+    public static double rotations = 40;
+    public static final int intakeElevatorID = 4;
   }
 
   public static final class IntakeConstants {
@@ -71,8 +73,8 @@ public final class Constants {
     public static final String CAMERA_NAME = "defaultCamera";
     // TODO: change me
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-        new Rotation3d(0, 0, 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-                                  // from center.
+        new Rotation3d(0, 0, 0));  // Cam mounted facing forward, half a meter forward of center, half a meter up
+                                                  // from center.
     public static final String FIELD_LAYOUT_RESOURCE_FILE = AprilTagFields.k2024Crescendo.m_resourceFile;
   }
 
