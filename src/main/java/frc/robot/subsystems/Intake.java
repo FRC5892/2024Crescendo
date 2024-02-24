@@ -138,6 +138,7 @@ public class Intake extends SubsystemBase{
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
     return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
     .alongWith(
+      outtakeNoteCommand().withTimeout(0.1),
       intakeNoteCommand()
       .withTimeout(0.25)
     ).until(() -> getDeployRotation() >= IntakeConstants.retractRotations||retractLimitSwitch.get());

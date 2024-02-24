@@ -17,7 +17,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
-/** Add your docs here. */
+/** Wrapper for SparkPidController to add convenience features  
+ */
 public class HeroSparkPID implements Sendable {
     SparkPIDController controller;
     CANSparkBase spark;
@@ -182,8 +183,10 @@ public class HeroSparkPID implements Sendable {
     *
     * @param measurement The current measurement of the process variable.
     * @param setpoint The new setpoint of the controller.
+    * @deprecated this is run on the rio so it doesn't belong here.
     * @return The next controller output.
     */
+    @Deprecated(forRemoval = true)
     public double calculate(double measurement, double setpoint) {
         //i think this works?? - chloe
         this.setpoint = setpoint;
@@ -202,6 +205,28 @@ public class HeroSparkPID implements Sendable {
               1 / i);
 
         return p * positionError + i * totalError + d * velocityError;
+    }
+    public boolean burnFlash(PIDConstants pid) {
+        return burnFlash(pid, 0);
+    }
+    private boolean burnFlash(PIDConstants pid,int attempt) {
+        controller.setP(pid.kP);
+        controller.setI(pid.kI);
+        controller.setD(pid.kD);
+        try {
+            Thread.sleep(300);
+            spark.burnFlash();
+            Thread.sleep(300);
+        } catch (Exception e) {
+            return false;
+        }
+        if (controller.getP()==pid.kP&&controller.getI()==pid.kI&&controller.getD()==pid.kD) {
+            return true;
+        } else {
+            if (attempt >= 5) return false;
+            
+            return burnFlash(pid, attempt+1);
+        }
     }
 
 }
