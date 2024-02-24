@@ -66,6 +66,9 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
     SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
+    SmartDashboard.putBoolean("Intake/deploy", deployLimitSwitch.get());
+    SmartDashboard.putBoolean("Intake/retract", retractLimitSwitch.get());
+
   }
 
   /* Intaking */
@@ -131,17 +134,18 @@ public class Intake extends SubsystemBase{
   public Command deployIntakeCommand() {
 
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-    return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||deployLimitSwitch.get());
+    return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
   }
 
   public Command retractIntakeCommand() {
     // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
     return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
-    .alongWith(
-      outtakeNoteCommand().withTimeout(0.1),
-      intakeNoteCommand()
-      .withTimeout(0.25)
-    ).until(() -> getDeployRotation() >= IntakeConstants.retractRotations||retractLimitSwitch.get());
+    // .alongWith(
+    //   outtakeNoteCommand().withTimeout(0.1),
+    //   intakeNoteCommand()
+    //   .withTimeout(0.25)
+    // )
+    .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
   }
 
   public Command intakeNoteCommand() {

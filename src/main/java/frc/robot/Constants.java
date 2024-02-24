@@ -23,13 +23,13 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class ClimbConstants {
-    public static final int elevatorMotorID = 1;
-    public static final int leftClimbMotorID = 3;
-    public static final int rightClimbMotorID = 2;
+    public static final int elevatorMotorID = 40;
+    public static final int leftClimbMotorID = 41;
+    public static final int rightClimbMotorID = 42;
     public static final double elevatorSpeed = 0.5;
     public static final double climbSpeed = 0.5;
     public static double rotations = 40;
-    public static final int intakeElevatorID = 4;
+    public static final int intakeElevatorID = 44;
   }
 
   public static final class IntakeConstants {
@@ -47,8 +47,8 @@ public final class Constants {
 
 
     // TODO: get the right rotations for deploy intake/intake note commands
-    public static final double deployRotations = 0.1;
-    public static final double retractRotations = 0.5;
+    public static final double deployRotations = 0.0;
+    public static final double retractRotations = 0.65;
     public static final int beamBreakPort = 0;
     //public static final int encoderPort = 0;
     public static final int deployLimitSwitchPort = 1;
