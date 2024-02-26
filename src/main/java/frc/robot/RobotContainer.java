@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -144,10 +145,11 @@ public class RobotContainer {
                         // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
                         SmartDashboard.putData("IntakeCommand",deployIntake);
                         SmartDashboard.putData("ShootCommand",shootCommand);
-
-
+                
+                /* PathPlanner Named Commands */
+                NamedCommands.registerCommand("intakeSequence", intakeNoteSequence);
+                
                 /* Default Commands */
-
                         s_Swerve.setDefaultCommand(
                                 new TeleopSwerve(
                                         s_Swerve,
@@ -158,8 +160,6 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
                         s_Vision.setDefaultCommand(addVisionPose);
 
-                                        
-                                        
                 /* Others */
                         // Auto chooser
                         autoChooser = AutoBuilder.buildAutoChooser("New Auto");
@@ -168,8 +168,6 @@ public class RobotContainer {
 
                         // Configure Smart Dashboard options
                         configureSmartDashboard();
-
-                
         }
 
         /**
@@ -230,6 +228,5 @@ public class RobotContainer {
         public Command getAutonomousCommand() {
                 // Executes the autonomous command chosen in smart dashboard
                 return autoChooser.getSelected();
-
         }
 }

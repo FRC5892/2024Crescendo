@@ -60,6 +60,8 @@ public class Intake extends SubsystemBase{
   @Override
   public void periodic() {
     // stolen from super
+
+
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
     //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
