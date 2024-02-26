@@ -36,9 +36,9 @@ public final class Constants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
     public static final double intakeSpeed = -0.6;
-    public static final double outtakeSpeed = 1;
-    public static final double deploySpeed = -0.36;
-    public static final double retractSpeed = 0.36;
+    public static final double outtakeSpeed = 0.5;
+    public static final double deploySpeed = -0.43;
+    public static final double retractSpeed = 0.43;
     public static final double maxVelocity = 1;
     public static final double maxAcceleration = 0.5;
 
@@ -96,7 +96,7 @@ public final class Constants {
 
     public static final double stickDeadBand = 0.1;
     public static final int pigeonID = 13;
-    public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+    public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
 
     /* Autonomous Speeds */
 

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -149,7 +150,7 @@ public class Intake extends SubsystemBase{
   }
 
   public Command intakeNoteCommand() {
-    return startEnd(() -> this.intakeNote(), this::stopIntake).until(()-> beamBreak.get());
+    return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get());
   }
 
   public Command intakeNoteSequence() {
@@ -168,6 +169,16 @@ public class Intake extends SubsystemBase{
   //   ()->goal,
   //   ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
   //   this);
+
+  public Command deployAmpCommand () {
+    return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
+  }
+
+  public Command scoreAmpSequence() {
+    return deployAmpCommand()
+    .andThen(new WaitCommand(1), outtakeNoteCommand())
+    .andThen(retractIntakeCommand());
+  }
 
 
 

@@ -69,14 +69,24 @@ public class RobotContainer {
                         XboxController.Button.kX.value);
                 private final JoystickButton fullShooterButton = new JoystickButton(codriver, 
                         XboxController.Button.kY.value);
+                private final JoystickButton scoreAmpSequenceButton = new JoystickButton(codriver, 
+                        XboxController.Button.kA.value);
+                private final JoystickButton shootButton = new JoystickButton(codriver,
+                        XboxController.Button.kB.value);
+
+                // private final JoystickButton deployIntakeButton = new JoystickButton(testDriver,
+                //         XboxController.Button.kY.value);
+                // private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
+                //         XboxController.Button.kB.value);
+
                         
                 // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
                 //         XboxController.Button.kLeftStick.value);
                 // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
                 //         XboxController.Button.kRightStick.value);
-                private final JoystickButton climbUpButton = new JoystickButton(codriver,
+                private final JoystickButton deployIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
-                private final JoystickButton climbDownButton = new JoystickButton(codriver,
+                private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
                 private final int tiltLeftButton = XboxController.Axis.kLeftTrigger.value;
                 private final int tiltRightButton = XboxController.Axis.kRightTrigger.value;
@@ -90,7 +100,6 @@ public class RobotContainer {
                         XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kB.value);
-                private final JoystickButton shootButton = new JoystickButton(testDriver, XboxController.Button.kLeftStick.value);
         /*Commands */
 
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -104,6 +113,7 @@ public class RobotContainer {
                 private final Command tiltRight = s_Climb.tiltRight();
         
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
+                private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
 
                 
                 private final Command openClawCommand = s_Claw.openClawCommand();
@@ -173,13 +183,19 @@ public class RobotContainer {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-                /* Note Manipulation */
+                /* Tester Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
-                fullShooterButton.whileTrue(fullShootCommand);
+
+                /* Codriver Buttons */
+                fullShooterButton.whileTrue(outtakeNote);
+                scoreAmpSequenceButton.whileTrue(scoreAmpSequence);
+                deployIntakeButton2.whileTrue(deployIntake);
+                retractIntakeButton2.whileTrue(retractIntake);
+
                 // intakeClawButton.whileTrue(openClawCommand);
                 // outtakeClawButton.whileTrue(closeClawCommand);
                 shootButton.whileTrue(shootCommand);
