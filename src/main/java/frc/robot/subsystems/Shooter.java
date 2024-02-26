@@ -63,9 +63,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putData("Shooter/SysId/right/dynamic backward", rSysIdDynamic(Direction.kReverse));
     SmartDashboard.putData("Shooter/SysId/right/quasistatic forward", rSysIdQuasistatic(Direction.kForward));
     SmartDashboard.putData("Shooter/SysId/right/quasistatic backward", rSysIdQuasistatic(Direction.kReverse));
-
-
   }
+
+
+  
   public void lShootVoltage(Measure<Voltage> volt) {
     leftKicker.setVoltage(volt.in(Units.Volts));
   }
@@ -101,17 +102,9 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void stopRightKickerMotor() {
-    rightKicker.set(0);
-  }
-
-  public void stopLeftKickerMotor() {
-    leftKicker.set(0);
-  }
-
   public void stopKickerMotors() {
-    stopLeftKickerMotor();
-    stopRightKickerMotor(); 
+    rightKicker.set(0);
+    leftKicker.set(0);
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
@@ -120,23 +113,26 @@ public class Shooter extends SubsystemBase {
     setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 0));
   }
 
+
+
   public Command shootCommand() {
     return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopKickerMotors);
   }
+
   public boolean ready() {
     return leftController.atSetpoint() && rightController.atSetpoint();
   }
+
   public boolean hasShot() {
     //TODO: implement me
     return false;
   }
 
-  /**
-   * speed form 0 -1
-   */
+  /*speed from 0 to -1 */
   public void setFeedMotorSpeed(double speed) {
     leftFeederMotor.set(speed);
   }
+
   public void stopFeedMotor() { 
     setFeedMotorSpeed(0);
   }
