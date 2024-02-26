@@ -39,19 +39,18 @@ public class Intake extends SubsystemBase{
 
   /* Creates a new GroundIntake. */
   public Intake() {
+
+
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
+    deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
     beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
     deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
     retractLimitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
 
-
-    
-
-    deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
     deployController.setPID(IntakeConstants.deployPID);
-    
     deployMotor.burnFlash();
 
     SmartDashboard.putData("Intake/subsystem",this);
@@ -61,10 +60,8 @@ public class Intake extends SubsystemBase{
   @Override
   public void periodic() {
     // stolen from super
-
-
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
-    SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
+    //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
     SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
     SmartDashboard.putBoolean("Intake/deploy", deployLimitSwitch.get());
@@ -72,114 +69,98 @@ public class Intake extends SubsystemBase{
 
   }
 
-  /* Intaking */
-  public void runIntake() {
-    intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
-  }
+  /* Other Functions */
+    public double getDeployRotation() {
+      return deployEncoder.getPosition();
+    }
 
-  public double getDeployRotation() {
-    return deployEncoder.getPosition();
-  }
-
-  public void intakeNote() {
-
-      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
-
-  }
-
-  public void outtakeNote() {
-    intakeMotor.set(IntakeConstants.outtakeSpeed);
-  }
-
-  public void stopIntake() {
-    intakeMotor.set(0);
-
-  }
-
-  /* via Chloe */
-  public void setDeploySetPoint(double setpoint) {
-    // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
-    deployController.setReference(setpoint, ControlType.kPosition);
-  }
-
-  public void setDeploySpeed(double speed) {
-    deployMotor.set(speed);
-  }
-
-  public void stopDeploy() {
-    deployMotor.set(0);
-    deployController.setReference(0, ControlType.kPosition);
-
-  }
-
-  // TODO: this doesn't work no matter how much I want it to so lets fix that tmr
-
-
-  public void coastMode() {
+    public void coastMode() {
     deployMotor.setIdleMode(IdleMode.kCoast);
-  }
-  // should be working deploy once we get pid working
+    }
 
-  public void retractIntake() {
-    deployMotor.set(IntakeConstants.retractSpeed);
-  }
+  
+  /* Intaking */
+    public void intakeNote() {
+      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+    }
+
+    public void outtakeNote() {
+      intakeMotor.set(IntakeConstants.outtakeSpeed);
+    }
+
+    public void stopIntake() {
+      intakeMotor.set(0);
+    }
 
 
+  /* Deploying */  
+    public void setDeploySpeed(double speed) {
+      deployMotor.set(speed);
+    }
+
+    public void stopDeploy() {
+      deployMotor.set(0);
+      deployController.setReference(0, ControlType.kPosition);
+
+    }
+
+    //PID?
+    public void setDeploySetPoint(double setpoint) {
+      // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
+      deployController.setReference(setpoint, ControlType.kPosition);
+    }
+  
 
 
   /* Commands */
-  public Command intakeSequenceCommand() {
-    return deployIntakeCommand().andThen(intakeNoteCommand());
-  }
+    /* Codriver Commands */
+      public Command intakeNoteSequence() {
+        return deployIntakeCommand()
+        .andThen(intakeNoteCommand())
+        .andThen(retractIntakeCommand());
+      }
 
-  public Command deployIntakeCommand() {
+      public Command scoreAmpSequence() {
+        return deployAmpCommand()
+        .andThen(new WaitCommand(1), outtakeNoteCommand())
+        .andThen(retractIntakeCommand());
+      }
 
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-    return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy).until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
-  }
+      public Command deployIntakeCommand() {
+        // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
+        return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy)
+        .until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
+      }
 
-  public Command retractIntakeCommand() {
-    // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-    return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
-    // .alongWith(
-    //   outtakeNoteCommand().withTimeout(0.1),
-    //   intakeNoteCommand()
-    //   .withTimeout(0.25)
-    // )
-    .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
-  }
+      public Command retractIntakeCommand() {
+        // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
+        return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
+        .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
 
-  public Command intakeNoteCommand() {
-    return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get());
-  }
+        // .alongWith(
+        //   outtakeNoteCommand().withTimeout(0.1),
+        //   intakeNoteCommand()
+        //   .withTimeout(0.25)
+        // )
+      }
 
-  public Command intakeNoteSequence() {
-    return deployIntakeCommand()
-    .andThen(intakeNoteCommand())
-    .andThen(retractIntakeCommand());
-  }
+    /* Test Commands */
+      public Command intakeNoteCommand() {
+        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get());
+      }
 
-  public Command outtakeNoteCommand () {
-    return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
-  }
+      public Command outtakeNoteCommand () {
+        return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+      }
 
-  // public final Command trapezoidCommand = new TrapezoidProfileCommand(
-  //   profile,
-  //   (state)->setDeploySpeed(state.velocity),
-  //   ()->goal,
-  //   ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
-  //   this);
+      public Command deployAmpCommand () {
+        return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
+      }
 
-  public Command deployAmpCommand () {
-    return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
-  }
-
-  public Command scoreAmpSequence() {
-    return deployAmpCommand()
-    .andThen(new WaitCommand(1), outtakeNoteCommand())
-    .andThen(retractIntakeCommand());
-  }
-
-
-
+      // public final Command trapezoidCommand = new TrapezoidProfileCommand(
+      //   profile,
+      //   (state)->setDeploySpeed(state.velocity),
+      //   ()->goal,
+      //   ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
+      //   this);
 }

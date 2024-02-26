@@ -9,7 +9,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 // import frc.robot.autos.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climb.Claw;
+import frc.robot.subsystems.Climb.Climb;
 
 /* 
 Summary:
@@ -64,32 +65,29 @@ public class RobotContainer {
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
 
+                private final JoystickButton climbUpButton = new JoystickButton(driver,
+                        XboxController.Button.kLeftBumper.value);
+                private final JoystickButton climbDownButton = new JoystickButton(driver,
+                        XboxController.Button.kRightBumper.value);
+                private final int tiltLeftButton = XboxController.Axis.kLeftTrigger.value;
+                private final int tiltRightButton = XboxController.Axis.kRightTrigger.value;
+                
+
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
-                private final JoystickButton fullShooterButton = new JoystickButton(codriver, 
+                private final JoystickButton shootButton = new JoystickButton(codriver, 
                         XboxController.Button.kY.value);
-                private final JoystickButton scoreAmpSequenceButton = new JoystickButton(codriver, 
-                        XboxController.Button.kA.value);
-                private final JoystickButton shootButton = new JoystickButton(codriver,
+                private final JoystickButton revShooterButton = new JoystickButton(codriver,
                         XboxController.Button.kB.value);
+                private final JoystickButton scoreAmpSequenceButton = new JoystickButton(codriver, 
+                        XboxController.Button.kA.value);   
 
-                // private final JoystickButton deployIntakeButton = new JoystickButton(testDriver,
-                //         XboxController.Button.kY.value);
-                // private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
-                //         XboxController.Button.kB.value);
-
-                        
-                // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
-                //         XboxController.Button.kLeftStick.value);
-                // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
-                //         XboxController.Button.kRightStick.value);
                 private final JoystickButton deployIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
-                private final int tiltLeftButton = XboxController.Axis.kLeftTrigger.value;
-                private final int tiltRightButton = XboxController.Axis.kRightTrigger.value;
+                
                         
                 /* Test-Driver buttons */
                 private final JoystickButton intakeNoteButton = new JoystickButton(testDriver, 
@@ -100,31 +98,34 @@ public class RobotContainer {
                         XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kB.value);
-        /*Commands */
-
-                private final Command shootCommand = s_Shooter.shootCommand();
-                private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
-                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
-                private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
-                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
+                // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
+                //         XboxController.Button.kLeftStick.value);
+                // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
+                //         XboxController.Button.kRightStick.value);
+        
+        /* Commands */
+                /* Driver */
                 private final Command climbUp = s_Climb.climbUp();
                 private final Command climbDown = s_Climb.climbDown();
                 private final Command tiltLeft = s_Climb.tiltLeft();
                 private final Command tiltRight = s_Climb.tiltRight();
-        
-                private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
-                private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
 
-                
-                private final Command openClawCommand = s_Claw.openClawCommand();
-                private final Command closeClawCommand = s_Claw.closeClawCommand();
-                //THIS IS JUST THE IntakeNote COMMAND AND NOT THE IntakeNoteSequence 
-                //private final Command intakeNoteSequence = s_GroundIntake.intakeNoteCommand();
+                /* Test */
+                private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
+                // private final Command openClawCommand = s_Claw.openClawCommand();
+                // private final Command closeClawCommand = s_Claw.closeClawCommand();
+                //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);                
+        
+                /* Codriver  */
+                private final Command shootCommand = s_Shooter.shootCommand();
+                private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence();
-                private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
+                private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
+                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
+                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
                 
-                // private final Command climbUp = s_Climb.climbUp();
-                // private final Command climbDown = s_Climb.climbDown();
+                /* General */
+                private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
         /* Other */
                 /* SendableChooser */
@@ -180,27 +181,34 @@ public class RobotContainer {
          * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
          */
         private void configureButtonBindings() {
+
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+                climbUpButton.whileTrue(climbUp);
+                climbDownButton.whileTrue(climbDown);
+                new Trigger(() -> driver.getRawAxis(tiltLeftButton) >= 0.5).whileTrue(tiltLeft);
+                new Trigger(() -> driver.getRawAxis(tiltRightButton) >= 0.5).whileTrue(tiltRight);
 
-                /* Tester Buttons */
-                intakeNoteSequenceButton.onTrue(intakeNoteSequence);
+
+                /* Testing */
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
 
+
                 /* Codriver Buttons */
-                fullShooterButton.whileTrue(outtakeNote);
+                intakeNoteSequenceButton.onTrue(intakeNoteSequence);
+                revShooterButton.whileTrue(shootCommand);
+                shootButton.whileTrue(outtakeNote);
+
                 scoreAmpSequenceButton.whileTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
                 retractIntakeButton2.whileTrue(retractIntake);
 
                 // intakeClawButton.whileTrue(openClawCommand);
                 // outtakeClawButton.whileTrue(closeClawCommand);
-                shootButton.whileTrue(shootCommand);
-                new Trigger(() -> codriver.getRawAxis(tiltLeftButton) >= 0.5).whileTrue(tiltLeft);
-                new Trigger(() -> codriver.getRawAxis(tiltRightButton) >= 0.5).whileTrue(tiltRight);
+                
         }
 
         private void configureSmartDashboard() {
