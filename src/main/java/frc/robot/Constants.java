@@ -23,8 +23,8 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class ClimbConstants {
-    public static final int elevatorMotorID = 15;
-    public static final int leftClimbMotorID = 16;
+    public static final int elevatorMotorID = 40;
+    public static final int leftClimbMotorID = 41;
     public static final int rightClimbMotorID = 42;
     public static final double elevatorSpeed = 0.5;
     public static final double climbSpeed = 0.5;

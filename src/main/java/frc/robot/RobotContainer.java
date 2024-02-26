@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 // import frc.robot.autos.*;
@@ -66,14 +67,6 @@ public class RobotContainer {
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
 
-                private final JoystickButton climbUpButton = new JoystickButton(driver,
-                        XboxController.Button.kLeftBumper.value);
-                private final JoystickButton climbDownButton = new JoystickButton(driver,
-                        XboxController.Button.kRightBumper.value);
-                private final int tiltLeftButton = XboxController.Axis.kLeftTrigger.value;
-                private final int tiltRightButton = XboxController.Axis.kRightTrigger.value;
-                
-
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
                         XboxController.Button.kX.value);
@@ -83,7 +76,10 @@ public class RobotContainer {
                         XboxController.Button.kB.value);
                 private final JoystickButton scoreAmpSequenceButton = new JoystickButton(codriver, 
                         XboxController.Button.kA.value);   
-
+                private final POVButton climbUpButton = new POVButton(codriver, 0);
+                private final POVButton climbDownButton = new POVButton(codriver, 180);
+                private final POVButton tiltClimbLeftButton = new POVButton(codriver, 270);
+                private final POVButton tiltClimbRightButton = new POVButton(codriver, 90);
                 private final JoystickButton deployIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
@@ -115,7 +111,7 @@ public class RobotContainer {
                 private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
                 // private final Command openClawCommand = s_Claw.openClawCommand();
                 // private final Command closeClawCommand = s_Claw.closeClawCommand();
-                //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);                
+                //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
         
                 /* Codriver  */
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -147,7 +143,7 @@ public class RobotContainer {
                         SmartDashboard.putData("ShootCommand",shootCommand);
                 
                 /* PathPlanner Named Commands */
-                NamedCommands.registerCommand("intakeSequence", intakeNoteSequence);
+                        NamedCommands.registerCommand("intakeSequence", intakeNoteSequence);
                 
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(
@@ -182,23 +178,23 @@ public class RobotContainer {
 
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-                climbUpButton.whileTrue(climbUp);
-                climbDownButton.whileTrue(climbDown);
-                new Trigger(() -> driver.getRawAxis(tiltLeftButton) >= 0.5).whileTrue(tiltLeft);
-                new Trigger(() -> driver.getRawAxis(tiltRightButton) >= 0.5).whileTrue(tiltRight);
-
-
+                
+                
                 /* Testing */
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
                 deployIntakeButton.whileTrue(deployIntake);
                 retractIntakeButton.whileTrue(retractIntake);
-
-
+                
+                
                 /* Codriver Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 revShooterButton.whileTrue(shootCommand);
                 shootButton.whileTrue(outtakeNote);
+                climbUpButton.whileTrue(climbUp);
+                climbDownButton.whileTrue(climbDown);
+                tiltClimbLeftButton.whileTrue(tiltLeft);
+                tiltClimbRightButton.whileTrue(tiltRight);
 
                 scoreAmpSequenceButton.whileTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);

@@ -29,6 +29,12 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center 2 note path 2"
+          }
         }
       ]
     }

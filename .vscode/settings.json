@@ -45,5 +45,6 @@
     "Teleop",
     "Vbat",
     "wpilibj"
-  ]
+  ],
+  "java.debug.settings.onBuildFailureProceed": true
 }
