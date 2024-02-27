@@ -143,6 +143,7 @@ public class RobotContainer {
                         SmartDashboard.putData("ShootCommand",shootCommand);
                 
                 /* PathPlanner Named Commands */
+                        s_Swerve.setupPathPlanner();
                         NamedCommands.registerCommand("intakeSequence", intakeNoteSequence);
                 
                 /* Default Commands */

@@ -67,6 +67,32 @@ public class Swerve extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData(field);
 
+    
+    routine = new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(this::voltageDrive, null, this));
+
+    SmartDashboard.putData("Swerve/SysId/dynamic forward", sysIdDynamic(Direction.kForward));
+    SmartDashboard.putData("Swerve/SysId/dynamic backward", sysIdDynamic(Direction.kReverse));
+    SmartDashboard.putData("Swerve/SysId/quasistatic forward", sysIdQuasistatic(Direction.kForward));
+    SmartDashboard.putData("Swerve/SysId/quasistatic backward", sysIdQuasistatic(Direction.kReverse));
+    SmartDashboard.putData("Swerve/subsytem", this);
+
+    Preferences.initDouble("offset 0", Constants.Swerve.Mod0.offsetDegree);
+    Preferences.initDouble("offset 1", Constants.Swerve.Mod1.offsetDegree);
+    Preferences.initDouble("offset 2", Constants.Swerve.Mod2.offsetDegree);
+    Preferences.initDouble("offset 3", Constants.Swerve.Mod3.offsetDegree);
+
+  }
+
+  public void getPreferences() {
+    mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0", mSwerveMods[0].getAngleOffset().getDegrees()));
+    mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1", mSwerveMods[1].getAngleOffset().getDegrees()));
+    mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2", mSwerveMods[2].getAngleOffset().getDegrees()));
+    mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3", mSwerveMods[3].getAngleOffset().getDegrees()));
+
+  }
+  public void setupPathPlanner() {
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -93,29 +119,6 @@ public class Swerve extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
-    routine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(this::voltageDrive, null, this));
-
-    SmartDashboard.putData("Swerve/SysId/dynamic forward", sysIdDynamic(Direction.kForward));
-    SmartDashboard.putData("Swerve/SysId/dynamic backward", sysIdDynamic(Direction.kReverse));
-    SmartDashboard.putData("Swerve/SysId/quasistatic forward", sysIdQuasistatic(Direction.kForward));
-    SmartDashboard.putData("Swerve/SysId/quasistatic backward", sysIdQuasistatic(Direction.kReverse));
-    SmartDashboard.putData("Swerve/subsytem", this);
-
-    Preferences.initDouble("offset 0", Constants.Swerve.Mod0.offsetDegree);
-    Preferences.initDouble("offset 1", Constants.Swerve.Mod1.offsetDegree);
-    Preferences.initDouble("offset 2", Constants.Swerve.Mod2.offsetDegree);
-    Preferences.initDouble("offset 3", Constants.Swerve.Mod3.offsetDegree);
-
-  }
-
-  public void getPreferences() {
-    mSwerveMods[0].setAngleOffset(Preferences.getDouble("offset 0", mSwerveMods[0].getAngleOffset().getDegrees()));
-    mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1", mSwerveMods[1].getAngleOffset().getDegrees()));
-    mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2", mSwerveMods[2].getAngleOffset().getDegrees()));
-    mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3", mSwerveMods[3].getAngleOffset().getDegrees()));
-
   }
 
   public void voltageDrive(Measure<Voltage> volts) {
