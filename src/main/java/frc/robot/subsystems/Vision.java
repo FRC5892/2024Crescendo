@@ -6,16 +6,23 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +38,7 @@ public class Vision extends SubsystemBase {
   private Pose2d visionPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Field2d field2d;
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-
+  StructArrayPublisher<Pose3d> arrayPublisher;
   /**
    * Creates a new AprilTagVision3.
    * 
@@ -51,6 +58,9 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putData("Vision estimated Pose",field2d);
 
     poseTimestamp = Timer.getFPGATimestamp();
+    arrayPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("SmartDashboard/Vision/Tags", Pose3d.struct).publish();
+      SmartDashboard.putBoolean("Vision/hi", false);
   }
   
   // feed into SwerveDrivePoseEstimator
@@ -76,12 +86,17 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     Optional<EstimatedRobotPose> estimatedPose = getEstimatedGlobalPose(referencePose);
     if (estimatedPose.isPresent()) {
+
       this.visionPose = estimatedPose.get().estimatedPose.toPose2d();
       this.poseTimestamp = estimatedPose.get().timestampSeconds;
     }
     var result = camera.getLatestResult();
+    ArrayList<Pose3d> array = new ArrayList<Pose3d>();
+    result.getTargets().forEach((t)->{
+      array.add(new Pose3d(getVisionPose()).plus(t.getBestCameraToTarget().plus(poseEstimator.getRobotToCameraTransform().inverse())));
+    });
     field2d.setRobotPose(this.visionPose);
-
+    arrayPublisher.set(array.toArray(new Pose3d[result.getTargets().size()]));
     
     SmartDashboard.putNumber("Vision estimated Angle",getVisionPose().getRotation().getDegrees());
     SmartDashboard.putBoolean("Has Targets", result.hasTargets());
