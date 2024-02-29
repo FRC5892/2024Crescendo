@@ -128,21 +128,21 @@ public final class Constants {
     public static final int driveContinuousCurrentLimit = 50;
 
     /* TODO: test Angle Motor PID Values (these are default, may tune if needed) */
-    public static final double angleKP = 0.01;
+    public static final double angleKP = 0.02;
     public static final double angleKI = 0.0;
     public static final double angleKD = 0.0;
     public static final double angleKFF = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.0; // TODO: Tune after charactarization
+    public static final double driveKP = 0.00; // TODO: Tune after charactarization
     public static final double driveKI = 0.0; // leave
     public static final double driveKD = 0.0; // leave
     public static final double driveKFF = 0.0; // leave
 
     /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
-    public static final double driveKS = 0.0;
-    public static final double driveKV = 0.0;
-    public static final double driveKA = 0.0;
+    public static final double driveKS = 0.119;
+    public static final double driveKV = 2.3823;
+    public static final double driveKA = 0.3;
 
     /* Drive Motor Conversion Factors */
     public static final double driveConversionVelocityFactor = ((wheelDiameter * Math.PI) / driveGearRatio) / 60.0;

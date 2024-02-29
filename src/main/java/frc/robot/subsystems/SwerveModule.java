@@ -165,23 +165,23 @@ public class SwerveModule {
   }
 
   private boolean burnFlash(int attempt) {
-      driveController.setP(Constants.Swerve.angleKP);
-      driveController.setI(Constants.Swerve.angleKI);
-      driveController.setD(Constants.Swerve.angleKD);
-      driveController.setFF(Constants.Swerve.angleKFF);
-      try {
-          Thread.sleep(300);
-          driveMotor.burnFlash();
-          Thread.sleep(300);
-      } catch (Exception e) {
-          return false;
-      }
-      if (driveController.getP()==Constants.Swerve.angleKP&&driveController.getI()==Constants.Swerve.angleKI&&driveController.getD()==Constants.Swerve.angleKD) {
-          return true;
-      } else {  
-          if (attempt >= 5) return false;
-          return burnFlash(attempt+1);
-      }
+    driveController.setP(Constants.Swerve.driveKP);
+    driveController.setI(Constants.Swerve.driveKI);
+    driveController.setD(Constants.Swerve.driveKD);
+    driveController.setFF(Constants.Swerve.driveKFF);
+    try {
+      Thread.sleep(300);
+      driveMotor.burnFlash();
+      Thread.sleep(300);
+    } catch (Exception e) {
+      return false;
+    }
+    if (driveController.getP()==Constants.Swerve.angleKP&&driveController.getI()==Constants.Swerve.angleKI&&driveController.getD()==Constants.Swerve.angleKD) {
+      return true;
+    } else {  
+      if (attempt >= 5) return false;
+      return burnFlash(attempt+1);
+    }
   }
 
   public SwerveModuleState getDesiredState() {

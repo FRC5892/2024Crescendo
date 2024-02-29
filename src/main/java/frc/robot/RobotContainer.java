@@ -127,7 +127,6 @@ public class RobotContainer {
         /* Other */
                 /* SendableChooser */
                 public final SendableChooser<Command> autoChooser;
-
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
@@ -145,7 +144,8 @@ public class RobotContainer {
                 /* PathPlanner Named Commands */
                         s_Swerve.setupPathPlanner();
                         NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence());
-                
+                        NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
+
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(
                                 new TeleopSwerve(
