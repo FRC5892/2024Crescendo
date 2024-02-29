@@ -144,7 +144,7 @@ public class RobotContainer {
                 
                 /* PathPlanner Named Commands */
                         s_Swerve.setupPathPlanner();
-                        NamedCommands.registerCommand("intakeSequence", intakeNoteSequence);
+                        NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence());
                 
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(
@@ -159,7 +159,7 @@ public class RobotContainer {
 
                 /* Others */
                         // Auto chooser
-                        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+                        autoChooser = AutoBuilder.buildAutoChooser("Center 2 note auto");
                         // Configure the button bindings
                         configureButtonBindings();
 
