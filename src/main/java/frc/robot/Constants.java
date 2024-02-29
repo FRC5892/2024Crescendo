@@ -72,8 +72,8 @@ public final class Constants {
   public static final class VisionConstants {
     public static final String CAMERA_NAME = "defaultCamera";
     // TODO: change me
-    public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.3302,-0.3302, 0.27305),
-        new Rotation3d(0, 0, 0));//Units.Degrees.of(22).in(Units.Radians))); // Cam mounted facing forward, half a meter forward of center, half a meter up
+    public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
+        new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14));//Units.Degrees.of(22).in(Units.Radians))); // Cam mounted facing forward, half a meter forward of center, half a meter up
                                                   // from center.
     public static final String FIELD_LAYOUT_RESOURCE_FILE = AprilTagFields.k2024Crescendo.m_resourceFile;
   }

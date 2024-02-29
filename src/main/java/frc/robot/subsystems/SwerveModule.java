@@ -140,7 +140,7 @@ public class SwerveModule {
     // } catch (InterruptedException e) {
     //   throw new RuntimeException();
     // }
-    angleMotor.burnFlash();
+    // angleMotor.burnFlash();
 
     
     resetToAbsolute();

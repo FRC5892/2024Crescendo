@@ -16,8 +16,10 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -79,6 +81,8 @@ public class Vision extends SubsystemBase {
   } 
   StructArrayPublisher<Pose3d> publisher = NetworkTableInstance.getDefault()
     .getStructArrayTopic("SmartDashboard/test2", Pose3d.struct).publish();
+StructPublisher<Transform3d> publisher2 = NetworkTableInstance.getDefault()
+    .getStructTopic("SmartDashboard/test3", Transform3d.struct).publish();
   @Override
   public void periodic() {
     Optional<EstimatedRobotPose> estimatedPose = getEstimatedGlobalPose(referencePose);
@@ -90,7 +94,7 @@ public class Vision extends SubsystemBase {
     var result = camera.getLatestResult();
     field2d.setRobotPose(this.visionPose);
     publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get()).toArray(size -> new Pose3d[size]));
-    
+    publisher2.set(VisionConstants.ROBOT_TO_CAM);
     SmartDashboard.putNumber("Vision estimated Angle",getVisionPose().getRotation().getDegrees());
     SmartDashboard.putBoolean("Has Targets", result.hasTargets());
 

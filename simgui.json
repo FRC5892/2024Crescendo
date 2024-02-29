@@ -15,6 +15,16 @@
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Intake/pid": "PIDController",
       "/SmartDashboard/Intake/subsystem": "Subsystem",
+      "/SmartDashboard/IntakeCommand": "Command",
+      "/SmartDashboard/ShootCommand": "Command",
+      "/SmartDashboard/Shooter/SysId/left/dynamic backward": "Command",
+      "/SmartDashboard/Shooter/SysId/left/dynamic forward": "Command",
+      "/SmartDashboard/Shooter/SysId/left/quasistatic backward": "Command",
+      "/SmartDashboard/Shooter/SysId/left/quasistatic forward": "Command",
+      "/SmartDashboard/Shooter/SysId/right/dynamic backward": "Command",
+      "/SmartDashboard/Shooter/SysId/right/dynamic forward": "Command",
+      "/SmartDashboard/Shooter/SysId/right/quasistatic backward": "Command",
+      "/SmartDashboard/Shooter/SysId/right/quasistatic forward": "Command",
       "/SmartDashboard/Shooter/leftPID": "PIDController",
       "/SmartDashboard/Shooter/rightPID": "PIDController",
       "/SmartDashboard/Shooter/subsystem": "Subsystem",
@@ -22,7 +32,8 @@
       "/SmartDashboard/Swerve/SysId/dynamic forward": "Command",
       "/SmartDashboard/Swerve/SysId/quasistatic backward": "Command",
       "/SmartDashboard/Swerve/SysId/quasistatic forward": "Command",
-      "/SmartDashboard/Swerve/subsytem": "Subsystem"
+      "/SmartDashboard/Swerve/subsytem": "Subsystem",
+      "/SmartDashboard/Vision estimated Pose": "Field2d"
     }
   },
   "NetworkTables": {
