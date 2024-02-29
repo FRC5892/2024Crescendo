@@ -10,12 +10,6 @@
           "data": {
             "pathName": "Move from start"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
-          }
         }
       ]
     }

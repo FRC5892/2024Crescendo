@@ -90,8 +90,8 @@ public class Swerve extends SubsystemBase {
     mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1", mSwerveMods[1].getAngleOffset().getDegrees()));
     mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2", mSwerveMods[2].getAngleOffset().getDegrees()));
     mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3", mSwerveMods[3].getAngleOffset().getDegrees()));
-
   }
+
   public void setupPathPlanner() {
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
@@ -102,7 +102,7 @@ public class Swerve extends SubsystemBase {
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
             4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new Translation2d(0.4, 0.4).getNorm(), // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         () -> {
