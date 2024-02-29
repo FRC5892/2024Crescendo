@@ -6,26 +6,16 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.Timer;
@@ -98,10 +88,6 @@ public class Vision extends SubsystemBase {
       this.poseTimestamp = estimatedPose.get().timestampSeconds;
     }
     var result = camera.getLatestResult();
-    ArrayList<Pose3d> array = new ArrayList<Pose3d>();
-    result.getTargets().forEach((t)->{
-      array.add(new Pose3d(getVisionPose()).plus(t.getBestCameraToTarget().plus(poseEstimator.getRobotToCameraTransform().inverse())));
-    });
     field2d.setRobotPose(this.visionPose);
     publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId())).toArray(size -> new Pose3d[size]));
     
