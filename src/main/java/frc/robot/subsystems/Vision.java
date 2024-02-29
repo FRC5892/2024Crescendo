@@ -89,7 +89,7 @@ public class Vision extends SubsystemBase {
     }
     var result = camera.getLatestResult();
     field2d.setRobotPose(this.visionPose);
-    publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId())).toArray(size -> new Pose3d[size]));
+    publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get()).toArray(size -> new Pose3d[size]));
     
     SmartDashboard.putNumber("Vision estimated Angle",getVisionPose().getRotation().getDegrees());
     SmartDashboard.putBoolean("Has Targets", result.hasTargets());
