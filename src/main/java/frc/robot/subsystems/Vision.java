@@ -35,7 +35,6 @@ public class Vision extends SubsystemBase {
   private Pose2d visionPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Field2d field2d;
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-  StructArrayPublisher<Pose3d> arrayPublisher;
   /**
    * Creates a new AprilTagVision3.
    * 
@@ -55,9 +54,6 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putData("Vision estimated Pose",field2d);
 
     poseTimestamp = Timer.getFPGATimestamp();
-    arrayPublisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("SmartDashboard/Vision/Tags", Pose3d.struct).publish();
-      SmartDashboard.putBoolean("Vision/hi", false);
   }
   
   // feed into SwerveDrivePoseEstimator
@@ -80,9 +76,7 @@ public class Vision extends SubsystemBase {
     this.referencePose = referencePose;
   } 
   StructArrayPublisher<Pose3d> publisher = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("SmartDashboard/test2", Pose3d.struct).publish();
-StructPublisher<Transform3d> publisher2 = NetworkTableInstance.getDefault()
-    .getStructTopic("SmartDashboard/test3", Transform3d.struct).publish();
+    .getStructArrayTopic("SmartDashboard/Vision/Tags", Pose3d.struct).publish();
   @Override
   public void periodic() {
     Optional<EstimatedRobotPose> estimatedPose = getEstimatedGlobalPose(referencePose);
@@ -94,11 +88,9 @@ StructPublisher<Transform3d> publisher2 = NetworkTableInstance.getDefault()
     var result = camera.getLatestResult();
     field2d.setRobotPose(this.visionPose);
     publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get()).toArray(size -> new Pose3d[size]));
-    publisher2.set(VisionConstants.ROBOT_TO_CAM);
     SmartDashboard.putNumber("Vision estimated Angle",getVisionPose().getRotation().getDegrees());
     SmartDashboard.putBoolean("Has Targets", result.hasTargets());
 
-    SmartDashboard.putNumberArray("test", new double[]{0,1,2,3,4,5});
 
   }
   
