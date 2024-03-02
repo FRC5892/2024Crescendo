@@ -10,10 +10,12 @@ Energy HERO'S Crescendo code
 ### Co-Driver
 |Button|Value|
 |-|-|
+|Left Bumper|Deploy Intake|
+|Right Bumper|Retract Intake|
 |X|Intake Note Sequence|
 |Y|Shoot|
-|A|Claw Intake|
-|B|Claw Outtake|
+|A|Amp Note Sequence|
+|B|Rev Up Shooter|
 ### Test Driver
 |Button|Value|
 |-|-|
