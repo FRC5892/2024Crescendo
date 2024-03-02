@@ -16,6 +16,7 @@ public class AddVisionPose extends Command{
     this.vision = vision3;
     this.swerveSubsytem = swerve;
     addRequirements(vision);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -38,5 +39,9 @@ public class AddVisionPose extends Command{
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public boolean runsWhenDisabled() {
+        return true;
   }
 }
