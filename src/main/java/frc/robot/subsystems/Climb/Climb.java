@@ -80,6 +80,10 @@ public class Climb extends SubsystemBase {
     return runEnd(this::retractMotors, this::stopMotors);
   }
 
+  public Command climbLeftDown() {
+    return runEnd(this::climbLeftMotor, this::stopLeft);
+  }
+
   public Command tiltLeft() {
     return runEnd(this::retractLeftMotor, this::stopLeft);
   }

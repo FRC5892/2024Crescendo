@@ -91,10 +91,14 @@ public class RobotContainer {
                         XboxController.Button.kX.value);
                 private final JoystickButton outtakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kA.value);
-                private final JoystickButton deployIntakeButton = new JoystickButton(testDriver,
+                private final JoystickButton climbLeftButton = new JoystickButton(testDriver,
                         XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kB.value);
+                private final JoystickButton testClimbUpButton = new JoystickButton(testDriver, 
+                        XboxController.Button.kLeftBumper.value);
+                private final JoystickButton testClimbDownButton = new JoystickButton(testDriver, 
+                        XboxController.Button.kRightBumper.value);
                 // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
                 //         XboxController.Button.kLeftStick.value);
                 // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
@@ -109,6 +113,7 @@ public class RobotContainer {
 
                 /* Test */
                 private final Command intakeNote = s_GroundIntake.intakeNoteCommand();
+                private final Command climbLeft = s_Climb.climbLeftDown();
                 // private final Command openClawCommand = s_Claw.openClawCommand();
                 // private final Command closeClawCommand = s_Claw.closeClawCommand();
                 //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
@@ -188,7 +193,7 @@ public class RobotContainer {
                 /* Testing */
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
-                deployIntakeButton.whileTrue(deployIntake);
+                climbLeftButton.whileTrue(climbLeft);
                 retractIntakeButton.whileTrue(retractIntake);
                 
                 
@@ -207,7 +212,8 @@ public class RobotContainer {
 
                 // intakeClawButton.whileTrue(openClawCommand);
                 // outtakeClawButton.whileTrue(closeClawCommand);
-                
+                testClimbUpButton.whileTrue(climbUp);
+                testClimbDownButton.whileTrue(climbDown);
         }
 
         private void configureSmartDashboard() {
