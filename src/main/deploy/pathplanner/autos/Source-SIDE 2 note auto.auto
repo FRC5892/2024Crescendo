@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3617289206409402,
-      "y": 5.535493887889185
+      "x": 0.7,
+      "y": 4.38
     },
-    "rotation": 0.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -40,57 +40,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Center 2 note path 1"
+                        "pathName": "Source-SIDE 2 note path 1"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Center 2 note path 2"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSequence"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "deployIntake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeSequence"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "3 note path 1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "3 note path 2"
+                        "pathName": "Source-SIDE 2 note path 2"
                       }
                     }
                   ]

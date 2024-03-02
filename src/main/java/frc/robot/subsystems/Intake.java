@@ -151,11 +151,11 @@ public class Intake extends SubsystemBase{
         return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get());
       }
 
-      public Command outtakeNoteCommand () {
+      public Command outtakeNoteCommand() {
         return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
       }
 
-      public Command deployAmpCommand () {
+      public Command deployAmpCommand() {
         return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
       }
 

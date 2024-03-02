@@ -3,32 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 5.54
+        "x": 0.7,
+        "y": 4.38
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4999999999999996,
-        "y": 5.54
+        "x": 0.9500000000000002,
+        "y": 3.9469872981077807
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3617289206409402,
-        "y": 5.535493887889185
+        "x": 1.75,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.36172892064094,
-        "y": 5.535493887889185
+        "x": 1.2500761524218045,
+        "y": 4.091273796781358
+      },
+      "nextControl": {
+        "x": 2.2499238475781955,
+        "y": 4.108726203218642
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 4.1
+      },
+      "prevControl": {
+        "x": 1.7374104645523611,
+        "y": 4.1
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -43,9 +65,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center 2 note",
+  "folder": "Source-SIDE 2 note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

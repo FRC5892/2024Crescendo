@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 0.7,
-      "y": 6.7
+      "y": 4.38
     },
     "rotation": 60.0
   },
@@ -15,6 +15,12 @@
           "type": "named",
           "data": {
             "name": "shootSequence"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "deployIntake"
           }
         },
         {
@@ -32,21 +38,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 2.0
+                        "pathName": "Amp-SIDE 2 note path 1"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left 2 note path 1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Left 2 note path 2"
+                        "pathName": "Amp-SIDE 2 note path 2"
                       }
                     }
                   ]

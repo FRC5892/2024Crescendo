@@ -4,31 +4,53 @@
     {
       "anchor": {
         "x": 2.5,
-        "y": 5.54
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4999999999999996,
-        "y": 5.54
+        "x": 2.0,
+        "y": 4.1
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3617289206409402,
-        "y": 5.535493887889185
+        "x": 1.75,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.36172892064094,
-        "y": 5.535493887889185
+        "x": 2.25,
+        "y": 4.1
+      },
+      "nextControl": {
+        "x": 1.25,
+        "y": 4.1
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7,
+        "y": 4.38
+      },
+      "prevControl": {
+        "x": 0.95,
+        "y": 3.9469872981077807
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center 2 note",
+  "folder": "Source-SIDE 2 note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

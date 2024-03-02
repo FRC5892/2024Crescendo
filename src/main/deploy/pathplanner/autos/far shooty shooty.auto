@@ -1,20 +1,20 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.4628998272081055,
+      "y": 1.95
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "retractIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSequence"
+            "pathName": "far shooty shooty"
           }
         }
       ]

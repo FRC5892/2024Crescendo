@@ -143,8 +143,12 @@ public class RobotContainer {
                 
                 /* PathPlanner Named Commands */
                         s_Swerve.setupPathPlanner();
+                        NamedCommands.registerCommand("deployIntake", s_GroundIntake.deployIntakeCommand());
+                        NamedCommands.registerCommand("retractIntake", s_GroundIntake.retractIntakeCommand());
                         NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence());
                         NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
+                        NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
+                        NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
 
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(

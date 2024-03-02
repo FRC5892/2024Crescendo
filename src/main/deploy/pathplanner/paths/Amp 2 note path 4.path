@@ -4,31 +4,53 @@
     {
       "anchor": {
         "x": 2.5,
-        "y": 5.54
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4999999999999996,
-        "y": 5.54
+        "x": 3.0,
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3617289206409402,
-        "y": 5.535493887889185
+        "x": 1.83,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 2.36172892064094,
-        "y": 5.535493887889185
+        "x": 1.83,
+        "y": 6.5
+      },
+      "nextControl": {
+        "x": 1.83,
+        "y": 7.1
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.83,
+        "y": 7.65
+      },
+      "prevControl": {
+        "x": 1.83,
+        "y": 7.550000000000001
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 90.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center 2 note",
+  "folder": "Amp scoring 2 note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
