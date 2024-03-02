@@ -12,6 +12,8 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -116,9 +118,9 @@ public class Intake extends SubsystemBase{
 
   /* Commands */
     /* Codriver Commands */
-      public Command intakeNoteSequence() {
+      public Command intakeNoteSequence(XboxController controller, XboxController controller2) {
         return deployIntakeCommand()
-        .andThen(intakeNoteCommand())
+        .andThen(intakeNoteCommand(controller,controller2))
         .andThen(retractIntakeCommand());
       }
 
@@ -147,8 +149,14 @@ public class Intake extends SubsystemBase{
       }
 
     /* Test Commands */
-      public Command intakeNoteCommand() {
-        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get());
+      public Command intakeNoteCommand(XboxController controller,XboxController controller2) {
+        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get()).andThen(() -> {
+          controller.setRumble(RumbleType.kBothRumble, 1);
+          controller2.setRumble(RumbleType.kBothRumble, 1);
+        }).andThen(new WaitCommand(0.25)).andThen(()->{
+          controller.setRumble(RumbleType.kBothRumble, 0);
+          controller2.setRumble(RumbleType.kBothRumble, 0);
+        });
       }
 
       public Command outtakeNoteCommand() {
