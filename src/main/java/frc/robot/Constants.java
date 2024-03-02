@@ -35,7 +35,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
-    public static final double intakeSpeed = -0.6;
+    public static final double intakeSpeed = -0.8;
     public static final double outtakeSpeed = 0.5;
     public static final double deploySpeed = -0.43;
     public static final double retractSpeed = 0.43;
