@@ -113,7 +113,7 @@ public class RobotContainer {
                 private final Command tiltRight = s_Climb.tiltRight();
 
                 /* Test */
-                private final Command intakeNote = s_GroundIntake.intakeNoteCommand(driver);
+                private final Command intakeNote = s_GroundIntake.intakeNoteCommand(driver,codriver);
                 private final Command climbLeft = s_Climb.climbLeftDown();
                 // private final Command openClawCommand = s_Claw.openClawCommand();
                 // private final Command closeClawCommand = s_Claw.closeClawCommand();
@@ -122,7 +122,7 @@ public class RobotContainer {
                 /* Codriver  */
                 private final Command shootCommand = s_Shooter.shootCommand();
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
-                private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence(driver);
+                private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence(driver,codriver);
                 private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
@@ -151,7 +151,7 @@ public class RobotContainer {
                         s_Swerve.setupPathPlanner();
                         NamedCommands.registerCommand("deployIntake", s_GroundIntake.deployIntakeCommand());
                         NamedCommands.registerCommand("retractIntake", s_GroundIntake.retractIntakeCommand());
-                        NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence(driver));
+                        NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence(driver,codriver));
                         NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
                         NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
