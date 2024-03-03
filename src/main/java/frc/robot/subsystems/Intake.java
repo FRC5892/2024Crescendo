@@ -127,7 +127,7 @@ public class Intake extends SubsystemBase{
       public Command scoreAmpSequence() {
         return deployAmpCommand()
         .andThen(new WaitCommand(1), outtakeNoteCommand())
-        .andThen(retractIntakeCommand(1).withTimeout(0.1),retractIntakeCommand())
+        .andThen(retractIntakeCommand(1).withTimeout(0.1),retractIntakeCommand());
       }
 
       public Command deployIntakeCommand() {
