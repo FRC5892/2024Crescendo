@@ -127,7 +127,7 @@ public class Intake extends SubsystemBase{
       public Command scoreAmpSequence() {
         return deployAmpCommand()
         .andThen(new WaitCommand(1), outtakeNoteCommand())
-        .andThen(retractIntakeCommand());
+        .andThen(retractIntakeCommand(1).withTimeout(0.1),retractIntakeCommand())
       }
 
       public Command deployIntakeCommand() {
@@ -136,17 +136,15 @@ public class Intake extends SubsystemBase{
         .until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
       }
 
-      public Command retractIntakeCommand() {
+      public Command retractIntakeCommand(double speed) {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-        return startEnd(()->this.setDeploySpeed(0.4), this::stopDeploy)
+        return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
         .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
-
-        // .alongWith(
-        //   outtakeNoteCommand().withTimeout(0.1),
-        //   intakeNoteCommand()
-        //   .withTimeout(0.25)
-        // )
       }
+      public Command retractIntakeCommand() {
+        return retractIntakeCommand(0.6);
+      }
+
 
     /* Test Commands */
       public Command intakeNoteCommand(XboxController controller,XboxController controller2) {
