@@ -127,12 +127,12 @@ public class Intake extends SubsystemBase{
       public Command scoreAmpSequence() {
         return deployAmpCommand()
         .andThen(new WaitCommand(1), outtakeNoteCommand())
-        .andThen(retractIntakeCommand(1).withTimeout(0.1),retractIntakeCommand());
+        .andThen(retractIntakeCommand(IntakeConstants.ampRetractSpeed).withTimeout(0.1),retractIntakeCommand());
       }
 
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-        return startEnd(()->this.setDeploySpeed(-0.4), this::stopDeploy)
+        return startEnd(()->this.setDeploySpeed(IntakeConstants.deploySpeed), this::stopDeploy)
         .until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
       }
 
@@ -142,7 +142,7 @@ public class Intake extends SubsystemBase{
         .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
       }
       public Command retractIntakeCommand() {
-        return retractIntakeCommand(0.6);
+        return retractIntakeCommand(IntakeConstants.retractSpeed);
       }
 
 
