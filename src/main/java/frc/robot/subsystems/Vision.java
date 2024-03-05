@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
-  public float target;
   private PhotonCamera camera;
   private PhotonPoseEstimator poseEstimator;
   private AprilTagFieldLayout fieldLayout;
@@ -35,11 +34,6 @@ public class Vision extends SubsystemBase {
   private Pose2d visionPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Field2d field2d;
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-  /**
-   * Creates a new AprilTagVision3.
-   * 
-   * @throws IOException
-   */
   public Vision() {
 
     camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
@@ -79,17 +73,33 @@ public class Vision extends SubsystemBase {
     .getStructArrayTopic("SmartDashboard/Vision/Tags", Pose3d.struct).publish();
   @Override
   public void periodic() {
+    /* update estimated pose */
     Optional<EstimatedRobotPose> estimatedPose = getEstimatedGlobalPose(referencePose);
     if (estimatedPose.isPresent()) {
-
       this.visionPose = estimatedPose.get().estimatedPose.toPose2d();
       this.poseTimestamp = estimatedPose.get().timestampSeconds;
     }
-    var result = camera.getLatestResult();
+    
+    boolean connected = camera.isConnected();
+    SmartDashboard.putBoolean("Vision/Camera Connected", connected);
+    if (camera.isConnected()) {
+      var result = camera.getLatestResult();
+      
+      //good old java
+      publisher.set(
+          result.getTargets().stream()
+          .map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get())
+          .toArray(size -> new Pose3d[size])
+          );
+          
+          SmartDashboard.putBoolean("Vision/Has Targets", result.hasTargets());
+    } else {
+      SmartDashboard.putBoolean("Vision/Has Targets", false);
+      publisher.set(new Pose3d[0]);
+    }
     field2d.setRobotPose(this.visionPose);
-    publisher.set(result.getTargets().stream().map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get()).toArray(size -> new Pose3d[size]));
-    SmartDashboard.putNumber("Vision estimated Angle",getVisionPose().getRotation().getDegrees());
-    SmartDashboard.putBoolean("Has Targets", result.hasTargets());
+    
+    SmartDashboard.putNumber("Vision/Estimated Angle",getVisionPose().getRotation().getDegrees());
 
 
   }
