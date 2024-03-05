@@ -114,7 +114,6 @@ public class RobotContainer {
 
                 /* Test */
                 private final Command intakeNote = s_GroundIntake.intakeNoteCommand(driver,codriver);
-                private final Command climbLeft = s_Climb.climbLeftDown();
                 // private final Command openClawCommand = s_Claw.openClawCommand();
                 // private final Command closeClawCommand = s_Claw.closeClawCommand();
                 //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
@@ -194,7 +193,6 @@ public class RobotContainer {
                 /* Testing */
                 outtakeButton.whileTrue(outtakeNote);
                 intakeNoteButton.whileTrue(intakeNote);
-                climbLeftButton.whileTrue(climbLeft);
                 retractIntakeButton.whileTrue(retractIntake);
                 
                 

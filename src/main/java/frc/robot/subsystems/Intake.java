@@ -79,7 +79,7 @@ public class Intake extends SubsystemBase{
     }
 
     public void coastMode() {
-    deployMotor.setIdleMode(IdleMode.kCoast);
+      deployMotor.setIdleMode(IdleMode.kCoast);
     }
 
   
@@ -126,7 +126,7 @@ public class Intake extends SubsystemBase{
 
       public Command scoreAmpSequence() {
         return deployAmpCommand()
-        .andThen(new WaitCommand(1), outtakeNoteCommand())
+        .andThen(new WaitCommand(1), outtakeNoteCommand().withTimeout(0.5))
         .andThen(retractIntakeCommand(IntakeConstants.ampRetractSpeed).withTimeout(0.1),retractIntakeCommand());
       }
 

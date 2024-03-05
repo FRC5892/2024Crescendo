@@ -32,20 +32,20 @@ public class Climb extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void climbRightMotor() {
+  public void climbRightMotor(double speed) {
     rightClimb.set(Constants.ClimbConstants.climbSpeed);
   }
 
-  public void climbLeftMotor() {
+  public void climbLeftMotor(double speed) {
     leftClimb.set(Constants.ClimbConstants.climbSpeed);
   }
 
-  public void retractRightMotor() {
-    rightClimb.set(-Constants.ClimbConstants.climbSpeed);
+  public void retractRightMotor(double speed) {
+    rightClimb.set(-Constants.ClimbConstants.retractSpeed);
   }
 
-  public void retractLeftMotor() {
-    leftClimb.set(-Constants.ClimbConstants.climbSpeed);
+  public void retractLeftMotor(double speed) {
+    leftClimb.set(-Constants.ClimbConstants.retractSpeed);
   }
 
   public void stopLeft() {
@@ -57,13 +57,13 @@ public class Climb extends SubsystemBase {
   }
 
   public void climbMotors() {
-    climbLeftMotor();
-    climbRightMotor();
+    climbLeftMotor(Constants.ClimbConstants.climbSpeed);
+    climbRightMotor(Constants.ClimbConstants.climbSpeed);
   }
   
   public void retractMotors() {
-    retractLeftMotor();
-    retractRightMotor();
+    retractLeftMotor(Constants.ClimbConstants.retractSpeed);
+    retractRightMotor(Constants.ClimbConstants.retractSpeed);
   }
 
   public void stopMotors() {
@@ -80,15 +80,11 @@ public class Climb extends SubsystemBase {
     return runEnd(this::retractMotors, this::stopMotors);
   }
 
-  public Command climbLeftDown() {
-    return runEnd(this::climbLeftMotor, this::stopLeft);
-  }
-
   public Command tiltLeft() {
-    return runEnd(this::retractLeftMotor, this::stopLeft);
+    return runEnd(() -> this.retractLeftMotor(Constants.ClimbConstants.levelSpeed), this::stopLeft);
   }
 
   public Command tiltRight() {
-    return runEnd(this::retractRightMotor, this::stopRight);
+    return runEnd(() -> this.retractRightMotor(Constants.ClimbConstants.levelSpeed), this::stopRight);
   }
 }
