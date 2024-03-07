@@ -16,10 +16,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,14 +34,14 @@ public class Vision extends SubsystemBase {
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   public Vision() {
 
-    camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
+    camera = new PhotonCamera(VisionConstants.cameraName);
     try {
-      fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
+      fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.fieldLayoutResourceFile);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
     poseEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera,
-        VisionConstants.ROBOT_TO_CAM);
+        VisionConstants.robotToCam);
     field2d = new Field2d();
     SmartDashboard.putData("Vision estimated Pose",field2d);
 

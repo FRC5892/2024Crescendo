@@ -19,11 +19,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 // import frc.robot.autos.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climb.Claw;
 import frc.robot.subsystems.Climb.Climb;
 
 /* 
@@ -51,7 +49,6 @@ public class RobotContainer {
                 private final Climb s_Climb = new Climb();
                 private final Vision s_Vision = new Vision();
                 
-                private final Claw s_Claw = new Claw();
                 
                 // private final LedSub ledSub = new LedSub();
 
@@ -92,8 +89,6 @@ public class RobotContainer {
                         XboxController.Button.kX.value);
                 private final JoystickButton outtakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kA.value);
-                private final JoystickButton climbLeftButton = new JoystickButton(testDriver,
-                        XboxController.Button.kY.value);
                 private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
                         XboxController.Button.kB.value);
                 private final JoystickButton testClimbUpButton = new JoystickButton(testDriver, 

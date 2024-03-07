@@ -47,9 +47,9 @@ public class Intake extends SubsystemBase{
     deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-    beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
-    deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchPort);
-    retractLimitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchPort);
+    beamBreak = new DigitalInput(IntakeConstants.beamBreakDIOPortID);
+    deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchDIOPortID);
+    retractLimitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchDIOPortID);
 
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
     deployController.setPID(IntakeConstants.deployPID);

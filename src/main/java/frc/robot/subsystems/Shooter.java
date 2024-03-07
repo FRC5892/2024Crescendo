@@ -34,8 +34,8 @@ public class Shooter extends SubsystemBase {
   HeroSparkPID rightController;
 
   public Shooter() {
-    leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorId, MotorType.kBrushless);
-    rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorId, MotorType.kBrushless);
+    leftKicker = new CANSparkMax(ShooterConstants.leftKickerMotorID, MotorType.kBrushless);
+    rightKicker = new CANSparkMax(ShooterConstants.rightKickerMotorID, MotorType.kBrushless);
 
     // rightFeederMotor.follow(leftFeederMotor, false);
     lShootRoutine = new SysIdRoutine(

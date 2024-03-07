@@ -15,8 +15,8 @@ public class LedSub extends SubsystemBase {
 
   /** Creates a new LedSub. */
   public LedSub() {
-    m_led = new AddressableLED(Constants.LEDConstants.LED_PORT);
-    m_ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.LED_LENGTH);
+    m_led = new AddressableLED(Constants.LEDConstants.ledPort);
+    m_ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.ledLength);
     m_led.setLength(m_ledBuffer.getLength());
 
     m_led.setData(m_ledBuffer);

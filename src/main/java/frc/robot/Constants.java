@@ -1,6 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -15,8 +17,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import frc.lib.config.SwerveModuleConstants;
 
@@ -28,54 +28,49 @@ public final class Constants {
     public static final double climbSpeed = 0.8;
     public static final double retractSpeed = 0.5;
     public static final double levelSpeed = 0.4;
-    public static double rotations = 40;
   }
 
   public static final class IntakeConstants {
     public static final int intakeMotorID = 13;
     public static final int deployMotorID = 14;
+
+    public static final int beamBreakDIOPortID = 0;
+    public static final int deployLimitSwitchDIOPortID = 1;
+    public static final int retractLimitSwitchDIOPortID = 2;
+
     public static final double intakeSpeed = -0.8;
     public static final double outtakeSpeed = 0.5;
     public static final double deploySpeed = -0.5;
     public static final double retractSpeed = 0.5;
-    public static final double maxVelocity = 1;
-    public static final double maxAcceleration = 0.5;
     public static final double ampRetractSpeed = 1;
 
-    public static double intakeRotations;
     public static final PIDConstants deployPID = new PIDConstants(0.02, 0, 0);
+    
+    public static final double maxVelocity = 1;
+    public static final double maxAcceleration = 0.5;
 
-
-    // TODO: get the right rotations for deploy intake/intake note commands
     public static final double deployRotations = 0.0;
     public static final double retractRotations = 0.65;
-    public static final int beamBreakPort = 0;
-    //public static final int encoderPort = 0;
-    public static final int deployLimitSwitchPort = 1;
-    public static final int retractLimitSwitchPort = 2;
+
+
 
   }
 
   public static final class ShooterConstants {
     // TODO: change me
-    public static final int leftKickerMotorId = 15;
-    public static final int rightKickerMotorId = 16;
-    public static final int leftFeederMotorID = 17;
-    public static final int rightFeederMotorId = 18;
-
+    public static final int leftKickerMotorID = 15;
+    public static final int rightKickerMotorID = 16;
+    
     public static final PIDConstants leftPID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants rightPID = new PIDConstants(0.2, 0, 0);
 
-    public static final Measure<Distance> wheelRadius = Units.Inches.of(10 / 2);
   }
 
   public static final class VisionConstants {
-    public static final String CAMERA_NAME = "defaultCamera";
-    // TODO: change me
-    public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
-        new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14));//Units.Degrees.of(22).in(Units.Radians))); // Cam mounted facing forward, half a meter forward of center, half a meter up
-                                                  // from center.
-    public static final String FIELD_LAYOUT_RESOURCE_FILE = AprilTagFields.k2024Crescendo.m_resourceFile;
+    public static final String cameraName = "defaultCamera";
+    public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
+        new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14 /*180 deg*/));
+    public static final String fieldLayoutResourceFile = AprilTagFields.k2024Crescendo.m_resourceFile;
   }
 
   public static final class Swerve {
@@ -101,14 +96,12 @@ public final class Constants {
     /* Autonomous Speeds */
 
     /* Drivetrain Constants */
-    // TODO: verify this is correct
     public static final double trackWidth = Units.Inches.of(29).in(Units.Meters);
     public static final double wheelBase = Units.Inches.of(29).in(Units.Meters);
     public static final double wheelDiameter = Units.Inches.of(4.0).in(Units.Meters);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double openLoopRamp = 2;
-    public static final double closedLoopRamp = 0.0; // seem to be useless
 
     public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1 for L2
 
@@ -231,23 +224,21 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3.25;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1.8;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final HolonomicPathFollowerConfig pathFollowerConfig= new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+    //TODO: check if this works
+    // we changed replanning config and pid constants.
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+    //5 is the default
+    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+    Swerve.maxSpeed, // Max module speed, in m/s
+    Swerve.wheelBase, // Drive base radius in meters. Distance from robot center to furthest module.
+    new ReplanningConfig(true,true)); // Default path replanning config. See the API for the options here
   }
 
   /* LED Ports */
   public static final class LEDConstants {
-    public static final int LED_PORT = 0;
-    public static final int LED_LENGTH = 105;
-  }
-  public static final class ClawConstants{
-  public static final int clawMotor = 50; 
-
+    public static final int ledPort = 0;
+    public static final int ledLength = 105;
   }
 }
