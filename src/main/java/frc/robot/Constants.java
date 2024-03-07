@@ -57,7 +57,6 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    // TODO: change me
     public static final int leftKickerMotorID = 15;
     public static final int rightKickerMotorID = 16;
     
@@ -127,12 +126,12 @@ public final class Constants {
     public static final double angleKFF = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.00; // TODO: Tune after charactarization
+    public static final double driveKP = 0.00; // TODO: Tune after characterization
     public static final double driveKI = 0.0; // leave
     public static final double driveKD = 0.0; // leave
     public static final double driveKFF = 0.0; // leave
 
-    /* TODO: Charactarize drivetrain Drive Motor Characterization Values */
+    /* TODO: characterization drive ff */
     public static final double driveKS = 0.119;
     public static final double driveKV = 2.3823;
     public static final double driveKA = 0.3;

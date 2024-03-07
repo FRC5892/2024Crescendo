@@ -27,6 +27,7 @@
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
+    "AHRS",
     "apriltag",
     "Brushless",
     "cancoder",
@@ -34,6 +35,7 @@
     "codriver",
     "CTRE",
     "CTREPCM",
+    "Devs",
     "feedforward",
     "Gamepiece",
     "Holonomic",

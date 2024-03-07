@@ -119,10 +119,10 @@ public class Swerve extends SubsystemBase {
 
   }
 
-  public Pose2d addVisionMeasurement(Pose2d measurment, double timeStamp) {
-    swerveOdometry.addVisionMeasurement(measurment, timeStamp);
-    SmartDashboard.putNumber("vision added x", measurment.getX());
-    SmartDashboard.putNumber("vision added y", measurment.getY());
+  public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
+    swerveOdometry.addVisionMeasurement(measurement, timeStamp);
+    SmartDashboard.putNumber("vision added x", measurement.getX());
+    SmartDashboard.putNumber("vision added y", measurement.getY());
 
     return swerveOdometry.getEstimatedPosition();
   }
@@ -166,12 +166,12 @@ public class Swerve extends SubsystemBase {
   }
 
   public SwerveModuleState[] getModuleDesiredStates() {
-    SwerveModuleState[] dstates = new SwerveModuleState[4];
+    SwerveModuleState[] desiredStates = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
-      dstates[mod.moduleNumber] = mod.getDesiredState();
+      desiredStates[mod.moduleNumber] = mod.getDesiredState();
     }
 
-    return dstates;
+    return desiredStates;
   }
 
   public void driveRelative(ChassisSpeeds chassisSpeeds) {

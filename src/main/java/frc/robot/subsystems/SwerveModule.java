@@ -129,11 +129,9 @@ public class SwerveModule {
     angleController.setPositionPIDWrappingEnabled(true);
     angleController.setPositionPIDWrappingMinInput(-180.0);
     angleController.setPositionPIDWrappingMaxInput(180.0);
-    angleController.setP(Constants.Swerve.angleKP);
-    angleController.setI(Constants.Swerve.angleKI);
-    angleController.setD(Constants.Swerve.angleKD);
-    angleController.setFF(Constants.Swerve.angleKFF);
     angleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
+    burnAngleFlash(1);
+
     // TODO: fix me
     // try {
     // Thread.sleep(200l);
@@ -158,13 +156,13 @@ public class SwerveModule {
     // driveController.setD(Constants.Swerve.angleKD);
     // driveController.setFF(Constants.Swerve.angleKFF);
     driveMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-    burnFlash(1);
     driveEncoder.setPosition(0.0);
+    burnDriveFlash(1);
 
     // driveMotor.setInverted(Constants.Swerve.driveInvert);
   }
 
-  private boolean burnFlash(int attempt) {
+  private boolean burnDriveFlash(int attempt) {
     driveController.setP(Constants.Swerve.driveKP);
     driveController.setI(Constants.Swerve.driveKI);
     driveController.setD(Constants.Swerve.driveKD);
@@ -176,11 +174,40 @@ public class SwerveModule {
     } catch (Exception e) {
       return false;
     }
-    if (driveController.getP()==Constants.Swerve.angleKP&&driveController.getI()==Constants.Swerve.angleKI&&driveController.getD()==Constants.Swerve.angleKD) {
+    if (
+          driveController.getP()==Constants.Swerve.driveKP
+        &&driveController.getI()==Constants.Swerve.driveKI
+        &&driveController.getD()==Constants.Swerve.driveKD
+        &&driveController.getFF()==Constants.Swerve.driveKFF
+        ) {
       return true;
     } else {  
       if (attempt >= 5) return false;
-      return burnFlash(attempt+1);
+      return burnDriveFlash(attempt+1);
+    }
+  }
+  private boolean burnAngleFlash(int attempt) {
+    angleController.setP(Constants.Swerve.angleKP);
+    angleController.setI(Constants.Swerve.angleKI);
+    angleController.setD(Constants.Swerve.angleKD);
+    angleController.setFF(Constants.Swerve.angleKFF);
+    try {
+      Thread.sleep(300);
+      driveMotor.burnFlash();
+      Thread.sleep(300);
+    } catch (Exception e) {
+      return false;
+    }
+    if (
+          angleController.getP()==Constants.Swerve.angleKP
+        &&angleController.getI()==Constants.Swerve.angleKI
+        &&angleController.getD()==Constants.Swerve.angleKD
+        &&angleController.getFF()==Constants.Swerve.angleKFF
+        ) {
+      return true;
+    } else {  
+      if (attempt >= 5) return false;
+      return burnAngleFlash(attempt+1);
     }
   }
 

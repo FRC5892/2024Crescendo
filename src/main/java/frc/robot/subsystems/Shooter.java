@@ -108,9 +108,8 @@ public class Shooter extends SubsystemBase {
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
-    //TODO: do math here
-    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 0));
-    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", 0));
+    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 6000));
+    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", -6000));
   }
 
 

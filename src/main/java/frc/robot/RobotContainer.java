@@ -36,9 +36,6 @@ public class RobotContainer {
                 public final static XboxController testDriver = new XboxController(2);
 
         /* Subsystems & Hardware */
-                //TODO: add compressor when we have a compressor 
-                /* Compressor */
-                // private Compressor compressor;
                 
                 /* Gyro Sensor */
                 AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
@@ -136,8 +133,6 @@ public class RobotContainer {
                         // TODO: add Camera when we have a camera
                         // CameraServer.startAutomaticCapture();
                         
-                        // TODO: add compressor when we have a compressor 
-                        // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
                         SmartDashboard.putData("IntakeCommand",deployIntake);
                         SmartDashboard.putData("ShootCommand",shootCommand);
                 
