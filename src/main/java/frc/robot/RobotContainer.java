@@ -80,7 +80,6 @@ public class RobotContainer {
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
                 
-                        
                 /* Test-Driver buttons */
                 private final JoystickButton intakeNoteButton = new JoystickButton(testDriver, 
                         XboxController.Button.kX.value);
