@@ -60,6 +60,25 @@
           "data": {
             "name": "shootSequence"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source-SIDE 2 note path 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeSequence"
+                }
+              }
+            ]
+          }
         }
       ]
     }
