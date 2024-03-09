@@ -61,8 +61,8 @@ Energy HERO'S Crescendo code
 ## Rio devices:
 |Id|Type|Usage|
 |-|-|-|
-|0|DIO|deploy Limit Switch|
-|1|DIO|intake Beam Break|
+|1|DIO|Deploy Limit Switch|
+|0|DIO|Intake Beam Break|
 |||
 |||
 
