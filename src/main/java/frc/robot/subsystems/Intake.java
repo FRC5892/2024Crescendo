@@ -91,6 +91,11 @@ public class Intake extends SubsystemBase{
     public void outtakeNote() {
       intakeMotor.set(IntakeConstants.outtakeSpeed);
     }
+    public void outtakeNoteForAmp() {
+      intakeMotor.set(IntakeConstants.outtakeSpeedForAmp);
+    }
+
+    //outtakeNoteForAmp
 
     public void stopIntake() {
       intakeMotor.set(0);
@@ -126,7 +131,7 @@ public class Intake extends SubsystemBase{
 
       public Command scoreAmpSequence() {
         return deployAmpCommand()
-        .andThen(new WaitCommand(1), outtakeNoteCommand().withTimeout(0.5))
+        .andThen(new WaitCommand(0.5), outtakeNoteForAmpCommand().withTimeout(0.25))
         .andThen(retractIntakeCommand(IntakeConstants.ampRetractSpeed).withTimeout(0.1),retractIntakeCommand());
       }
 
@@ -159,6 +164,10 @@ public class Intake extends SubsystemBase{
 
       public Command outtakeNoteCommand() {
         return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+      }
+
+      public Command outtakeNoteForAmpCommand() {
+        return startEnd(() -> this.outtakeNoteForAmp(), ()-> this.stopIntake());
       }
 
       public Command deployAmpCommand() {

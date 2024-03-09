@@ -84,13 +84,57 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "3 note path 1"
+                        "pathName": "3 note CHEESE path 1"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "3 note path 2"
+                        "pathName": "3 note CHEESE path 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSequence"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "deployIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeSequence"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "4 note CHEESE path 1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "4 note CHEESE path 2"
                       }
                     }
                   ]

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.04,
-        "y": 7.57
+        "x": 0.7,
+        "y": 4.38
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.79,
-        "y": 7.57
+        "x": 1.7000000000000006,
+        "y": 2.647949192431123
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.535493887889185
+        "x": 5.582001023156975,
+        "y": 1.8788882648187843
       },
       "prevControl": {
-        "x": 2.2,
-        "y": 5.535493887889185
+        "x": 3.582001023156975,
+        "y": 1.8788882648187843
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 note CHEESE",
+  "folder": "Source-SIDE far note grab",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

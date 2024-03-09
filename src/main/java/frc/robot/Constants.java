@@ -39,8 +39,10 @@ public final class Constants {
     public static final int retractLimitSwitchDIOPortID = 2;
 
     public static final double intakeSpeed = -0.8;
-    public static final double outtakeSpeed = 0.5;
-    public static final double deploySpeed = -0.5;
+    public static final double outtakeSpeed = 0.8;
+    public static final double outtakeSpeedForAmp = 0.6;//0.445;
+
+    public static final double deploySpeed = -0.8;
     public static final double retractSpeed = 0.5;
     public static final double ampRetractSpeed = 1;
 
@@ -51,9 +53,6 @@ public final class Constants {
 
     public static final double deployRotations = 0.0;
     public static final double retractRotations = 0.65;
-
-
-
   }
 
   public static final class ShooterConstants {
@@ -228,8 +227,8 @@ public final class Constants {
     // we changed replanning config and pid constants.
 
     //5 is the default
-    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+    new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
     Swerve.maxSpeed, // Max module speed, in m/s
     Swerve.wheelBase, // Drive base radius in meters. Distance from robot center to furthest module.
     new ReplanningConfig(true,true)); // Default path replanning config. See the API for the options here
