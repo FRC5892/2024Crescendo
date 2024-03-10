@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.lib.config.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
@@ -20,7 +23,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 
 
-public class SwerveModule {
+public class SwerveModule implements Sendable {
   public int moduleNumber;
 
   private Rotation2d lastAngle;
@@ -35,6 +38,14 @@ public class SwerveModule {
 
   private final SparkPIDController driveController;
   private final SparkPIDController angleController; 
+
+  private boolean isDriveEnabled = true;
+  private boolean isAngleEnabled = true;
+
+  private double cachedCanCoderPosition =0;
+  private double cachedModPosition = 0;
+  private SwerveModuleState cachedState = new SwerveModuleState();
+
 
   private SwerveModuleState desiredState = new SwerveModuleState(0, new Rotation2d(0));
 
@@ -65,6 +76,7 @@ public class SwerveModule {
     configDriveMotor();
 
     lastAngle = getState().angle;
+
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -80,6 +92,10 @@ public class SwerveModule {
 
 
   private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
+    if (!isDriveEnabled) {
+      driveMotor.set(0);
+      return;
+    }
     if (isOpenLoop) {
       double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
       driveMotor.set(percentOutput);
@@ -96,6 +112,10 @@ public class SwerveModule {
   }
 
   private void setAngle(SwerveModuleState desiredState) {
+    if (!isAngleEnabled) {
+      angleMotor.set(0);
+      return;
+    }
     // Prevent rotating module if speed is less then 1%. Prevents jittering.
     Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01))
         ? lastAngle
@@ -242,5 +262,23 @@ public class SwerveModule {
     double position = driveEncoder.getPosition();
     return new SwerveModulePosition(position, getAngle());
   }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addBooleanProperty("Angle Enabled", () -> isAngleEnabled, (e)-> isAngleEnabled = e);
+    builder.addBooleanProperty("Drive Enabled", () -> isDriveEnabled, (e)-> isDriveEnabled = e);
+    builder.addDoubleProperty("Stats/Cancoder", ()->cachedCanCoderPosition, null);
+    builder.addDoubleProperty("Stats/Integrated", ()->cachedState.angle.getDegrees(), null);
+    builder.addDoubleProperty("Stats/Velocity", ()->cachedState.speedMetersPerSecond, null);
+    builder.addDoubleProperty("Stats/Position", ()->cachedModPosition, null);
+    builder.addDoubleProperty("Stats/Setpoint Angle", ()->desiredState.angle.getDegrees(), null);
+    builder.addDoubleProperty("Stats/Setpoint Velocity", ()->desiredState.speedMetersPerSecond, null);
+  }
+  public void updateCache() {
+    cachedCanCoderPosition = getCanCoder().getDegrees();
+    cachedModPosition = this.getPosition().distanceMeters;
+    cachedState = getState();
+  }
+
 
 }

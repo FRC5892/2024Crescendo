@@ -68,9 +68,9 @@ public class Intake extends SubsystemBase{
     //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
     SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
-    SmartDashboard.putBoolean("Intake/deploy", deployLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/retract", retractLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
+    SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
+    SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
+    SmartDashboard.putBoolean("Intake/BeamBreak", !beamBreak.get());
 
   }
 

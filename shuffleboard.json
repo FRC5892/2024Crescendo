@@ -1,0 +1,504 @@
+{
+  "tabPane": [
+    {
+      "title": "Drive",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              2,
+              6
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Kill Switches",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Grid Layout",
+                  "_title": "Mod 0 FL",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                {
+                  "_type": "Grid Layout",
+                  "_title": "Mod 1 FR",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                {
+                  "_type": "Grid Layout",
+                  "_title": "Mod BL",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                {
+                  "_type": "Grid Layout",
+                  "_title": "Mod BR",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "4,0": {
+            "size": [
+              9,
+              6
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_title": "Camera Stream",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
+          },
+          "13,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Field",
+              "_title": "SmartDashboard/Field",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "k2024Crescendo",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false
+            }
+          },
+          "2,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake/BeamBreak",
+              "_title": "Beam Break",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Limit Switches",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 2,
+              "Layout/Number of rows": 1,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Intake/deploy",
+                  "_title": "Deploy",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "1,0": {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Intake/retract",
+                  "_title": "Retract",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                }
+              }
+            }
+          },
+          "13,3": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto Chooser",
+              "_title": "SmartDashboard/Auto Chooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Development",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Stats",
+              "_title": "Mod 0 Stats",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,0": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Stats",
+              "_title": "Mod 1 Stats",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,6": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Stats",
+              "_title": "Mod 2",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,6": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Stats",
+              "_title": "Mod 3",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Robot Preferences",
+              "_source0": "network_table:///Preferences",
+              "_title": "Preferences",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Miscellaneous/Show search box": true
+            }
+          },
+          "10,6": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///SmartDashboard/Intake/pid",
+              "_title": "Intake PID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,10": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake/BeamBreak",
+              "_title": "Beam Break",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "13,6": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/Intake/DeployRotations",
+              "_title": "Deploy",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Range/Min": 0.0,
+              "Range/Max": 1.0,
+              "Visuals/Show value": true
+            }
+          },
+          "13,9": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Limit Switches",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 2,
+              "Layout/Number of rows": 1,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Intake/deploy",
+                  "_title": "Deploy",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "1,0": {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Intake/retract",
+                  "_title": "Retract",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                }
+              }
+            }
+          },
+          "17,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///SmartDashboard/Shooter/leftPID",
+              "_title": "Left PID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "20,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///SmartDashboard/Shooter/rightPID",
+              "_title": "Right PID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "17,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/leftRealSpeed",
+              "_title": "Left Velocity",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "20,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/rightSpeed",
+              "_title": "Right Velocity",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "17,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/leftSpeed",
+              "_title": "Left Setpoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "20,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/rightSpeed",
+              "_title": "Right Setpoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "17,8": {
+            "size": [
+              9,
+              4
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Vision estimated Pose",
+              "_title": "Vision Pose",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "k2024Crescendo",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 3",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1382.0,
+    "height": 736.0
+  }
+}

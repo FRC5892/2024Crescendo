@@ -80,6 +80,9 @@ public class Swerve extends SubsystemBase {
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.offsetDegree);
     Preferences.initDouble("offset 3", Constants.Swerve.Mod3.offsetDegree);
 
+    for (SwerveModule mod : mSwerveMods) {
+      SmartDashboard.putData("Swerve/Modules/Mod "+mod.moduleNumber,mod);
+    }
   }
 
   public void getPreferences() {
@@ -345,22 +348,7 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putNumber("Acceleration", accelerometer.getX());
 
     for (SwerveModule mod : mSwerveMods) {
-      final SwerveModuleState state = mod.getState();
-      final SwerveModuleState desiredState = mod.getDesiredState();
-
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Cancoder", mod.getCanCoder().getDegrees());
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Integrated", state.angle.getDegrees());
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Velocity", state.speedMetersPerSecond);
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Position", mod.getPosition().distanceMeters);
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Setpoint Angle", desiredState.angle.getDegrees());
-      SmartDashboard.putNumber(
-          "Swerve/Modules/Mod " + mod.moduleNumber + "/Setpoint Velocity", desiredState.speedMetersPerSecond);
-
+      mod.updateCache();
     }
     SmartDashboard.putBoolean("Teleop", DriverStation.isTeleopEnabled());
 
