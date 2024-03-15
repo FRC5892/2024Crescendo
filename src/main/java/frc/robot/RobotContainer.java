@@ -44,7 +44,7 @@ public class RobotContainer {
                 private final Intake s_GroundIntake = new Intake();
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
-                private final Vision s_Vision = new Vision();
+                private final Vision s_Vision = new Vision(s_Swerve::useVisionMeasurement,s_Swerve::getPose);
                 
                 
                 // private final LedSub ledSub = new LedSub();
@@ -117,8 +117,6 @@ public class RobotContainer {
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
                 
-                /* General */
-                private final Command addVisionPose = new AddVisionPose(s_Vision,s_Swerve); 
                 
         /* Other */
                 /* SendableChooser */
@@ -153,7 +151,6 @@ public class RobotContainer {
                                         () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
                                         () -> -driver.getRawAxis(rotationAxis) * SPEED_MULTIPLIER,
                                         () -> robotCentric.getAsBoolean()));
-                        s_Vision.setDefaultCommand(addVisionPose);
 
                 /* Others */
                         // Auto chooser

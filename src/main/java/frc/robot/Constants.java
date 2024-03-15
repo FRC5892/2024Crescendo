@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -65,12 +66,35 @@ public final class Constants {
   }
 
   public static final class VisionConstants {
-    public static final String cameraName = "front";
-    // public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
-        // new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14 /*180 deg*/));
-    public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.1524,0, 0.635),
+    public static final String frontCameraName = "front";
+    public static final String backCameraName = "back";
+
+    public static final Transform3d robotToBackCam = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
+        new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14 /*180 deg*/));
+    public static final Transform3d robotToFrontCam = new Transform3d(new Translation3d(-0.1524,0, 0.635),
         new Rotation3d(0, Units.Degrees.of(-32).in(Units.Radians), 0));
     public static final String fieldLayoutResourceFile = AprilTagFields.k2024Crescendo.m_resourceFile;
+     /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
+    public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+    public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
+    public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
+    public static final double NOISY_DISTANCE_METERS = 2.5;
+    public static final double DISTANCE_WEIGHT = 7;
+    public static final int TAG_PRESENCE_WEIGHT = 10;
+
+    /**
+     * Standard deviations of model states. Increase these numbers to trust your
+     * model's state estimates less. This
+     * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
+     * meters.
+     */
+    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = Matrix.mat(Nat.N3(), Nat.N1())
+        .fill(
+            // if these numbers are less than one, multiplying will do bad things
+            1, // x
+            1, // y
+            1 * Math.PI // theta
+        );
   }
   //8.5 off back; 25 off ground; centered;
 
@@ -82,14 +106,7 @@ public final class Constants {
     // in meters, and heading in radians). Increase these numbers to trust your
     // state estimate
     // less.
-    public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(10, 10, Units.Degrees.of(5).in(Units.Radians));
-
-    // Standard deviations of the vision pose measurement (x position
-    // in meters, y position in meters, and heading in radians). Increase these
-    // numbers to trust
-    // the vision pose measurement less.
-    public static final Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians));
-
+    public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.1 , 0.1, Units.Degrees.of(5).in(Units.Radians));
     public static final double stickDeadBand = 0.1;
     public static final int pigeonID = 13;
     public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
@@ -230,8 +247,8 @@ public final class Constants {
     // we changed replanning config and pid constants.
 
     //5 is the default
-    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-    new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+    new PIDConstants(0.2, 0.0, 0.0), // Translation PID constants
+    new PIDConstants(0.2, 0.0, 0.0), // Rotation PID constants
     6.5, // Max module speed, in m/s
     Swerve.wheelBase, // Drive base radius in meters. Distance from robot center to furthest module.
     new ReplanningConfig(true, true)); // Default path replanning config. See the API for the options here

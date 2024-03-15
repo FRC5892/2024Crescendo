@@ -60,7 +60,7 @@ public class Swerve extends SubsystemBase {
     };
     swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(),
         getModulePositions(), Constants.Swerve.INITIAL_POSE, Constants.Swerve.stateStdDevs,
-        Constants.Swerve.visionStdDevs);
+        Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);
     field = new Field2d();
     SmartDashboard.putData(field);
 
@@ -74,7 +74,7 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putData("Swerve/SysId/quasistatic forward", sysIdQuasistatic(Direction.kForward));
     SmartDashboard.putData("Swerve/SysId/quasistatic backward", sysIdQuasistatic(Direction.kReverse));
     SmartDashboard.putData("Swerve/subsytem", this);
-
+    SmartDashboard.putData("Swerve/offsetCommand",setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.offsetDegree);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.offsetDegree);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.offsetDegree);
@@ -114,7 +114,10 @@ public class Swerve extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
   }
-
+  public void useVisionMeasurement(Vision.VisionMeasurement measurement) {
+    swerveOdometry.addVisionMeasurement(measurement.pose, measurement.timeStamp, measurement.dev);
+  }
+  
   public void voltageDrive(Measure<Voltage> volts) {
     for (SwerveModule mod : mSwerveMods) {
       mod.setVoltage(volts);
@@ -322,6 +325,15 @@ public class Swerve extends SubsystemBase {
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return routine.dynamic(direction);
+  }
+  public Command setAngleOffsetCommand() {
+    return runOnce(()->{
+      resetToAbsolute();
+      for (SwerveModule mod : mSwerveMods) {
+        Preferences.setDouble("offset " + mod.moduleNumber, -mod.getState().angle.getDegrees());
+      };
+      resetToAbsolute();
+    }).ignoringDisable(true);
   }
 
   StructArrayPublisher<SwerveModuleState> statePublisher = NetworkTableInstance.getDefault()

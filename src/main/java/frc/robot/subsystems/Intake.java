@@ -29,8 +29,7 @@ public class Intake extends SubsystemBase{
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
-  private DigitalInput retractLimitSwitch;
-
+  private DigitalInput retractLimitSwitch;  
 
   /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
     If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
@@ -71,7 +70,6 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/BeamBreak", !beamBreak.get());
-
   }
 
   /* Other Functions */

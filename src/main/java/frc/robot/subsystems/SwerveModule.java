@@ -128,7 +128,6 @@ public class SwerveModule implements Sendable {
 
   public void resetToAbsolute() {
     // System.out.println("resetAbsolute \n \n \n \n reset to absolute");
-    // double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
     
     double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
     integratedAngleEncoder.setPosition(absolutePosition);
