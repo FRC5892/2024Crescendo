@@ -2,7 +2,7 @@
   "tabPane": [
     {
       "title": "Drive",
-      "autoPopulate": true,
+      "autoPopulate": false,
       "autoPopulatePrefix": "LiveWindow/",
       "widgetPane": {
         "gridSize": 64.0,
@@ -14,7 +14,7 @@
           "0,0": {
             "size": [
               2,
-              6
+              7
             ],
             "content": {
               "_type": "List Layout",
@@ -158,7 +158,7 @@
               "_glyph": 148,
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
-              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Robot Icon Size": 30.0,
               "Visuals/Show Outside Circles": false
             }
           },
@@ -223,6 +223,22 @@
               "_title": "SmartDashboard/Auto Chooser",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "2,4": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/Shooter/leftRealSpeed",
+              "_title": "SmartDashboard/Shooter/leftRealSpeed",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Range/Min": 0.0,
+              "Range/Max": 6000.0,
+              "Visuals/Show value": true
             }
           }
         }
@@ -479,19 +495,6 @@
             }
           }
         }
-      }
-    },
-    {
-      "title": "Tab 3",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {}
       }
     }
   ],

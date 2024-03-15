@@ -44,7 +44,7 @@ public class Vision extends SubsystemBase {
         VisionConstants.robotToCam);
     field2d = new Field2d();
     SmartDashboard.putData("Vision estimated Pose",field2d);
-
+    
     poseTimestamp = Timer.getFPGATimestamp();
   }
   

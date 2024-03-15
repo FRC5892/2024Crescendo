@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -265,8 +266,8 @@ public class SwerveModule implements Sendable {
 
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.addBooleanProperty("Angle Enabled", () -> isAngleEnabled, (e)-> isAngleEnabled = e);
-    builder.addBooleanProperty("Drive Enabled", () -> isDriveEnabled, (e)-> isDriveEnabled = e);
+    builder.addBooleanProperty("Angle Enabled", () -> isAngleEnabled, this::setAngleEnabled);
+    builder.addBooleanProperty("Drive Enabled", () -> isDriveEnabled, this::setDriveEnabled);
     builder.addDoubleProperty("Stats/Cancoder", ()->cachedCanCoderPosition, null);
     builder.addDoubleProperty("Stats/Integrated", ()->cachedState.angle.getDegrees(), null);
     builder.addDoubleProperty("Stats/Velocity", ()->cachedState.speedMetersPerSecond, null);
@@ -278,6 +279,18 @@ public class SwerveModule implements Sendable {
     cachedCanCoderPosition = getCanCoder().getDegrees();
     cachedModPosition = this.getPosition().distanceMeters;
     cachedState = getState();
+  }
+  public void setAngleEnabled(boolean enabled) {
+    if (isAngleEnabled!=enabled) {
+        angleMotor.setIdleMode(enabled?IdleMode.kBrake:IdleMode.kCoast);
+    }
+    isAngleEnabled = enabled;
+  }
+  public void setDriveEnabled(boolean enabled) {
+    if (isDriveEnabled!=enabled) {
+        driveMotor.setIdleMode(enabled?IdleMode.kBrake:IdleMode.kCoast);
+    }
+    isDriveEnabled = enabled;
   }
 
 

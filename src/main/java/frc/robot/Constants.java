@@ -65,11 +65,14 @@ public final class Constants {
   }
 
   public static final class VisionConstants {
-    public static final String cameraName = "defaultCamera";
-    public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
-        new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14 /*180 deg*/));
+    public static final String cameraName = "front";
+    // public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.3302,-0.3302, 0.27305),
+        // new Rotation3d(0, Units.Degrees.of(-50).in(Units.Radians), 3.14 /*180 deg*/));
+    public static final Transform3d robotToCam = new Transform3d(new Translation3d(-0.1524,0, 0.635),
+        new Rotation3d(0, Units.Degrees.of(-32).in(Units.Radians), 0));
     public static final String fieldLayoutResourceFile = AprilTagFields.k2024Crescendo.m_resourceFile;
   }
+  //8.5 off back; 25 off ground; centered;
 
   public static final class Swerve {
     // TODO: change me
