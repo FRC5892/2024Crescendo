@@ -41,15 +41,12 @@ public class Swerve extends SubsystemBase {
   private SwerveModule[] mSwerveMods;
 
   private Field2d field;
-  BuiltInAccelerometer accelerometer;
 
   SysIdRoutine routine;
 
   public Swerve(AHRS gyro) {
 
-    accelerometer = new BuiltInAccelerometer();
     this.gyro = gyro;
-    // gyro.configFactoryDefault();
     zeroGyro();
 
     mSwerveMods = new SwerveModule[] {
@@ -352,12 +349,12 @@ public class Swerve extends SubsystemBase {
     swerveOdometry.update(getYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getYaw());
-    SmartDashboard.putNumber("Pigeon2 Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("NavX Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("NavX Pitch", gyro.getPitch());
 
-    SmartDashboard.putNumber("Pigeon2 Roll", gyro.getRoll());
+    SmartDashboard.putNumber("NavX Roll", gyro.getRoll());
 
-    SmartDashboard.putNumber("Acceleration", accelerometer.getX());
+    SmartDashboard.putNumber("Acceleration", gyro.getWorldLinearAccelX());
 
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();

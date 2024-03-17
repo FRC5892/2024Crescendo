@@ -20,8 +20,8 @@ public class Climb extends SubsystemBase {
 
   /** Creates a new Climb. */
   public Climb() {
-    leftClimb = new CANSparkMax(ClimbConstants.leftClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
-    rightClimb = new CANSparkMax(ClimbConstants.rightClimbMotorID, CANSparkLowLevel.MotorType.kBrushless);
+    leftClimb = new CANSparkMax(ClimbConstants.LEFT_CLIMB_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    rightClimb = new CANSparkMax(ClimbConstants.RIGHT_CLIMB_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
 
     leftClimbEncoder = leftClimb.getEncoder();
     leftClimbEncoder.setPositionConversionFactor(0.50);
@@ -33,19 +33,19 @@ public class Climb extends SubsystemBase {
   }
 
   public void climbRightMotor(double speed) {
-    rightClimb.set(Constants.ClimbConstants.climbSpeed);
+    rightClimb.set(Constants.ClimbConstants.CLIMB_SPEED);
   }
 
   public void climbLeftMotor(double speed) {
-    leftClimb.set(Constants.ClimbConstants.climbSpeed);
+    leftClimb.set(Constants.ClimbConstants.CLIMB_SPEED);
   }
 
   public void retractRightMotor(double speed) {
-    rightClimb.set(-Constants.ClimbConstants.retractSpeed);
+    rightClimb.set(-Constants.ClimbConstants.RETRACT_SPEED);
   }
 
   public void retractLeftMotor(double speed) {
-    leftClimb.set(-Constants.ClimbConstants.retractSpeed);
+    leftClimb.set(-Constants.ClimbConstants.RETRACT_SPEED);
   }
 
   public void stopLeft() {
@@ -57,13 +57,13 @@ public class Climb extends SubsystemBase {
   }
 
   public void climbMotors() {
-    climbLeftMotor(Constants.ClimbConstants.climbSpeed);
-    climbRightMotor(Constants.ClimbConstants.climbSpeed);
+    climbLeftMotor(Constants.ClimbConstants.CLIMB_SPEED);
+    climbRightMotor(Constants.ClimbConstants.CLIMB_SPEED);
   }
   
   public void retractMotors() {
-    retractLeftMotor(Constants.ClimbConstants.retractSpeed);
-    retractRightMotor(Constants.ClimbConstants.retractSpeed);
+    retractLeftMotor(Constants.ClimbConstants.RETRACT_SPEED);
+    retractRightMotor(Constants.ClimbConstants.RETRACT_SPEED);
   }
 
   public void stopMotors() {
@@ -81,10 +81,10 @@ public class Climb extends SubsystemBase {
   }
 
   public Command tiltLeft() {
-    return runEnd(() -> this.retractLeftMotor(Constants.ClimbConstants.levelSpeed), this::stopLeft);
+    return runEnd(() -> this.retractLeftMotor(Constants.ClimbConstants.LEVEL_SPEED), this::stopLeft);
   }
 
   public Command tiltRight() {
-    return runEnd(() -> this.retractRightMotor(Constants.ClimbConstants.levelSpeed), this::stopRight);
+    return runEnd(() -> this.retractRightMotor(Constants.ClimbConstants.LEVEL_SPEED), this::stopRight);
   }
 }

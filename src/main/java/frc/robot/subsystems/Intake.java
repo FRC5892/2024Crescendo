@@ -42,16 +42,16 @@ public class Intake extends SubsystemBase{
   public Intake() {
 
 
-    intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
-    deployMotor = new CANSparkMax(IntakeConstants.deployMotorID, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
+    deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-    beamBreak = new DigitalInput(IntakeConstants.beamBreakDIOPortID);
-    deployLimitSwitch = new DigitalInput(IntakeConstants.deployLimitSwitchDIOPortID);
-    retractLimitSwitch = new DigitalInput(IntakeConstants.retractLimitSwitchDIOPortID);
+    beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
+    deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
+    retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
 
     deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
-    deployController.setPID(IntakeConstants.deployPID);
+    deployController.setPID(IntakeConstants.DEPLOY_PID);
     deployMotor.burnFlash();
 
     SmartDashboard.putData("Intake/subsystem",this);
@@ -84,14 +84,14 @@ public class Intake extends SubsystemBase{
   
   /* Intaking */
     public void intakeNote() {
-      intakeMotor.set(Constants.IntakeConstants.intakeSpeed);
+      intakeMotor.set(Constants.IntakeConstants.INTAKE_SPEED);
     }
 
     public void outtakeNote() {
-      intakeMotor.set(IntakeConstants.outtakeSpeed);
+      intakeMotor.set(IntakeConstants.OUTTAKE_SPEED);
     }
     public void outtakeNoteForAmp() {
-      intakeMotor.set(IntakeConstants.outtakeSpeedForAmp);
+      intakeMotor.set(IntakeConstants.OUTTAKE_SPEED_FOR_AMP);
     }
 
     //outtakeNoteForAmp
@@ -131,22 +131,22 @@ public class Intake extends SubsystemBase{
       public Command scoreAmpSequence() {
         return deployAmpCommand()
         .andThen(new WaitCommand(0.5), outtakeNoteForAmpCommand().withTimeout(0.25))
-        .andThen(retractIntakeCommand(IntakeConstants.ampRetractSpeed).withTimeout(0.1),retractIntakeCommand());
+        .andThen(retractIntakeCommand(IntakeConstants.AMP_RETRACT_SPEED).withTimeout(0.1),retractIntakeCommand());
       }
 
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-        return startEnd(()->this.setDeploySpeed(IntakeConstants.deploySpeed), this::stopDeploy)
-        .until(() -> getDeployRotation() <= IntakeConstants.deployRotations||!deployLimitSwitch.get());
+        return startEnd(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED), this::stopDeploy)
+        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get());
       }
 
       public Command retractIntakeCommand(double speed) {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
         return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
-        .until(() -> getDeployRotation() >= IntakeConstants.retractRotations||!retractLimitSwitch.get());
+        .until(() -> getDeployRotation() >= IntakeConstants.RETRACT_ROTATIONS||!retractLimitSwitch.get());
       }
       public Command retractIntakeCommand() {
-        return retractIntakeCommand(IntakeConstants.retractSpeed);
+        return retractIntakeCommand(IntakeConstants.RETRACT_SPEED);
       }
 
 
