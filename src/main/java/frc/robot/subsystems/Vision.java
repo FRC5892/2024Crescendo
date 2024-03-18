@@ -57,18 +57,18 @@ public class Vision extends SubsystemBase {
   public Vision(Consumer<VisionMeasurement> consumer,Supplier<Pose2d> poseSupplier) {
     this.poseSupplier = poseSupplier;
     this.consumer = consumer;
-    frontCamera = new PhotonCamera(VisionConstants.frontCameraName);
-    backCamera = new PhotonCamera(VisionConstants.backCameraName);
+    frontCamera = new PhotonCamera(VisionConstants.FRONT_CAMERA_NAME);
+    backCamera = new PhotonCamera(VisionConstants.BACK_CAMERA_NAME);
 
     try {
-      fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.fieldLayoutResourceFile);
+      fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
     frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCamera,
-        VisionConstants.robotToFrontCam);
+        VisionConstants.ROBOT_TO_FRONT_CAM);
     backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCamera,
-        VisionConstants.robotToBackCam);
+        VisionConstants.ROBOT_TO_BACK_CAM);
     field2d = new Field2d();
     SmartDashboard.putData("Vision estimated Pose",field2d);
     
