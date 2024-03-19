@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.75,
-        "y": 1.5
+        "x": 1.852613365334066,
+        "y": 5.203075194882785
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.689692620785909,
-        "y": 1.1579798566743311
+        "x": 1.852613365334066,
+        "y": 6.203075194882785
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 2.45
+        "x": 1.852613365334066,
+        "y": 6.72
       },
       "prevControl": {
-        "x": 6.5,
-        "y": 2.45
+        "x": 1.852613365334066,
+        "y": 5.72
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source-SIDE far note grab",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -20.0,
+    "rotation": 90.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

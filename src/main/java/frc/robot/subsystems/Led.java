@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class LedSub extends SubsystemBase {
+public class Led extends SubsystemBase {
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
 
   /** Creates a new LedSub. */
-  public LedSub() {
+  public Led() {
     m_led = new AddressableLED(Constants.LEDConstants.LED_PORT);
     m_ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.LED_LENGTH);
     m_led.setLength(m_ledBuffer.getLength());

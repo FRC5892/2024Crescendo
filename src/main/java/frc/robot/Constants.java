@@ -62,7 +62,6 @@ public final class Constants {
     
     public static final PIDConstants LEFT_PID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants RIGHT_PID = new PIDConstants(0.2, 0, 0);
-
   }
 
   public static final class VisionConstants {
@@ -88,7 +87,7 @@ public final class Constants {
      * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
      * meters.
      */
-    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = Matrix.mat(Nat.N3(), Nat.N1())
+    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = VecBuilder
         .fill(
             // if these numbers are less than one, multiplying will do bad things
             1, // x
@@ -104,11 +103,9 @@ public final class Constants {
 
     // Standard deviations of the pose estimate (x position in meters, y position
     // in meters, and heading in radians). Increase these numbers to trust your
-    // state estimate
-    // less.
+    // state estimate less.
     public static final Matrix<N3, N1> STATE_STD_DEVS = VecBuilder.fill(0.1 , 0.1, Units.Degrees.of(5).in(Units.Radians));
     public static final double STICK_DEAD_BAND = 0.1;
-    public static final int PIGEON_ID = 13;
     public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
 
     /* Autonomous Speeds */
@@ -182,7 +179,6 @@ public final class Constants {
       public static final double OFFSET_DEGREE = 331.69;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE);
       public static final Rotation2d BALANCE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE + 45);
-      public static final double CONVERSION_FACTOR = 0.060509807;
 
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_INVERT, DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -199,7 +195,6 @@ public final class Constants {
       public static final double OFFSET_DEGREE = -103.5;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE);
       public static final Rotation2d BALANCE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE - 45);
-      public static final double CONVERSION_FACTOR = 0.060509807;
 
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_INVERT, DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -216,7 +211,6 @@ public final class Constants {
       public static final double OFFSET_DEGREE = -161.89;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE);
       public static final Rotation2d BALANCE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE + 45);
-      public static final double CONVERSION_FACTOR = 0.060509807;
 
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_INVERT, DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -230,23 +224,20 @@ public final class Constants {
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int CAN_CODER_ID = 11;
 
+
+      public static final int MICHAEL_STATT = 0;
       public static final double OFFSET_DEGREE = 58.26;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE);
       public static final Rotation2d BALANCE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE - 45);
-      public static final double CONVERSION_FACTOR = 0.060509807;
 
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_INVERT, DRIVE_MOTOR_ID,
-          ANGLE_MOTOR_ID,
-          CAN_CODER_ID, ANGLE_OFFSET);
+        ANGLE_MOTOR_ID,
+        CAN_CODER_ID, ANGLE_OFFSET);
     }
   }
 
   public static final class AutoConstants {
     public static final HolonomicPathFollowerConfig PATH_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    //TODO: check if this works
-    // we changed replanning config and pid constants.
-
-    //5 is the default
     new PIDConstants(0.2, 0.0, 0.0), // Translation PID constants
     new PIDConstants(0.2, 0.0, 0.0), // Rotation PID constants
     6.5, // Max module speed, in m/s
@@ -257,6 +248,6 @@ public final class Constants {
   /* LED Ports */
   public static final class LEDConstants {
     public static final int LED_PORT = 0;
-    public static final int LED_LENGTH = 105;
+    public static final int LED_LENGTH = 0;
   }
 }

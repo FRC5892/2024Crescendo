@@ -14,7 +14,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -119,7 +118,6 @@ public class Swerve extends SubsystemBase {
     for (SwerveModule mod : mSwerveMods) {
       mod.setVoltage(volts);
     }
-
   }
 
   public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
@@ -324,12 +322,10 @@ public class Swerve extends SubsystemBase {
     return routine.dynamic(direction);
   }
   public Command setAngleOffsetCommand() {
-    return runOnce(()->{
-      resetToAbsolute();
+    return runOnce(() -> {
       for (SwerveModule mod : mSwerveMods) {
-        Preferences.setDouble("offset " + mod.moduleNumber, -mod.getState().angle.getDegrees());
+        Preferences.setDouble("offset " + mod.moduleNumber, mod.getCanCoder().getDegrees());
       };
-      resetToAbsolute();
     }).ignoringDisable(true);
   }
 
@@ -360,7 +356,5 @@ public class Swerve extends SubsystemBase {
       mod.updateCache();
     }
     SmartDashboard.putBoolean("Teleop", DriverStation.isTeleopEnabled());
-
   }
-
 }

@@ -31,11 +31,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
-  private PhotonCamera frontCamera;
-  private PhotonCamera backCamera;
+  private PhotonCamera frontCamera; private PhotonCamera backCamera;
 
-  private PhotonPoseEstimator frontEstimator;
-  private PhotonPoseEstimator backEstimator;
+  private PhotonPoseEstimator frontEstimator; private PhotonPoseEstimator backEstimator;
 
   private AprilTagFieldLayout fieldLayout;
   private double poseTimestamp;
@@ -60,18 +58,17 @@ public class Vision extends SubsystemBase {
     frontCamera = new PhotonCamera(VisionConstants.FRONT_CAMERA_NAME);
     backCamera = new PhotonCamera(VisionConstants.BACK_CAMERA_NAME);
 
+    field2d = new Field2d();
+
     try {
       fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    } catch (IOException e) {throw new UncheckedIOException(e);}
     frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCamera,
         VisionConstants.ROBOT_TO_FRONT_CAM);
     backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCamera,
         VisionConstants.ROBOT_TO_BACK_CAM);
-    field2d = new Field2d();
-    SmartDashboard.putData("Vision estimated Pose",field2d);
-    
+
+    SmartDashboard.putData("Vision estimated Pose", field2d);
     poseTimestamp = Timer.getFPGATimestamp();
   }
   
@@ -104,12 +101,12 @@ public class Vision extends SubsystemBase {
 
     if (frontEstimate.isPresent()) {
       consumer.accept(new VisionMeasurement(frontEstimate.get().estimatedPose.toPose2d(), frontEstimate.get().timestampSeconds, confidenceCalculator(frontEstimate.get())));
-      //good old java
-       frontTags.set(
+        //good old java
+        frontTags.set(
           frontEstimate.get().targetsUsed.stream()
           .map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get())
           .toArray(size -> new Pose3d[size])
-          );
+        );
       
     } else {
       frontTags.set(new Pose3d[0]);
@@ -134,8 +131,6 @@ public class Vision extends SubsystemBase {
     field2d.setRobotPose(this.visionPose);
     
     SmartDashboard.putNumber("Vision/Estimated Angle",getVisionPose().getRotation().getDegrees());
-
-
   }
    private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
     double smallestDistance = Double.POSITIVE_INFINITY;

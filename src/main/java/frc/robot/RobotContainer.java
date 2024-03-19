@@ -19,26 +19,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import frc.robot.commands.*;
-// import frc.robot.autos.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climb.Climb;
-
-/* 
-Summary:
-This code is for the robot container and has a joy stick, joystick buttons, swerve subsystem, a sendable chooser for autonomous modes, autonomous modes, and methods for configuring button bindings and smart dashboard options. 
-*/
-
+/**
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
-                public final static XboxController testDriver = new XboxController(2);
 
         /* Subsystems & Hardware */
-                
                 /* Gyro Sensor */
-                AHRS ahrs = new AHRS(Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
+                AHRS ahrs = new AHRS(Port.kMXP);
+
                 /* Swerve Subsystem */
                 private final Swerve s_Swerve = new Swerve(ahrs);
                 private final Intake s_GroundIntake = new Intake();
@@ -46,16 +47,12 @@ public class RobotContainer {
                 private final Climb s_Climb = new Climb();
                 private final Vision s_Vision = new Vision(s_Swerve::useVisionMeasurement,s_Swerve::getPose);
                 
-                
-                // private final LedSub ledSub = new LedSub();
-
-        /* Controls and buttons */
+        /* Controls & Buttons */
                 /* Drive Controls */
                 private static final int translationAxis = XboxController.Axis.kLeftY.value;
                 private static final int strafeAxis = XboxController.Axis.kLeftX.value;
                 private static final int rotationAxis = XboxController.Axis.kRightX.value;
-                private double SPEED_MULTIPLIER = 1.0;
-                
+                private static final double SPEED_MULTIPLIER = 1.0;
                 
                 /* Driver Buttons */
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -79,22 +76,6 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
-                
-                /* Test-Driver buttons */
-                private final JoystickButton intakeNoteButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kX.value);
-                private final JoystickButton outtakeButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kA.value);
-                private final JoystickButton retractIntakeButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kB.value);
-                private final JoystickButton testClimbUpButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kLeftBumper.value);
-                private final JoystickButton testClimbDownButton = new JoystickButton(testDriver, 
-                        XboxController.Button.kRightBumper.value);
-                // private final JoystickButton intakeClawButton = new JoystickButton(codriver,
-                //         XboxController.Button.kLeftStick.value);
-                // private final JoystickButton outtakeClawButton = new JoystickButton(codriver,
-                //         XboxController.Button.kRightStick.value);
         
         /* Commands */
                 /* Driver */
@@ -102,12 +83,6 @@ public class RobotContainer {
                 private final Command climbDown = s_Climb.climbDown();
                 private final Command tiltLeft = s_Climb.tiltLeft();
                 private final Command tiltRight = s_Climb.tiltRight();
-
-                /* Test */
-                private final Command intakeNote = s_GroundIntake.intakeNoteCommand(driver,codriver);
-                // private final Command openClawCommand = s_Claw.openClawCommand();
-                // private final Command closeClawCommand = s_Claw.closeClawCommand();
-                //private final Command fullShootCommand = s_Shooter.fullShooter(s_GroundIntake);
         
                 /* Codriver  */
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -116,19 +91,14 @@ public class RobotContainer {
                 private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
-                
-                
+
         /* Other */
                 /* SendableChooser */
                 public final SendableChooser<Command> autoChooser;
-        /**
-         * The container for the robot. Contains subsystems, OI devices, and commands.
-         */
+
         public RobotContainer() {
                 /* Hardware and Logging */
                         DriverStation.silenceJoystickConnectionWarning(true);
-                        // TODO: add Camera when we have a camera
-                        // CameraServer.startAutomaticCapture();
                         
                         SmartDashboard.putData("IntakeCommand",deployIntake);
                         SmartDashboard.putData("ShootCommand",shootCommand);
@@ -153,12 +123,9 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
 
                 /* Others */
-                        // Auto chooser
                         autoChooser = AutoBuilder.buildAutoChooser("Center 2 note auto");
-                        // Configure the button bindings
+                        
                         configureButtonBindings();
-
-                        // Configure Smart Dashboard options
                         configureSmartDashboard();
         }
 
@@ -175,13 +142,6 @@ public class RobotContainer {
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()).ignoringDisable(true));
                 
-                
-                /* Testing */
-                outtakeButton.whileTrue(outtakeNote);
-                intakeNoteButton.whileTrue(intakeNote);
-                retractIntakeButton.whileTrue(retractIntake);
-                
-                
                 /* Codriver Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 revShooterButton.whileTrue(shootCommand);
@@ -194,18 +154,11 @@ public class RobotContainer {
                 scoreAmpSequenceButton.whileTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
                 retractIntakeButton2.whileTrue(retractIntake);
-
-                // intakeClawButton.whileTrue(openClawCommand);
-                // outtakeClawButton.whileTrue(closeClawCommand);
-                testClimbUpButton.whileTrue(climbUp);
-                testClimbDownButton.whileTrue(climbDown);
         }
 
         private void configureSmartDashboard() {
                 SmartDashboard.putNumber("Swerve/Speed Multiplier", SPEED_MULTIPLIER);
                 SmartDashboard.putData("Auto Chooser", autoChooser);
-
-        
         }
 
         public void disabledInit() {

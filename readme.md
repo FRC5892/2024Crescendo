@@ -16,6 +16,10 @@ Energy HERO'S Crescendo code
 |Y|Shoot|
 |A|Amp Note Sequence|
 |B|Rev Up Shooter|
+|D-Pad Up|Climb Up|
+|D-Pad Down|Climb Down|
+|D-Pad Left|Tilt Climb Left|
+|D-Pad Right|Tilt Climb Right|
 ### Test Driver
 |Button|Value|
 |-|-|
@@ -24,7 +28,7 @@ Energy HERO'S Crescendo code
 |B|Retract Intake|
 |Y|Deploy Intake|
 |Left Bumper|Climb Up|
-|Right Bumper| Climb Down|
+|Right Bumper|Climb Down|
 ## Swerve Modules
 |Id|Position|
 |-|-|

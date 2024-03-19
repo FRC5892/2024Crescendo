@@ -41,11 +41,11 @@ public class Intake extends SubsystemBase{
   /* Creates a new GroundIntake. */
   public Intake() {
 
-
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
+    
     beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
