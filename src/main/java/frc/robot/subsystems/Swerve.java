@@ -325,11 +325,9 @@ public class Swerve extends SubsystemBase {
   }
   public Command setAngleOffsetCommand() {
     return runOnce(()->{
-      resetToAbsolute();
       for (SwerveModule mod : mSwerveMods) {
-        Preferences.setDouble("offset " + mod.moduleNumber, -mod.getState().angle.getDegrees());
+        Preferences.setDouble("offset " + mod.moduleNumber, mod.getCanCoder().getDegrees());
       };
-      resetToAbsolute();
     }).ignoringDisable(true);
   }
 
