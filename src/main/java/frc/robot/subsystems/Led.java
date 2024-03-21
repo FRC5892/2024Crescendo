@@ -28,25 +28,23 @@ public class Led extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-
- 
-  public void setData(){
+  public void setData() {
     m_led.setData(m_ledBuffer);
   }
 
-  public void stop(){
+  public void stop() {
     m_led.stop();
   }
   
-  public void start(){
+  public void start() {
     m_led.start();
   }
 
-  public double getLength(){
+  public double getLength() {
     return m_ledBuffer.getLength();
   }
 
-  public void setRGB(int i, int a, int b, int c){
+  public void setRGB(int i, int a, int b, int c) {
     m_ledBuffer.setRGB(i, a, b, c);
   }
 }
