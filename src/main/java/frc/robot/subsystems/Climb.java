@@ -22,7 +22,7 @@ public class Climb extends SubsystemBase {
   public Climb() {
     leftClimb = new CANSparkMax(ClimbConstants.LEFT_CLIMB_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     rightClimb = new CANSparkMax(ClimbConstants.RIGHT_CLIMB_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-
+    
     leftClimbEncoder = leftClimb.getEncoder();
     leftClimbEncoder.setPositionConversionFactor(0.50);
   }
@@ -33,7 +33,7 @@ public class Climb extends SubsystemBase {
   }
 
   public void climbRightMotor(double speed) {
-    rightClimb.set(Constants.ClimbConstants.CLIMB_SPEED);
+    rightClimb.set(-Constants.ClimbConstants.CLIMB_SPEED);
   }
 
   public void climbLeftMotor(double speed) {
@@ -41,7 +41,7 @@ public class Climb extends SubsystemBase {
   }
 
   public void retractRightMotor(double speed) {
-    rightClimb.set(-Constants.ClimbConstants.RETRACT_SPEED);
+    rightClimb.set(Constants.ClimbConstants.RETRACT_SPEED);
   }
 
   public void retractLeftMotor(double speed) {

@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -92,7 +91,7 @@ public final class Constants {
             // if these numbers are less than one, multiplying will do bad things
             1, // x
             1, // y
-            1 * Math.PI // theta
+            Math.PI // theta
         );
   }
   //8.5 off back; 25 off ground; centered;
