@@ -111,7 +111,7 @@ public class Swerve extends SubsystemBase {
     );
   }
   public void useVisionMeasurement(Vision.VisionMeasurement measurement) {
-    swerveOdometry.addVisionMeasurement(measurement.pose, measurement.timeStamp, measurement.dev);
+    swerveOdometry.addVisionMeasurement(measurement.pose, measurement.timeStamp);
   }
   
   public void voltageDrive(Measure<Voltage> volts) {
