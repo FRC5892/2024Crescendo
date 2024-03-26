@@ -42,7 +42,7 @@ public final class Constants {
     public static final double OUTTAKE_SPEED = 0.8;
     public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;
 
-    public static final double DEPLOY_SPEED = -0.8;
+    public static final double DEPLOY_SPEED = -1;
     public static final double RETRACT_SPEED = 0.5;
     public static final double AMP_RETRACT_SPEED = 1;
 
@@ -155,7 +155,7 @@ public final class Constants {
     public static final double DRIVE_CONVERSION_VELOCITY_FACTOR = ((WHEEL_DIAMETER * Math.PI) / DRIVE_GEAR_RATIO) / 60.0;
     public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
 
-    /* TODO: set Swerve Profiling Values */
+    /* TODO: set Swerve Profiling Values  */
     // private static final double SPEED_MULTIPLIER = 0.2;
     public static final double MAX_SPEED = 5.5; // meters per second
     public static final double MAX_ANGULAR_VELOCITY = 5; // TODO: Tune
@@ -238,7 +238,7 @@ public final class Constants {
   public static final class AutoConstants {
     public static final HolonomicPathFollowerConfig PATH_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
     new PIDConstants(0.2, 0.0, 0.0), // Translation PID constants
-    new PIDConstants(0.2, 0.0, 0.0), // Rotation PID constants
+    new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
     6.5, // Max module speed, in m/s
     Swerve.WHEEL_BASE, // Drive base radius in meters. Distance from robot center to furthest module.
     new ReplanningConfig(true, true)); // Default path replanning config. See the API for the options here

@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "deployIntake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -62,12 +56,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "deployIntake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -103,12 +91,6 @@
           "type": "named",
           "data": {
             "name": "shootSequence"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "deployIntake"
           }
         },
         {

@@ -345,8 +345,8 @@
               "_title": "Beam Break",
               "_glyph": 148,
               "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "Colors/Color when true": "#800000FF",
+              "Colors/Color when false": "#00FF00FF"
             }
           },
           "13,6": {
@@ -492,6 +492,111 @@
               "Game/Game": "k2024Crescendo",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
+            }
+          },
+          "23,0": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/offsetCommand",
+              "_title": "SmartDashboard/Swerve/offsetCommand",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 3",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 47.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "13,0": {
+            "size": [
+              8,
+              9
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Swerve/SysId",
+              "_title": "SmartDashboard/Swerve/SysId",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/SysId/dynamic backward",
+              "_title": "SmartDashboard/Swerve/SysId/dynamic backward",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/SysId/dynamic forward",
+              "_title": "SmartDashboard/Swerve/SysId/dynamic forward",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/SysId/quasistatic backward",
+              "_title": "SmartDashboard/Swerve/SysId/quasistatic backward",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/SysId/quasistatic forward",
+              "_title": "SmartDashboard/Swerve/SysId/quasistatic forward",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Swerve/offsetCommand",
+              "_title": "SmartDashboard/Swerve/offsetCommand",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }

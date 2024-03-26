@@ -12,7 +12,9 @@
     "Source-SIDE 2 note",
     "Source-SIDE far note grab"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "New Folder"
+  ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
