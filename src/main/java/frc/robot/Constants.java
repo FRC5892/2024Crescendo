@@ -58,7 +58,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int LEFT_KICKER_MOTOR_ID = 15;
     public static final int RIGHT_KICKER_MOTOR_ID = 16;
-    
+  
     public static final PIDConstants LEFT_PID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants RIGHT_PID = new PIDConstants(0.2, 0, 0);
   }
@@ -77,7 +77,7 @@ public final class Constants {
     public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
     public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
     public static final double NOISY_DISTANCE_METERS = 2.5;
-    public static final double DISTANCE_WEIGHT = 7;
+    public static final double DISTANCE_WEIGHT = 15;
     public static final int TAG_PRESENCE_WEIGHT = 10;
 
     /**
@@ -103,7 +103,7 @@ public final class Constants {
     // Standard deviations of the pose estimate (x position in meters, y position
     // in meters, and heading in radians). Increase these numbers to trust your
     // state estimate less.
-    public static final Matrix<N3, N1> STATE_STD_DEVS = VecBuilder.fill(0.1 , 0.1, Units.Degrees.of(5).in(Units.Radians));
+    public static final Matrix<N3, N1> STATE_STD_DEVS = VecBuilder.fill(0.05 , 0.05, Units.Degrees.of(2.5).in(Units.Radians));
     public static final double STICK_DEAD_BAND = 0.1;
     public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
 

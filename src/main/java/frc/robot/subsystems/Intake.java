@@ -69,7 +69,7 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
     SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/BeamBreak", !beamBreak.get());
+    SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
   }
 
   /* Other Functions */
