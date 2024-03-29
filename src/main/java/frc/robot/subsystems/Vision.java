@@ -26,6 +26,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
@@ -42,6 +43,7 @@ public class Vision extends SubsystemBase {
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Consumer<VisionMeasurement> consumer;
   private Supplier<Pose2d> poseSupplier;
+  private double noisyDistanceMeters = VisionConstants.NOISY_DISTANCE_METERS;
   public static class VisionMeasurement {
     public Pose2d pose;
     public double timeStamp;
@@ -83,6 +85,16 @@ public class Vision extends SubsystemBase {
   public void setReferencePose(Pose2d referencePose) {
     this.referencePose = referencePose;
   } 
+  public void setNoisyDistance(double distanceMeters) {
+    noisyDistanceMeters = distanceMeters;
+  }
+  public void resetNoisyDistance() {
+    setNoisyDistance(VisionConstants.NOISY_DISTANCE_METERS); 
+  }
+ public Command reducedDistanceCommand() {
+  return startEnd(()->setNoisyDistance(VisionConstants.AMP_NOISY_DISTANCE_METERS), this::resetNoisyDistance);
+ }
+
   StructArrayPublisher<Pose3d> frontTags = NetworkTableInstance.getDefault()
     .getStructArrayTopic("SmartDashboard/Vision/Front Tags", Pose3d.struct).publish();
   StructArrayPublisher<Pose3d> backTags = NetworkTableInstance.getDefault()

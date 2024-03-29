@@ -59,7 +59,7 @@ public class RobotContainer {
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
-                // private final JoystickButton alignAmpButton = new JoystickButton(driver,XboxController.Button.kA.value);
+                private final JoystickButton alignAmpButton = new JoystickButton(driver,XboxController.Button.kA.value);
 
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
@@ -85,7 +85,7 @@ public class RobotContainer {
                 private final Command climbDown = s_Climb.climbDown();
                 private final Command tiltLeft = s_Climb.tiltLeft();
                 private final Command tiltRight = s_Climb.tiltRight();
-                // private final Command followAmpCommand;
+                private final Command followAmpCommand;
         
                 /* Codriver  */
                 private final Command shootCommand = s_Shooter.shootCommand();
@@ -114,7 +114,8 @@ public class RobotContainer {
                         NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
                         NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
-                        // followAmpCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Amp"));
+                        NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
+                        followAmpCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Amp"));
 
 
                 /* Default Commands */
@@ -146,7 +147,7 @@ public class RobotContainer {
 
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()).ignoringDisable(true));
-                // alignAmpButton.onTrue(followAmpCommand);
+                alignAmpButton.onTrue(followAmpCommand);
                 /* Codriver Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 revShooterButton.whileTrue(shootCommand);
