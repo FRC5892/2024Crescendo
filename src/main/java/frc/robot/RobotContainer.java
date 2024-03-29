@@ -7,8 +7,6 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -116,8 +114,7 @@ public class RobotContainer {
                         NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
                         NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
-                        followAmpCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Amp Alignment 1")).raceWith(s_Vision.reducedDistanceCommand());
-
+                        followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(s_Vision.reducedDistanceCommand());
 
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(

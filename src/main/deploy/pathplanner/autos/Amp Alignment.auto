@@ -10,6 +10,12 @@
           "data": {
             "pathName": "Amp Alignment 1"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Alignment 2"
+          }
         }
       ]
     }
