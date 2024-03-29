@@ -7,6 +7,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -115,7 +116,7 @@ public class RobotContainer {
                         NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
                         NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
-                        followAmpCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Amp"));
+                        followAmpCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Amp Alignment 1")).raceWith(s_Vision.reducedDistanceCommand());
 
 
                 /* Default Commands */
@@ -144,10 +145,9 @@ public class RobotContainer {
          * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
          */
         private void configureButtonBindings() {
-
                 /* Driver Buttons */
                 zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()).ignoringDisable(true));
-                alignAmpButton.onTrue(followAmpCommand);
+                alignAmpButton.whileTrue(followAmpCommand);
                 /* Codriver Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
                 revShooterButton.whileTrue(shootCommand);
