@@ -136,10 +136,12 @@ public class Intake extends SubsystemBase{
 
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-        return startEnd(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED), this::stopDeploy)
-        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get());
+        return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
+        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOYSLOW_ROTATIONS)
+        .andThen(()-> {this.setDeploySpeed(IntakeConstants.DEPLOYSLOW_SPEED); deployMotor.setIdleMode(IdleMode.kBrake);})
+        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get())
+        .finallyDo(this::stopDeploy);
       }
-
       public Command retractIntakeCommand(double speed) {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
         return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
