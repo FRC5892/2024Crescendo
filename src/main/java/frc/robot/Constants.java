@@ -53,8 +53,8 @@ public final class Constants {
 
     public static final double DEPLOY_ROTATIONS = 0.0;
     public static final double RETRACT_ROTATIONS = 0.65;
-    public static final double DEPLOYSLOW_ROTATIONS = 0.2;
-    public static final double DEPLOYSLOW_SPEED = -0.6;
+    public static final double DEPLOYSLOW_ROTATIONS = 0.15;
+    public static final double DEPLOYSLOW_SPEED = -0.3;
   }
 
   public static final class ShooterConstants {
@@ -159,7 +159,7 @@ public final class Constants {
 
     /* TODO: set Swerve Profiling Values  */
     // private static final double SPEED_MULTIPLIER = 0.2;
-    public static final double MAX_SPEED = 5.5; // meters per second
+    public static final double MAX_SPEED = 6.5; // meters per second
     public static final double MAX_ANGULAR_VELOCITY = 5; // TODO: Tune
 
     /* Neutral Modes */

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1828052388499146,
-        "y": 1.4597516518976712
+        "x": 2.2113445212805924,
+        "y": 1.7956317309921466
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.284709527165534,
-        "y": 0.7949142658848707
+        "x": 8.299162513817985,
+        "y": 2.4570077309168705
       },
       "prevControl": {
-        "x": 5.423018169980002,
-        "y": 0.7804612792324187
+        "x": 6.001029184461051,
+        "y": 0.528644901857253
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 40.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Far note",
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0
