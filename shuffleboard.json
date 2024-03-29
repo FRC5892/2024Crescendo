@@ -221,15 +221,15 @@
               "Visuals/Show value": true
             }
           },
-          "4,0": {
+          "4,1": {
             "size": [
               9,
-              5
+              6
             ],
             "content": {
               "_type": "Camera Stream",
-              "_source0": "camera_server://front",
-              "_title": "front",
+              "_source0": "camera_server://photonvision_Port_1182_Output_MJPEG_Server",
+              "_title": "photonvision_Port_1182_Output_MJPEG_Server",
               "_glyph": 148,
               "_showGlyph": false,
               "Crosshair/Show crosshair": true,
@@ -605,9 +605,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1382.0,
-    "height": 736.0
+    "x": -7.0,
+    "y": 0.0,
+    "width": 1380.0,
+    "height": 527.0
   }
 }

@@ -7,7 +7,6 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,6 +37,7 @@ public class RobotContainer {
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
 
+                
         /* Subsystems & Hardware */
                 /* Gyro Sensor */
                 AHRS ahrs = new AHRS(Port.kMXP);
@@ -130,7 +130,7 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
 
                 /* Others */
-                        autoChooser = AutoBuilder.buildAutoChooser("Center 2 note auto");
+                        autoChooser = AutoBuilder.buildAutoChooser("Shoot 1 note");
                         
                         configureButtonBindings();
                         configureSmartDashboard();

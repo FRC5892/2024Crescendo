@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -58,17 +58,11 @@
         {
           "type": "named",
           "data": {
-            "name": "retractIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootSequence"
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -102,17 +96,11 @@
         {
           "type": "named",
           "data": {
-            "name": "retractIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootSequence"
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -141,12 +129,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "retractIntake"
           }
         },
         {
