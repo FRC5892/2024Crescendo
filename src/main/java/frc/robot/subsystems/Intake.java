@@ -137,8 +137,8 @@ public class Intake extends SubsystemBase{
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
         return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
-        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOYSLOW_ROTATIONS)
-        .andThen(()-> {this.setDeploySpeed(IntakeConstants.DEPLOYSLOW_SPEED); deployMotor.setIdleMode(IdleMode.kBrake);})
+        // .until(() -> getDeployRotation() <= IntakeConstants.DEPLOYSLOW_ROTATIONS)
+        // .andThen(()-> {this.setDeploySpeed(IntakeConstants.DEPLOYSLOW_SPEED); deployMotor.setIdleMode(IdleMode.kBrake);})
         .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get())
         .finallyDo(this::stopDeploy);
       }
