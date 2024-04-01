@@ -33,6 +33,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int INTAKE_MOTOR_ID = 13;
     public static final int DEPLOY_MOTOR_ID = 14;
+    public static final int DEPLOY_MOTOR_2_ID = 15;
 
     public static final int BEAM_BREAK_DIO_PORT_ID = 0;
     public static final int DEPLOY_LIMIT_SWITCH_DIO_PORT_ID = 1;
@@ -58,8 +59,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int LEFT_KICKER_MOTOR_ID = 15;
-    public static final int RIGHT_KICKER_MOTOR_ID = 16;
+    public static final int LEFT_KICKER_MOTOR_ID = 16;
+    public static final int RIGHT_KICKER_MOTOR_ID = 17;
   
     public static final PIDConstants LEFT_PID = new PIDConstants(0.2, 0, 0);
     public static final PIDConstants RIGHT_PID = new PIDConstants(0.2, 0, 0);
