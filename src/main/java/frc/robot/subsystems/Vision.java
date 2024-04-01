@@ -112,6 +112,8 @@ public class Vision extends SubsystemBase {
     if (frontEstimate.isPresent()) {
       if (confidenceCalculator(frontEstimate.get())) {
         consumer.accept(new VisionMeasurement(frontEstimate.get().estimatedPose.toPose2d(), frontEstimate.get().timestampSeconds));
+        this.visionPose = frontEstimate.get().estimatedPose.toPose2d();
+
       }
         //good old java
         frontTags.set(
@@ -126,6 +128,7 @@ public class Vision extends SubsystemBase {
     if (backEstimate.isPresent()) {
       if (confidenceCalculator(backEstimate.get())) {
         consumer.accept(new VisionMeasurement(backEstimate.get().estimatedPose.toPose2d(), backEstimate.get().timestampSeconds));
+        this.visionPose = backEstimate.get().estimatedPose.toPose2d();
       }
       //good old java
        backTags.set(
