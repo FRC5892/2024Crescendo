@@ -63,9 +63,6 @@ public class Intake extends SubsystemBase{
 
   @Override
   public void periodic() {
-    // stolen from super
-
-
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
     //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
@@ -116,12 +113,9 @@ public class Intake extends SubsystemBase{
 
     //PID?
     public void setDeploySetPoint(double setpoint) {
-      // deployMotor.set(deployController.calculate(getDeployRotation(), setpoint));
       deployController.setReference(setpoint, ControlType.kPosition);
     }
   
-
-
   /* Commands */
     /* Codriver Commands */
       public Command intakeNoteSequence(XboxController controller, XboxController controller2) {
@@ -169,6 +163,7 @@ public class Intake extends SubsystemBase{
         return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
       }
 
+
       public Command outtakeNoteForAmpCommand() {
         return startEnd(() -> this.outtakeNoteForAmp(), ()-> this.stopIntake());
       }
@@ -176,11 +171,4 @@ public class Intake extends SubsystemBase{
       public Command deployAmpCommand() {
         return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
       }
-
-      // public final Command trapezoidCommand = new TrapezoidProfileCommand(
-      //   profile,
-      //   (state)->setDeploySpeed(state.velocity),
-      //   ()->goal,
-      //   ()->new State(getDeployRotation(),deployEncoder.getVelocity()),
-      //   this);
 }

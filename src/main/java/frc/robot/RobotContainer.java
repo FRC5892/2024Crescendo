@@ -58,7 +58,7 @@ public class RobotContainer {
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
                 private final JoystickButton robotCentric = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
-                private final JoystickButton alignAmpButton = new JoystickButton(driver,XboxController.Button.kA.value);
+                private final JoystickButton alignAmpButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
@@ -115,7 +115,7 @@ public class RobotContainer {
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
                         NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
                         followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(s_Vision.reducedDistanceCommand());
-
+                
                 /* Default Commands */
                         s_Swerve.setDefaultCommand(
                                 new TeleopSwerve(

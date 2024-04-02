@@ -64,8 +64,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putData("Shooter/SysId/right/quasistatic forward", rSysIdQuasistatic(Direction.kForward));
     SmartDashboard.putData("Shooter/SysId/right/quasistatic backward", rSysIdQuasistatic(Direction.kReverse));
   }
-
-
   
   public void lShootVoltage(Measure<Voltage> volt) {
     leftKicker.setVoltage(volt.in(Units.Volts));
@@ -112,22 +110,10 @@ public class Shooter extends SubsystemBase {
     setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", -6000));
   }
 
-
-
   public Command shootCommand() {
     return runEnd(this::setKickerSpeedsFromSmartDashboard, this::stopKickerMotors);
   }
 
-  public boolean ready() {
-    return leftController.atSetpoint() && rightController.atSetpoint();
-  }
-
-  public boolean hasShot() {
-    //TODO: implement me
-    return false;
-  }
-
-  /*speed from 0 to -1 */
   public void setFeedMotorSpeed(double speed) {
     leftFeederMotor.set(speed);
   }
@@ -136,17 +122,18 @@ public class Shooter extends SubsystemBase {
     setFeedMotorSpeed(0);
   }
 
+  /**
+   * Command to hand off a NOTE into the Shooter and to shoot it.
+   * <p>Runs for 1 second.
+   * @param intake - the Intake subsystem
+   */
   public Command fullShooter(Intake intake) {
-    return this.shootCommand()                    // shoot
-            .alongWith(                           // as well as
-                // new WaitUntilCommand(this::ready)  // wait for motor to get to speed
-                // .withTimeout(3)             // or for 3 seconds to pass
-                Commands.waitSeconds(.5)             // or for 3 seconds to pass
-                .andThen(intake.outtakeNoteCommand())//then outtake into shooter
-            )
-            .until(this::hasShot)                   //until it has shot
-            .withTimeout(1);                //or 2 seconds pass 
-                                                    //then interrupt all commands, stopping outtake and shooter
+    return this.shootCommand()
+      .alongWith(
+        Commands.waitSeconds(.5)
+        .andThen(intake.outtakeNoteCommand())
+      )
+      .withTimeout(1);
   }
 
   @Override
