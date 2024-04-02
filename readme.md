@@ -57,6 +57,7 @@ Energy HERO'S Crescendo code
 |Id|Usage|
 |-|-|
 |13|Intake Motor|
+
 |14|Deploy Motor|
 |15|Left Shooter Motor|
 |16|Right Shooter Motor|

@@ -32,8 +32,9 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int INTAKE_MOTOR_ID = 13;
-    public static final int DEPLOY_MOTOR_ID = 14;
-    public static final int DEPLOY_MOTOR_2_ID = 15;
+    public static final int DEPLOY_MOTOR_2_ID = 14;
+    
+    public static final int DEPLOY_MOTOR_ID = 15;
 
     public static final int BEAM_BREAK_DIO_PORT_ID = 0;
     public static final int DEPLOY_LIMIT_SWITCH_DIO_PORT_ID = 1;

@@ -47,8 +47,11 @@ public class Vision extends SubsystemBase {
   public static class VisionMeasurement {
     public Pose2d pose;
     public double timeStamp;
+    // Matrix<N3, N1> dev;
+    // public VisionMeasurement (Pose2d pose,double timeStamp,Matrix<N3, N1> dev) {
     public VisionMeasurement (Pose2d pose,double timeStamp) {
       this.pose = pose;
+      // this.dev = dev;
       this.timeStamp = timeStamp;
     }
   }
@@ -110,6 +113,7 @@ public class Vision extends SubsystemBase {
     Optional<EstimatedRobotPose> backEstimate  = backEstimator.update();
 
     if (frontEstimate.isPresent()) {
+      // consumer.accept(new VisionMeasurement(frontEstimate.get().estimatedPose.toPose2d(), frontEstimate.get().timestampSeconds, confidenceCalculator(frontEstimate.get())));
       if (confidenceCalculator(frontEstimate.get())) {
         consumer.accept(new VisionMeasurement(frontEstimate.get().estimatedPose.toPose2d(), frontEstimate.get().timestampSeconds));
         this.visionPose = frontEstimate.get().estimatedPose.toPose2d();
@@ -126,6 +130,7 @@ public class Vision extends SubsystemBase {
       frontTags.set(new Pose3d[0]);
     }
     if (backEstimate.isPresent()) {
+      // consumer.accept(new VisionMeasurement(backEstimate.get().estimatedPose.toPose2d(), backEstimate.get().timestampSeconds, confidenceCalculator(backEstimate.get())));
       if (confidenceCalculator(backEstimate.get())) {
         consumer.accept(new VisionMeasurement(backEstimate.get().estimatedPose.toPose2d(), backEstimate.get().timestampSeconds));
         this.visionPose = backEstimate.get().estimatedPose.toPose2d();
@@ -149,6 +154,7 @@ public class Vision extends SubsystemBase {
     
     SmartDashboard.putNumber("Vision/Estimated Angle",getVisionPose().getRotation().getDegrees());
   }
+  // private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
    private boolean confidenceCalculator(EstimatedRobotPose estimation) {
     double smallestDistance = Double.POSITIVE_INFINITY;
     for (var target : estimation.targetsUsed) {
@@ -158,6 +164,21 @@ public class Vision extends SubsystemBase {
         smallestDistance = distance;
     }
 
+    // double poseAmbiguityFactor = estimation.targetsUsed.size() != 1
+    //     ? 1
+    //     : Math.max(
+    //         1,
+    //         (estimation.targetsUsed.get(0).getPoseAmbiguity()
+    //             + Constants.VisionConstants.POSE_AMBIGUITY_SHIFTER)
+    //             * Constants.VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
+    // double confidenceMultiplier = Math.max(1, (
+    //   Math.max(1,
+    //     Math.max(0, smallestDistance - Constants.VisionConstants.NOISY_DISTANCE_METERS)
+    //     * Constants.VisionConstants.DISTANCE_WEIGHT
+    //   ) * poseAmbiguityFactor)
+    // / (1 + ((estimation.targetsUsed.size() - 1) * Constants.VisionConstants.TAG_PRESENCE_WEIGHT)));
+
+    // return Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
     return smallestDistance <= VisionConstants.NOISY_DISTANCE_METERS;
   }
 }

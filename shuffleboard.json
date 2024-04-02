@@ -5,136 +5,21 @@
       "autoPopulate": false,
       "autoPopulatePrefix": "LiveWindow/",
       "widgetPane": {
-        "gridSize": 64.0,
+        "gridSize": 52.0,
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
+          "14,0": {
             "size": [
-              2,
-              7
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "Kill Switches",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Grid Layout",
-                  "_title": "Mod 0 FL",
-                  "_glyph": 149,
-                  "_showGlyph": false,
-                  "Layout/Number of columns": 2,
-                  "Layout/Number of rows": 1,
-                  "Layout/Label position": "BOTTOM",
-                  "_children": {
-                    "0,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Drive Enabled",
-                      "_title": "Drive",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    },
-                    "1,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Angle Enabled",
-                      "_title": "Angle",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    }
-                  }
-                },
-                {
-                  "_type": "Grid Layout",
-                  "_title": "Mod 1 FR",
-                  "_glyph": 149,
-                  "_showGlyph": false,
-                  "Layout/Number of columns": 2,
-                  "Layout/Number of rows": 1,
-                  "Layout/Label position": "BOTTOM",
-                  "_children": {
-                    "0,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Drive Enabled",
-                      "_title": "Drive",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    },
-                    "1,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Angle Enabled",
-                      "_title": "Angle",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    }
-                  }
-                },
-                {
-                  "_type": "Grid Layout",
-                  "_title": "Mod BL",
-                  "_glyph": 149,
-                  "_showGlyph": false,
-                  "Layout/Number of columns": 2,
-                  "Layout/Number of rows": 1,
-                  "Layout/Label position": "BOTTOM",
-                  "_children": {
-                    "0,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Drive Enabled",
-                      "_title": "Drive",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    },
-                    "1,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Angle Enabled",
-                      "_title": "Angle",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    }
-                  }
-                },
-                {
-                  "_type": "Grid Layout",
-                  "_title": "Mod BR",
-                  "_glyph": 149,
-                  "_showGlyph": false,
-                  "Layout/Number of columns": 2,
-                  "Layout/Number of rows": 1,
-                  "Layout/Label position": "BOTTOM",
-                  "_children": {
-                    "0,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Drive Enabled",
-                      "_title": "Drive",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    },
-                    "1,0": {
-                      "_type": "Toggle Switch",
-                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Angle Enabled",
-                      "_title": "Angle",
-                      "_glyph": 148,
-                      "_showGlyph": false
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "13,0": {
-            "size": [
-              4,
-              3
+              6,
+              4
             ],
             "content": {
               "_type": "Field",
               "_source0": "network_table:///SmartDashboard/Field",
-              "_title": "SmartDashboard/Field",
+              "_title": "Map",
               "_glyph": 148,
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
@@ -142,7 +27,7 @@
               "Visuals/Show Outside Circles": false
             }
           },
-          "2,2": {
+          "3,4": {
             "size": [
               2,
               2
@@ -157,9 +42,9 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "2,0": {
+          "0,4": {
             "size": [
-              2,
+              3,
               2
             ],
             "content": {
@@ -192,54 +77,174 @@
               }
             }
           },
-          "13,3": {
+          "14,4": {
             "size": [
-              4,
+              6,
               2
             ],
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Auto Chooser",
-              "_title": "SmartDashboard/Auto Chooser",
+              "_title": "Auto Chooser",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "2,4": {
+          "5,0": {
             "size": [
               2,
-              2
+              6
             ],
             "content": {
-              "_type": "Simple Dial",
+              "_type": "Number Bar",
               "_source0": "network_table:///SmartDashboard/Shooter/leftRealSpeed",
-              "_title": "SmartDashboard/Shooter/leftRealSpeed",
+              "_title": "Shooter RPM",
               "_glyph": 148,
               "_showGlyph": false,
               "Range/Min": 0.0,
               "Range/Max": 6000.0,
-              "Visuals/Show value": true
+              "Range/Center": 0.0,
+              "Visuals/Num tick marks": 5,
+              "Visuals/Show text": true,
+              "Visuals/Orientation": "VERTICAL"
             }
           },
-          "4,1": {
+          "7,0": {
             "size": [
-              9,
+              7,
               6
             ],
             "content": {
               "_type": "Camera Stream",
               "_source0": "camera_server://photonvision_Port_1182_Output_MJPEG_Server",
-              "_title": "photonvision_Port_1182_Output_MJPEG_Server",
+              "_title": "Front Camera",
               "_glyph": 148,
               "_showGlyph": false,
               "Crosshair/Show crosshair": true,
               "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
+              "Controls/Show controls": false,
               "Controls/Rotation": "NONE",
               "compression": -1.0,
               "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "imageWidth": 0,
+              "imageHeight": 0
+            }
+          },
+          "0,0": {
+            "size": [
+              5,
+              4
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Kill Switches",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 2,
+              "Layout/Number of rows": 2,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Grid Layout",
+                  "_title": "Mod 0 FL",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 0/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                "1,0": {
+                  "_type": "Grid Layout",
+                  "_title": "Mod 1 FR",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 1/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                "0,1": {
+                  "_type": "Grid Layout",
+                  "_title": "Mod BL",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 2/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                },
+                "1,1": {
+                  "_type": "Grid Layout",
+                  "_title": "Mod BR",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 2,
+                  "Layout/Number of rows": 1,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Drive Enabled",
+                      "_title": "Drive",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    "1,0": {
+                      "_type": "Toggle Switch",
+                      "_source0": "network_table:///SmartDashboard/Swerve/Modules/Mod 3/Angle Enabled",
+                      "_title": "Angle",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -608,6 +613,6 @@
     "x": -7.0,
     "y": 0.0,
     "width": 1380.0,
-    "height": 527.0
+    "height": 531.0
   }
 }

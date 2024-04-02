@@ -83,7 +83,6 @@ public class Intake extends SubsystemBase{
     public void coastMode() {
       deployMotor.setIdleMode(IdleMode.kCoast);
     }
-
   
   /* Intaking */
     public void intakeNote() {
