@@ -42,10 +42,10 @@ public final class Constants {
 
     public static final double INTAKE_SPEED = -0.8;
     public static final double OUTTAKE_SPEED = 0.8;
-    public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;
+    public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;n
 
     public static final double DEPLOY_SPEED = -1;
-    public static final double RETRACT_SPEED = 0.75;
+    public static final double RETRACT_SPEED = 0.5;
     public static final double AMP_RETRACT_SPEED = 1;
 
     public static final PIDConstants DEPLOY_PID = new PIDConstants(0.02, 0, 0);
