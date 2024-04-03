@@ -32,9 +32,9 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int INTAKE_MOTOR_ID = 13;
-    public static final int DEPLOY_MOTOR_2_ID = 14;
+    // public static final int DEPLOY_MOTOR_2_ID = 15;
     
-    public static final int DEPLOY_MOTOR_ID = 15;
+    public static final int DEPLOY_MOTOR_ID = 14;
 
     public static final int BEAM_BREAK_DIO_PORT_ID = 0;
     public static final int DEPLOY_LIMIT_SWITCH_DIO_PORT_ID = 1;
@@ -119,7 +119,7 @@ public final class Constants {
     public static final double TRACK_WIDTH = Units.Inches.of(29).in(Units.Meters);
     public static final double WHEEL_BASE = Units.Inches.of(29).in(Units.Meters);
     public static final double WHEEL_DIAMETER = Units.Inches.of(4.0).in(Units.Meters);
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+    // public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
     public static final double OPEN_LOOP_RAMP = 2;
 
@@ -158,7 +158,7 @@ public final class Constants {
     public static final double DRIVE_KA = 0.3;
 
     /* Drive Motor Conversion Factors */
-    public static final double DRIVE_CONVERSION_VELOCITY_FACTOR = ((WHEEL_DIAMETER * Math.PI) / DRIVE_GEAR_RATIO) / 60.0;
+    public static final double DRIVE_CONVERSION_VELOCITY_FACTOR = (((WHEEL_DIAMETER * Math.PI) / DRIVE_GEAR_RATIO) / 60.0 ) ;
     public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
 
     /* TODO: set Swerve Profiling Values  */
@@ -172,6 +172,8 @@ public final class Constants {
 
     // public static final boolean DRIVE_INVERT = true;
     public static final boolean ANGLE_INVERT = false;
+
+    public static final double DRIVE_FUDGE_FACTOR = 0.060509807 * 0.78;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */

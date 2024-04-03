@@ -44,8 +44,8 @@ public class Intake extends SubsystemBase{
 
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
-    deployMotor2 = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_2_ID, MotorType.kBrushless);
-    deployMotor2.follow(deployMotor, true);
+    // deployMotor2 = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_2_ID, MotorType.kBrushless);
+    // deployMotor2.follow(deployMotor, true);
     
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     

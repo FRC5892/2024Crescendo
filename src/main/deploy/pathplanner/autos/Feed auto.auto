@@ -54,6 +54,18 @@
           "data": {
             "name": "shootSequence"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far note path 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Feed path 1"
+          }
         }
       ]
     }

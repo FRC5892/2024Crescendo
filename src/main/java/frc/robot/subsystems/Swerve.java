@@ -35,7 +35,12 @@ In the periodic() method, the robot's odometry is updated, and the yaw of the ro
 */
 
 public class Swerve extends SubsystemBase {
-  private AHRS gyro;
+
+
+
+private AHRS gyro;
+
+
 
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
@@ -55,6 +60,7 @@ public class Swerve extends SubsystemBase {
         new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS),
         new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS)
     };
+    
     swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(),
         getModulePositions(), Constants.Swerve.INITIAL_POSE, Constants.Swerve.STATE_STD_DEVS,
         Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);

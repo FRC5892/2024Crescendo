@@ -604,15 +604,28 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "10,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/IntakeCommand",
+              "_title": "/SmartDashboard/IntakeCommand",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
-    "y": 0.0,
-    "width": 1380.0,
-    "height": 531.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1382.0,
+    "height": 736.0
   }
 }

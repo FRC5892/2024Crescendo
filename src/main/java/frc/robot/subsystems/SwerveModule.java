@@ -169,7 +169,7 @@ public class SwerveModule implements Sendable {
     CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kVelocityOnly);
     driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_CONTINUOUS_CURRENT_LIMIT);
     driveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);
-    driveEncoder.setPositionConversionFactor(0.060509807);
+    driveEncoder.setPositionConversionFactor(Constants.Swerve.DRIVE_FUDGE_FACTOR);
     driveEncoder.setVelocityConversionFactor(Constants.Swerve.DRIVE_CONVERSION_VELOCITY_FACTOR);
     // driveController.setP(Constants.Swerve.ANGLE_KP);
     // driveController.setI(Constants.Swerve.ANGLE_KI);
