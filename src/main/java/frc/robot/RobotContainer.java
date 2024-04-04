@@ -111,8 +111,10 @@ public class RobotContainer {
                         NamedCommands.registerCommand("retractIntake", s_GroundIntake.retractIntakeCommand());
                         NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence(driver,codriver));
                         NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
+                        NamedCommands.registerCommand("runShooter", s_Shooter.shootCommand());
                         NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
                         NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
+                        NamedCommands.registerCommand("handoffNote", s_GroundIntake.handoffNote());
                         NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
                         followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(s_Vision.reducedDistanceCommand());
                 
@@ -127,7 +129,7 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
 
                 /* Others */
-                        autoChooser = AutoBuilder.buildAutoChooser("Center 2 note auto");
+                        autoChooser = AutoBuilder.buildAutoChooser();
                         
                         configureButtonBindings();
                         configureSmartDashboard();

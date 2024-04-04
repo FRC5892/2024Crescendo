@@ -8,12 +8,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Center Line Test Path"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Auton Tests",
   "choreoAuto": false
 }

@@ -173,7 +173,7 @@ public final class Constants {
     // public static final boolean DRIVE_INVERT = true;
     public static final boolean ANGLE_INVERT = false;
 
-    public static final double DRIVE_FUDGE_FACTOR = 0.060509807 * 0.78;
+    public static final double DRIVE_FUDGE_FACTOR = 0.060509807 * 0.7;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */

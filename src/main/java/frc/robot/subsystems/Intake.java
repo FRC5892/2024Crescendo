@@ -163,6 +163,10 @@ public class Intake extends SubsystemBase{
         return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
       }
 
+      public Command handoffNote() {
+        return outtakeNoteCommand()
+          .withTimeout(0.5);
+      }
 
       public Command outtakeNoteForAmpCommand() {
         return startEnd(() -> this.outtakeNoteForAmp(), ()-> this.stopIntake());

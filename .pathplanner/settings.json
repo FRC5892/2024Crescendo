@@ -6,17 +6,22 @@
     "3 note",
     "3 note CHEESE",
     "4 note CHEESE",
+    "Amp Alignment",
     "Amp scoring 2 note",
     "Amp-SIDE 2 note",
+    "Amp-side Note 118",
+    "Auton Testing",
     "Center 2 note",
+    "Center Note 118",
     "Far note",
     "Feed",
-    "Amp Alignment",
-    "Source-SIDE 2 note",
+    "Podium Note 118",
     "Source-SIDE far note grab"
   ],
   "autoFolders": [
-    "New Folder"
+    "118 Autos",
+    "New Folder",
+    "Auton Tests"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 4.0,
