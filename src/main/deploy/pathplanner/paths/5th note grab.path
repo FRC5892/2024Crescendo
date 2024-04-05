@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9,
+        "x": 1.3472759339884879,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9000000000000008,
+        "x": 2.3472759339884863,
         "y": 5.54
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.15,
-        "y": 5.54
+        "x": 8.313615500470437,
+        "y": 7.443288126012872
       },
       "prevControl": {
-        "x": 2.1499999999999995,
-        "y": 5.54
+        "x": 7.347689674181368,
+        "y": 7.184469080910351
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.0,
+    "rotation": 15.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center Note 118",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

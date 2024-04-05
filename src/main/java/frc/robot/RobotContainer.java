@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -46,6 +47,7 @@ public class RobotContainer {
                 private final Shooter s_Shooter = new Shooter(); 
                 private final Climb s_Climb = new Climb();
                 private final Vision s_Vision = new Vision(s_Swerve::useVisionMeasurement,s_Swerve::getPose);
+                private final AmpAssist s_AmpAssist = new AmpAssist(); 
                 
         /* Controls & Buttons */
                 /* Drive Controls */
@@ -90,7 +92,7 @@ public class RobotContainer {
                 private final Command shootCommand = s_Shooter.shootCommand();
                 private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
                 private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence(driver,codriver);
-                private final Command scoreAmpSequence = s_GroundIntake.scoreAmpSequence();
+                private final Command scoreAmpSequence = s_AmpAssist.ampAssistCommand();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
 
@@ -105,6 +107,8 @@ public class RobotContainer {
                         SmartDashboard.putData("IntakeCommand",deployIntake);
                         SmartDashboard.putData("ShootCommand",shootCommand);
                 
+                        CameraServer.startAutomaticCapture();
+
                 /* PathPlanner Named Commands */
                         s_Swerve.setupPathPlanner();
                         NamedCommands.registerCommand("deployIntake", s_GroundIntake.deployIntakeCommand());
@@ -153,10 +157,10 @@ public class RobotContainer {
                 shootButton.whileTrue(outtakeNote);
                 climbUpButton.whileTrue(climbUp);
                 climbDownButton.whileTrue(climbDown);
-                tiltClimbLeftButton.whileTrue(tiltLeft);
-                tiltClimbRightButton.whileTrue(tiltRight);
+                // tiltClimbLeftButton.whileTrue(tiltLeft);
+                // tiltClimbRightButton.whileTrue(tiltRight);
 
-                scoreAmpSequenceButton.whileTrue(scoreAmpSequence);
+                scoreAmpSequenceButton.toggleOnTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
                 retractIntakeButton2.whileTrue(retractIntake);
         }
@@ -164,6 +168,9 @@ public class RobotContainer {
         private void configureSmartDashboard() {
                 SmartDashboard.putNumber("Swerve/Speed Multiplier", SPEED_MULTIPLIER);
                 SmartDashboard.putData("Auto Chooser", autoChooser);
+                SmartDashboard.putData("tilt-left",tiltLeft);
+                SmartDashboard.putData("tilt-right",tiltRight);
+
         }
 
         public void disabledInit() {

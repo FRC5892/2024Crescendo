@@ -45,7 +45,7 @@ public final class Constants {
     public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;n
 
     public static final double DEPLOY_SPEED = -1;
-    public static final double RETRACT_SPEED = 0.5;
+    public static final double RETRACT_SPEED = 0.75;
     public static final double AMP_RETRACT_SPEED = 1;
 
     public static final PIDConstants DEPLOY_PID = new PIDConstants(0.02, 0, 0);
@@ -57,8 +57,16 @@ public final class Constants {
     public static final double RETRACT_ROTATIONS = 0.65;
     public static final double DEPLOYSLOW_ROTATIONS = 0.15;
     public static final double DEPLOYSLOW_SPEED = -0.3;
-  }
 
+  }
+  public static final class AmpAssistConstants {
+    public static final double RETRACT_POSITION = 0.45;
+    public static final double EXTEND_POSITION = 1;
+    public static final int LEFT_SERVO_PORT = 0;
+    public static final int RIGHT_SERVO_PORT = 1;
+
+
+  }
   public static final class ShooterConstants {
     public static final int LEFT_KICKER_MOTOR_ID = 16;
     public static final int RIGHT_KICKER_MOTOR_ID = 17;
@@ -137,8 +145,8 @@ public final class Constants {
     public static final double VOLTAGE_COMP = 12.0;
 
     /* Swerve Current Limiting */
-    public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 20;
-    public static final int DRIVE_CONTINUOUS_CURRENT_LIMIT = 50;
+    public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 25;
+    public static final int DRIVE_CONTINUOUS_CURRENT_LIMIT = 50; //50
 
     /* TODO: test Angle Motor PID Values (these are default, may tune if needed) */
     public static final double ANGLE_KP = 0.02;
