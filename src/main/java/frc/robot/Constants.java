@@ -144,7 +144,7 @@ public final class Constants {
     /* Swerve Compensation */
     public static final double VOLTAGE_COMP = 12.0;
 
-    /* Swerve Current Limiting */
+    /* Swerve Current Limiting */ 
     public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 25;
     public static final int DRIVE_CONTINUOUS_CURRENT_LIMIT = 50; //50
 

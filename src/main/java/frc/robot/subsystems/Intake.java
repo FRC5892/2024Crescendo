@@ -150,10 +150,13 @@ public class Intake extends SubsystemBase{
 
     /* Test Commands */
       public Command intakeNoteCommand(XboxController controller,XboxController controller2) {
-        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get()).andThen(() -> {
+        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get())
+        .andThen(() -> {
           controller.setRumble(RumbleType.kBothRumble, 1);
           controller2.setRumble(RumbleType.kBothRumble, 1);
-        }).andThen(new WaitCommand(0.25)).andThen(()->{
+        })
+        .andThen(new WaitCommand(0.25))
+        .finallyDo(()->{
           controller.setRumble(RumbleType.kBothRumble, 0);
           controller2.setRumble(RumbleType.kBothRumble, 0);
         });
