@@ -150,32 +150,6 @@
                       "data": {
                         "name": "handoffNote"
                       }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "5th note grab"
-                                  }
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeSequence"
-                            }
-                          }
-                        ]
-                      }
                     }
                   ]
                 }
