@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.jni.CANSparkMaxJNI;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,7 +27,6 @@ public class Intake extends SubsystemBase{
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
-  private CANSparkMax deployMotor2;
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
@@ -44,8 +44,6 @@ public class Intake extends SubsystemBase{
 
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
-    // deployMotor2 = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_2_ID, MotorType.kBrushless);
-    // deployMotor2.follow(deployMotor, true);
     
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     
@@ -103,6 +101,7 @@ public class Intake extends SubsystemBase{
   /* Deploying */  
     public void setDeploySpeed(double speed) {
       deployMotor.set(speed);
+      
     }
 
     public void stopDeploy() {

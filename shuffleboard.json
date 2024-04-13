@@ -11,25 +11,9 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "14,0": {
+          "16,2": {
             "size": [
-              6,
-              4
-            ],
-            "content": {
-              "_type": "Field",
-              "_source0": "network_table:///SmartDashboard/Field",
-              "_title": "Map",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Game/Game": "k2024Crescendo",
-              "Visuals/Robot Icon Size": 30.0,
-              "Visuals/Show Outside Circles": false
-            }
-          },
-          "3,4": {
-            "size": [
-              2,
+              4,
               2
             ],
             "content": {
@@ -42,9 +26,9 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,4": {
+          "16,0": {
             "size": [
-              3,
+              4,
               2
             ],
             "content": {
@@ -77,7 +61,7 @@
               }
             }
           },
-          "14,4": {
+          "0,4": {
             "size": [
               6,
               2
@@ -90,28 +74,25 @@
               "_showGlyph": false
             }
           },
-          "5,0": {
+          "16,4": {
             "size": [
-              2,
-              6
+              4,
+              3
             ],
             "content": {
-              "_type": "Number Bar",
+              "_type": "Simple Dial",
               "_source0": "network_table:///SmartDashboard/Shooter/leftRealSpeed",
               "_title": "Shooter RPM",
               "_glyph": 148,
               "_showGlyph": false,
               "Range/Min": 0.0,
               "Range/Max": 6000.0,
-              "Range/Center": 0.0,
-              "Visuals/Num tick marks": 5,
-              "Visuals/Show text": true,
-              "Visuals/Orientation": "VERTICAL"
+              "Visuals/Show value": true
             }
           },
           "0,0": {
             "size": [
-              5,
+              6,
               4
             ],
             "content": {
@@ -226,10 +207,10 @@
               }
             }
           },
-          "7,0": {
+          "6,0": {
             "size": [
-              7,
-              6
+              10,
+              8
             ],
             "content": {
               "_type": "Camera Stream",
@@ -243,8 +224,8 @@
               "Controls/Rotation": "NONE",
               "compression": -1.0,
               "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "imageWidth": 0,
+              "imageHeight": 0
             }
           }
         }
@@ -668,6 +649,89 @@
               "_title": "SmartDashboard/tilt-right",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 4",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard",
+              "_title": "SmartDashboard",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/P Gain",
+              "_title": "/SmartDashboard/P Gain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/I Gain",
+              "_title": "/SmartDashboard/I Gain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/D Gain",
+              "_title": "SmartDashboard/D Gain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/Set Rotations",
+              "_title": "SmartDashboard/Set Rotations",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
             }
           }
         }
