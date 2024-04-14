@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase{
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private DigitalInput beamBreak;
-  private SparkPIDController deployController;
+  private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
   private DigitalInput retractLimitSwitch;
   private SparkAbsoluteEncoder deployEncoder;
@@ -41,37 +41,15 @@ public class Intake extends SubsystemBase{
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
     
-    deployController = deployMotor.getPIDController();
+    deployController = new HeroSparkPID(deployMotor);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     
     beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
     
-    kP = 0.07; 
-    kI = 0;
-    kD = 0;
-    kIz = 0;
-    kFF = 0;
-    kMaxOutput = 1; 
-    kMinOutput = -1;
-
-    deployController.setP(kP);
-    deployController.setI(kI);
-    deployController.setD(kD);
-    deployController.setIZone(kIz);
-    deployController.setFF(kFF);
-    deployController.setOutputRange(kMinOutput, kMaxOutput);
-
-    SmartDashboard.putNumber("P Gain", kP);
-    SmartDashboard.putNumber("I Gain", kI);
-    SmartDashboard.putNumber("D Gain", kD);
-    SmartDashboard.putNumber("I Zone", kIz);
-    SmartDashboard.putNumber("Feed Forward", kFF);
-    SmartDashboard.putNumber("Max Output", kMaxOutput);
-    SmartDashboard.putNumber("Min Output", kMinOutput);
-    SmartDashboard.putNumber("Set Rotations", 0);
-
+    
+    
     SmartDashboard.putData("Intake/subsystem", this);
   }
 
@@ -83,30 +61,8 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
-
-    double p = SmartDashboard.getNumber("P Gain", 0);
-    double i = SmartDashboard.getNumber("I Gain", 0);
-    double d = SmartDashboard.getNumber("D Gain", 0);
-    double iz = SmartDashboard.getNumber("I Zone", 0);
-    double ff = SmartDashboard.getNumber("Feed Forward", 0);
-    double max = SmartDashboard.getNumber("Max Output", 0);
-    double min = SmartDashboard.getNumber("Min Output", 0);
-    double rotations = SmartDashboard.getNumber("Set Rotations", 0);
-
-    if((p != kP)) { deployController.setP(p); kP = p; }
-    if((i != kI)) { deployController.setI(i); kI = i; }
-    if((d != kD)) { deployController.setD(d); kD = d; }
-    if((iz != kIz)) { deployController.setIZone(iz); kIz = iz; }
-    if((ff != kFF)) { deployController.setFF(ff); kFF = ff; }
-    if((max != kMaxOutput) || (min != kMinOutput)) { 
-      deployController.setOutputRange(min, max); 
-      kMinOutput = min; kMaxOutput = max; 
-    }
-
-    deployController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-    
-    SmartDashboard.putNumber("SetPoint", rotations);
-    SmartDashboard.putNumber("ProcessVariable", deployEncoder.getPosition());
+    SmartDashboard.putData("Intake/deployPID",  deployController);
+    SmartDashboard.putNumber("Intake/reference",  deployController.getReference());
   }
 
   /**
@@ -137,7 +93,6 @@ public class Intake extends SubsystemBase{
 
     public void stopDeploy() {
       deployMotor.set(0);
-      deployController.setReference(0, ControlType.kPosition);
     }
 
     //PID?
@@ -191,16 +146,18 @@ public class Intake extends SubsystemBase{
 
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-        return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
+        // return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
+        return run(()->this.setDeploySetpoint(IntakeConstants.DEPLOY_VALUE))
         // .until(() -> getDeployRotation() <= IntakeConstants.DEPLOYSLOW_ROTATIONS)
         // .andThen(()-> {this.setDeploySpeed(IntakeConstants.DEPLOYSLOW_SPEED); deployMotor.setIdleMode(IdleMode.kBrake);})
-        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get())
+        .until(() -> !deployLimitSwitch.get())
         .finallyDo(this::stopDeploy);
       }
       public Command retractIntakeCommand(double speed) {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-        return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
-        .until(() -> getDeployRotation() >= IntakeConstants.RETRACT_ROTATIONS||!retractLimitSwitch.get());
+        // return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
+        return startEnd(()->this.setDeploySetpoint(IntakeConstants.RETRACT_VALUE), this::stopDeploy)
+        .until(() -> getDeployRotation() >= IntakeConstants.RETRACT_VALUE||!retractLimitSwitch.get());
       }
       public Command retractIntakeCommand() {
         return retractIntakeCommand(IntakeConstants.RETRACT_SPEED);
