@@ -36,6 +36,7 @@ public class RobotContainer {
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
+                public final static XboxController pidXboxController = new XboxController(2);
 
         /* Subsystems & Hardware */
                 /* Gyro Sensor */
@@ -79,6 +80,9 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
+                
+                /* Intake PID Testing */
+                private final JoystickButton pidTestingButton = new JoystickButton(pidXboxController, XboxController.Button.kA.value);
         
         /* Commands */
                 /* Driver */
@@ -95,6 +99,9 @@ public class RobotContainer {
                 private final Command scoreAmpSequence = s_AmpAssist.ampAssistCommand();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
+
+                /* Intake PID Testing */
+                private final Command setDeployIntakeSetpoint = s_GroundIntake.setTestSetpointCommand();
 
         /* Other */
                 /* SendableChooser */
@@ -163,6 +170,8 @@ public class RobotContainer {
                 scoreAmpSequenceButton.toggleOnTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
                 retractIntakeButton2.whileTrue(retractIntake);
+
+                pidTestingButton.whileTrue(setDeployIntakeSetpoint);
         }
 
         private void configureSmartDashboard() {

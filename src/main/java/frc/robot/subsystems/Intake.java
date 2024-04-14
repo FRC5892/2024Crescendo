@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.jni.CANSparkMaxJNI;
 
@@ -30,14 +31,9 @@ public class Intake extends SubsystemBase{
   private DigitalInput beamBreak;
   private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
-  private DigitalInput retractLimitSwitch;  
-
-  /* REV’s docs here (https://docs.revrobotics.com/through-bore-encoder/application-examples#ni-roborio) outline the different wiring options:
-    If you use through bore encoder as a quadrature / relative encoder, use the Encoder class.
-    If you use through bore encoder as a duty cycle / absolute encoder, use the DutyCycleEncoder class.
-  If the SparkMax is controlling a brushless motor (NEO/NEO550), you would need to wire it for Alternate Encoder Mode 
-    (https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders/alternate-encoder-mode) and use getAlternateEncoder() */
-    private SparkAbsoluteEncoder deployEncoder; 
+  private DigitalInput retractLimitSwitch;
+  private SparkAbsoluteEncoder deployEncoder;
+  double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   /* Creates a new GroundIntake. */
   public Intake() {
@@ -45,18 +41,16 @@ public class Intake extends SubsystemBase{
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
     
+    deployController = new HeroSparkPID(deployMotor);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     
     beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
-
-    deployController = new HeroSparkPID(deployMotor).useAbsoluteEncoder();
-    deployController.setPID(IntakeConstants.DEPLOY_PID);
-    deployMotor.burnFlash();
-
+    
+    
+    
     SmartDashboard.putData("Intake/subsystem", this);
-    SmartDashboard.putData("Intake/pid", deployController);
   }
 
   @Override
@@ -64,59 +58,80 @@ public class Intake extends SubsystemBase{
     SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
     //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
     SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
-    SmartDashboard.putNumber("Intake/Setpoint", deployController.getReference());
     SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
     SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
+    SmartDashboard.putData("Intake/deployPID",  deployController);
+    SmartDashboard.putNumber("Intake/reference",  deployController.getReference());
   }
 
-  /* Other Functions */
-    public double getDeployRotation() {
-      return deployEncoder.getPosition();
-    }
-
-    public void coastMode() {
-      deployMotor.setIdleMode(IdleMode.kCoast);
-    }
+  /**
+   * @return the position of the intake deploy motor
+   */
+  public double getDeployRotation() {
+    return deployEncoder.getPosition();
+  }
   
   /* Intaking */
     public void intakeNote() {
       intakeMotor.set(Constants.IntakeConstants.INTAKE_SPEED);
     }
-
     public void outtakeNote() {
       intakeMotor.set(IntakeConstants.OUTTAKE_SPEED);
     }
     public void outtakeNoteForAmp() {
       intakeMotor.set(IntakeConstants.OUTTAKE_SPEED_FOR_AMP);
     }
-
-    //outtakeNoteForAmp
-
     public void stopIntake() {
       intakeMotor.set(0);
     }
 
-
   /* Deploying */  
     public void setDeploySpeed(double speed) {
       deployMotor.set(speed);
-      
     }
 
     public void stopDeploy() {
       deployMotor.set(0);
-      deployController.setReference(0, ControlType.kPosition);
-
     }
 
     //PID?
-    public void setDeploySetPoint(double setpoint) {
+    public void setDeploySetpoint(double setpoint) {
       deployController.setReference(setpoint, ControlType.kPosition);
     }
-  
-  /* Commands */
-    /* Codriver Commands */
+
+    public Command setTestSetpointCommand() {
+      return runOnce(() -> this.setDeploySetpoint(0.3));
+    }
+    
+    /* Commands */
+
+    /**
+     * Runs the intake rollers to outtake until interrupted.
+     */
+    public Command outtakeNoteCommand() {
+      return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
+    }
+
+    /**
+     * Runs the intake rollers to intake a note until interrupted, or until the intake beam break is triggered.
+     * Rumbles the driver and codriver controllers to let the operators know that a note is now in the intake.
+     * @param controller
+     * @param controller2
+     */
+    public Command intakeNoteCommand(XboxController controller, XboxController controller2) {
+      return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get())
+      .andThen(() -> {
+        controller.setRumble(RumbleType.kBothRumble, 1);
+        controller2.setRumble(RumbleType.kBothRumble, 1);
+      })
+      .andThen(new WaitCommand(0.25))
+      .finallyDo(()->{
+        controller.setRumble(RumbleType.kBothRumble, 0);
+        controller2.setRumble(RumbleType.kBothRumble, 0);
+      });
+    }
+
       public Command intakeNoteSequence(XboxController controller, XboxController controller2) {
         return deployIntakeCommand()
         .andThen(intakeNoteCommand(controller,controller2))
@@ -131,16 +146,18 @@ public class Intake extends SubsystemBase{
 
       public Command deployIntakeCommand() {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.deployRotations), this::stopDeploy).until(() -> deployEncoder.getPosition() <= IntakeConstants.deployRotations ||deployLimitSwitch.get()).andThen(() -> deployMotor.setIdleMode(IdleMode.kCoast));
-        return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
+        // return run(()->this.setDeploySpeed(IntakeConstants.DEPLOY_SPEED))
+        return run(()->this.setDeploySetpoint(IntakeConstants.DEPLOY_VALUE))
         // .until(() -> getDeployRotation() <= IntakeConstants.DEPLOYSLOW_ROTATIONS)
         // .andThen(()-> {this.setDeploySpeed(IntakeConstants.DEPLOYSLOW_SPEED); deployMotor.setIdleMode(IdleMode.kBrake);})
-        .until(() -> getDeployRotation() <= IntakeConstants.DEPLOY_ROTATIONS||!deployLimitSwitch.get())
+        .until(() -> !deployLimitSwitch.get())
         .finallyDo(this::stopDeploy);
       }
       public Command retractIntakeCommand(double speed) {
         // return startEnd(() -> setDeploySetPoint(IntakeConstants.retractRotations), this::stopDeploy).until(() ->  deployEncoder.getPosition() >= IntakeConstants.retractRotations).andThen(() -> deployMotor.setIdleMode(IdleMode.kBrake));
-        return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
-        .until(() -> getDeployRotation() >= IntakeConstants.RETRACT_ROTATIONS||!retractLimitSwitch.get());
+        // return startEnd(()->this.setDeploySpeed(speed), this::stopDeploy)
+        return startEnd(()->this.setDeploySetpoint(IntakeConstants.RETRACT_VALUE), this::stopDeploy)
+        .until(() -> getDeployRotation() >= IntakeConstants.RETRACT_VALUE||!retractLimitSwitch.get());
       }
       public Command retractIntakeCommand() {
         return retractIntakeCommand(IntakeConstants.RETRACT_SPEED);
@@ -148,33 +165,18 @@ public class Intake extends SubsystemBase{
 
 
     /* Test Commands */
-      public Command intakeNoteCommand(XboxController controller,XboxController controller2) {
-        return startEnd(() -> this.intakeNote(), this::stopIntake).until(() -> beamBreak.get())
-        .andThen(() -> {
-          controller.setRumble(RumbleType.kBothRumble, 1);
-          controller2.setRumble(RumbleType.kBothRumble, 1);
-        })
-        .andThen(new WaitCommand(0.25))
-        .finallyDo(()->{
-          controller.setRumble(RumbleType.kBothRumble, 0);
-          controller2.setRumble(RumbleType.kBothRumble, 0);
-        });
-      }
 
-      public Command outtakeNoteCommand() {
-        return startEnd(() -> this.outtakeNote(), ()-> this.stopIntake());
-      }
+    public Command handoffNote() {
+      return outtakeNoteCommand()
+      .withTimeout(0.5);
+    }
 
-      public Command handoffNote() {
-        return outtakeNoteCommand()
-          .withTimeout(0.5);
-      }
+    public Command outtakeNoteForAmpCommand() {
+      return startEnd(() -> this.outtakeNoteForAmp(), ()-> this.stopIntake());
+    }
+    
+    public Command deployAmpCommand() {
+      return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
+    }
 
-      public Command outtakeNoteForAmpCommand() {
-        return startEnd(() -> this.outtakeNoteForAmp(), ()-> this.stopIntake());
-      }
-
-      public Command deployAmpCommand() {
-        return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
-      }
 }

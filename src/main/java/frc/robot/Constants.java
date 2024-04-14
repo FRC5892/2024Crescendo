@@ -40,7 +40,7 @@ public final class Constants {
     public static final int DEPLOY_LIMIT_SWITCH_DIO_PORT_ID = 1;
     public static final int RETRACT_LIMIT_SWITCH_DIO_PORT_ID = 2;
 
-    public static final double INTAKE_SPEED = -0.8;
+    public static final double INTAKE_SPEED = -0.45;
     public static final double OUTTAKE_SPEED = 0.8;
     public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;n
 
@@ -53,9 +53,9 @@ public final class Constants {
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 0.5;
 
-    public static final double DEPLOY_ROTATIONS = 0.0;
-    public static final double RETRACT_ROTATIONS = 0.65;
-    public static final double DEPLOYSLOW_ROTATIONS = 0.15;
+    public static final int DEPLOY_VALUE = 10;
+    public static final int RETRACT_VALUE = 607;
+    public static final double DEPLOYSLOW_VALUE = 0.15;
     public static final double DEPLOYSLOW_SPEED = -0.3;
 
   }
