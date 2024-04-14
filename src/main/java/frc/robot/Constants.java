@@ -41,7 +41,7 @@ public final class Constants {
     public static final int RETRACT_LIMIT_SWITCH_DIO_PORT_ID = 2;
 
     public static final double INTAKE_SPEED = -0.45;
-    public static final double OUTTAKE_SPEED = 0.45;
+    public static final double OUTTAKE_SPEED = 0.8;
     public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;n
 
     public static final double DEPLOY_SPEED = -1;
