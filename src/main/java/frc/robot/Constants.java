@@ -40,9 +40,9 @@ public final class Constants {
     public static final int DEPLOY_LIMIT_SWITCH_DIO_PORT_ID = 1;
     public static final int RETRACT_LIMIT_SWITCH_DIO_PORT_ID = 2;
 
-    public static final double INTAKE_SPEED = -0.8;
+    public static final double INTAKE_SPEED = -0.45;
     public static final double OUTTAKE_SPEED = 0.8;
-    public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;n
+    public static final double OUTTAKE_SPEED_FOR_AMP = 0.55; //0.445;
 
     public static final double DEPLOY_SPEED = -1;
     public static final double RETRACT_SPEED = 0.75;
@@ -239,8 +239,6 @@ public final class Constants {
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int CAN_CODER_ID = 11;
 
-
-      public static final int MICHAEL_STATT = 0;
       public static final double OFFSET_DEGREE = 58.26;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE);
       public static final Rotation2d BALANCE_OFFSET = Rotation2d.fromDegrees(OFFSET_DEGREE - 45);
