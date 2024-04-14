@@ -53,9 +53,9 @@ public final class Constants {
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 0.5;
 
-    public static final double DEPLOY_ROTATIONS = 0.0;
-    public static final double RETRACT_ROTATIONS = 0.65;
-    public static final double DEPLOYSLOW_ROTATIONS = 0.15;
+    public static final int DEPLOY_VALUE = 10;
+    public static final int RETRACT_VALUE = 607;
+    public static final double DEPLOYSLOW_VALUE = 0.15;
     public static final double DEPLOYSLOW_SPEED = -0.3;
 
   }
