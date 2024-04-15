@@ -178,5 +178,4 @@ public class Intake extends SubsystemBase{
     public Command deployAmpCommand() {
       return startEnd(() -> this.setDeploySpeed(-0.3), this::stopDeploy).until(() -> getDeployRotation() <= 0.37);
     }
-
 }

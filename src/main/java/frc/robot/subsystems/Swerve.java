@@ -53,7 +53,7 @@ private AHRS gyro;
 
     this.gyro = gyro;
     zeroGyro();
-
+    
     mSwerveMods = new SwerveModule[] {
         new SwerveModule(0, Constants.Swerve.Mod0.CONSTANTS),
         new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS),
@@ -66,7 +66,6 @@ private AHRS gyro;
         Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);
     field = new Field2d();
     SmartDashboard.putData(field);
-
     
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
@@ -316,7 +315,8 @@ private AHRS gyro;
    * @return The yaw of the robot.
    */
   public Rotation2d getYaw() {
-    return (Constants.Swerve.INVERT_GYRO)
+    return (Constants.Swerve.
+    INVERT_GYRO)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
@@ -351,7 +351,7 @@ private AHRS gyro;
     swerveOdometry.update(getYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("NavX Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("NavX Yaw", getYaw().getDegrees());
     SmartDashboard.putNumber("NavX Pitch", gyro.getPitch());
 
     SmartDashboard.putNumber("NavX Roll", gyro.getRoll());
