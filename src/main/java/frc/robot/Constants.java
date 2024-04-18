@@ -178,10 +178,10 @@ public final class Constants {
     public static final IdleMode ANGLE_NEUTRAL_MODE = IdleMode.kBrake;
     public static final IdleMode DRIVE_NEUTRAL_MODE = IdleMode.kBrake;
 
-    // public static final boolean DRIVE_INVERT = true;
+    // public static final boolean DRIVE_INVERT = true;p[]
     public static final boolean ANGLE_INVERT = false;
 
-    public static final double DRIVE_FUDGE_FACTOR = 0.060509807 * 0.7;
+    public static final double DRIVE_FUDGE_FACTOR = 0.0443;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */

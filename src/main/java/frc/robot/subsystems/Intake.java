@@ -48,8 +48,6 @@ public class Intake extends SubsystemBase{
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
     
-    
-    
     SmartDashboard.putData("Intake/subsystem", this);
   }
 
