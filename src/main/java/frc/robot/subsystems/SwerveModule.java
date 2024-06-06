@@ -112,7 +112,7 @@ public class SwerveModule implements Sendable {
     driveMotor.setVoltage(volts.in(Units.Volts));
   }
 
-  private void setAngle(SwerveModuleState desiredState) {
+  public void setAngle(SwerveModuleState desiredState) {
     if (!isAngleEnabled) {
       angleMotor.set(0);
       return;

@@ -12,17 +12,24 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.AmpAssist;
+import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
+import java.util.function.Function;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -33,6 +40,12 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+        private static RobotContainer instance;
+        public static RobotContainer getInstance() {
+                if (instance == null) instance = new RobotContainer();
+                return instance;
+        }
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
@@ -98,9 +111,10 @@ public class RobotContainer {
 
         /* Other */
                 /* SendableChooser */
-                public final SendableChooser<Command> autoChooser;
+                private final SendableChooser<Command> autoChooser;
+                private final SendableChooser<Command> characterizationChooser;
 
-        public RobotContainer() {
+        private RobotContainer() {
                 /* Hardware and Logging */
                         DriverStation.silenceJoystickConnectionWarning(true);
                         
@@ -133,7 +147,9 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
 
                 /* Others */
+                        SmartDashboard.putBoolean("Characterization", false);
                         autoChooser = AutoBuilder.buildAutoChooser();
+                        characterizationChooser = new SendableChooser<Command>();
                         
                         configureButtonBindings();
                         configureSmartDashboard();
@@ -178,6 +194,35 @@ public class RobotContainer {
                 driver.setRumble(RumbleType.kBothRumble, 0);
                 codriver.setRumble(RumbleType.kBothRumble, 0);
         }
+        
+        /**
+         * Add a Characterization Command to the choosable list on the dashboard 
+         * @param name The name of the entry 
+         * @param command the command
+         */
+        public void addCharacterization(String name, Command command) {
+                characterizationChooser.addOption(name, command);
+        }
+        /**
+         * Adds all 4 SysId command of a routine to the choosable list on the dashboard.
+         * @param name The name of the routine, seen on the dashboard 
+         * @param map Function to map each command to. Could be used to add before and after commands. 
+         * @param routine The SysID routine
+         */
+        public void addSysidCharacterization(String name, Function<Command,Command> map, SysIdRoutine routine) {
+                addCharacterization(name+" Dynamic Forward", map.apply(routine.dynamic(Direction.kForward)));
+                addCharacterization(name+" Dynamic Reverse", map.apply(routine.dynamic(Direction.kReverse)));
+                addCharacterization(name+" Quasistatic Forward", map.apply(routine.quasistatic(Direction.kForward)));
+                addCharacterization(name+" Quasistatic Reverse", map.apply(routine.quasistatic(Direction.kReverse)));
+        }
+        /**
+         * Adds all 4 SysId command of a routine to the choosable list on the dashboard.
+         * @param name The name of the routine, seen on the dashboard 
+         * @param routine The SysID routine
+         */
+        public void addSysidCharacterization(String name, SysIdRoutine routine) { 
+                addSysidCharacterization(name, c-> c, routine);
+        }
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -185,7 +230,12 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                // Executes the autonomous command chosen in smart dashboard
-                return autoChooser.getSelected();
+                if (SmartDashboard.getBoolean("Characterization",false)) {
+                        return characterizationChooser.getSelected(); 
+                } else {
+                        return autoChooser.getSelected();
+                }
         }
+
+        
 }

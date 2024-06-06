@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 
 /*
@@ -71,12 +71,20 @@ private AHRS gyro;
         new SysIdRoutine.Config(),
         new SysIdRoutine.Mechanism(this::voltageDrive, null, this));
 
-    SmartDashboard.putData("Swerve/SysId/dynamic forward", sysIdDynamic(Direction.kForward));
-    SmartDashboard.putData("Swerve/SysId/dynamic backward", sysIdDynamic(Direction.kReverse));
-    SmartDashboard.putData("Swerve/SysId/quasistatic forward", sysIdQuasistatic(Direction.kForward));
-    SmartDashboard.putData("Swerve/SysId/quasistatic backward", sysIdQuasistatic(Direction.kReverse));
-    SmartDashboard.putData("Swerve/subsytem", this);
-    SmartDashboard.putData("Swerve/offsetCommand",setAngleOffsetCommand());
+    RobotContainer.getInstance().addSysidCharacterization(
+      "Swerve",
+      command -> {
+        return command
+        .beforeStarting(() ->{
+          setModuleRotation(new Rotation2d(0));
+          setAllDriveEnabled(false);
+        })
+        .finallyDo(()-> setAllDriveEnabled(true));
+      },
+      routine
+      );
+
+    RobotContainer.getInstance().addCharacterization("Swerve Offset", setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.OFFSET_DEGREE);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);
@@ -116,14 +124,19 @@ private AHRS gyro;
         this // Reference to this subsystem to set requirements
     );
   }
-  public void useVisionMeasurement(Vision.VisionMeasurement measurement) {
-    swerveOdometry.addVisionMeasurement(measurement.pose, measurement.timeStamp);
-  }
   
   public void voltageDrive(Measure<Voltage> volts) {
     for (SwerveModule mod : mSwerveMods) {
       mod.setVoltage(volts);
     }
+  }
+  public void setAllDriveEnabled(boolean enabled) {
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setDriveEnabled(enabled);
+    }
+  }
+  public void useVisionMeasurement(Vision.VisionMeasurement measurement) {
+    swerveOdometry.addVisionMeasurement(measurement.pose, measurement.timeStamp);
   }
 
   public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
@@ -300,6 +313,19 @@ private AHRS gyro;
     }
     return positions;
   }
+  /**
+   * Returns the current distance of each SwerveModule drive motor.
+   * 
+   * @return The current distance of each SwerveModule drive motor.
+   */
+  public double[] getModuleDistances() {
+    double[] positions = new double[4];
+    for (SwerveModule mod : mSwerveMods) {
+      positions[mod.moduleNumber] = mod.getPosition().distanceMeters;
+    }
+    return positions;
+  }
+
 
   /**
    * Sets the yaw of the robot to 0.
@@ -319,13 +345,6 @@ private AHRS gyro;
     INVERT_GYRO)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
-  }
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return routine.quasistatic(direction);
-  }
-
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return routine.dynamic(direction);
   }
   public Command setAngleOffsetCommand() {
     return runOnce(() -> {
@@ -363,4 +382,8 @@ private AHRS gyro;
     }
     SmartDashboard.putBoolean("Teleop", DriverStation.isTeleopEnabled());
   }
+
+public void runWheelRadiusCharacterization(double characterizationInput) {
+  driveRelative(new ChassisSpeeds(0, 0, characterizationInput));
+}
 }

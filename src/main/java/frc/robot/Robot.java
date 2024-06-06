@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = RobotContainer.getInstance();
     DataLogManager.start();
     // DriverStation.startDataLog(DataLogManager.getLog());
     if (Robot.isReal()) {
