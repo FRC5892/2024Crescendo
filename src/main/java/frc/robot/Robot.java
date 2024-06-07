@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     ctreConfigs = new CTREConfigs();
     m_robotContainer = RobotContainer.getInstance();
     DataLogManager.start();
-    // DriverStation.startDataLog(DataLogManager.getLog());
+    DriverStation.startDataLog(DataLogManager.getLog());
     if (Robot.isReal()) {
       URCL.start();
     }

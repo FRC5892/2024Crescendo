@@ -4,11 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.security.interfaces.RSAKey;
-import java.sql.ResultSet;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;

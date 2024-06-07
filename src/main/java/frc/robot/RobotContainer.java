@@ -41,11 +41,11 @@ import java.util.function.Function;
  */
 public class RobotContainer {
 
-        private static RobotContainer instance;
+        public static RobotContainer instance;
         public static RobotContainer getInstance() {
                 if (instance == null) instance = new RobotContainer();
                 return instance;
-        }
+        }    
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
@@ -86,8 +86,6 @@ public class RobotContainer {
                         XboxController.Button.kA.value);   
                 private final POVButton climbUpButton = new POVButton(codriver, 0);
                 private final POVButton climbDownButton = new POVButton(codriver, 180);
-                private final POVButton tiltClimbLeftButton = new POVButton(codriver, 270);
-                private final POVButton tiltClimbRightButton = new POVButton(codriver, 90);
                 private final JoystickButton deployIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
@@ -173,8 +171,6 @@ public class RobotContainer {
                 shootButton.whileTrue(outtakeNote);
                 climbUpButton.whileTrue(climbUp);
                 climbDownButton.whileTrue(climbDown);
-                // tiltClimbLeftButton.whileTrue(tiltLeft);
-                // tiltClimbRightButton.whileTrue(tiltRight);
 
                 scoreAmpSequenceButton.toggleOnTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
