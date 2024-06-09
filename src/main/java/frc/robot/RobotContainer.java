@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -16,11 +17,15 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.lib.AutoManager;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.WheelRadiusCharacterization;
+import frc.robot.commands.WheelRadiusCharacterization.Direction;
 import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Intake;
@@ -98,6 +103,8 @@ public class RobotContainer {
                 private final Command scoreAmpSequence = s_AmpAssist.ampAssistCommand();
                 private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
                 private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
+                
+                /* Other */
 
         /* Other */
                 /* SendableChooser */
@@ -136,6 +143,12 @@ public class RobotContainer {
 
                 /* Others */
                         AutoManager.useExistingAutoChooser(AutoBuilder.buildAutoChooser());
+                        AutoManager.addCharacterization("Wheel Radius", Commands
+                                .runOnce(()-> s_Swerve.driveRelative(new ChassisSpeeds(0,0,Math.PI)), s_Swerve)
+                                .andThen(new WaitCommand(0.25))
+                                .andThen(()->s_Swerve.stop())
+                                .andThen(new WheelRadiusCharacterization(s_Swerve, Direction.COUNTER_CLOCKWISE))
+                        );
                         
                         configureButtonBindings();
                         configureSmartDashboard();

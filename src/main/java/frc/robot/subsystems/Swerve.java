@@ -394,7 +394,7 @@ private AHRS gyro;
     SmartDashboard.putBoolean("Teleop", DriverStation.isTeleopEnabled());
   }
 
-public void runWheelRadiusCharacterization(double characterizationInput) {
-  driveRelative(new ChassisSpeeds(0, 0, characterizationInput));
-}
+  public void runWheelRadiusCharacterization(double characterizationInput) {
+    driveRelative(new ChassisSpeeds(0, 0, characterizationInput));
+  }
 }
