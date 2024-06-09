@@ -12,7 +12,10 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/AutoChooser": "String Chooser",
+      "/SmartDashboard/CharacterizationChooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Intake/deployPID": "PIDController",
       "/SmartDashboard/Intake/pid": "PIDController",
       "/SmartDashboard/Intake/subsystem": "Subsystem",
       "/SmartDashboard/IntakeCommand": "Command",
@@ -34,19 +37,26 @@
       "/SmartDashboard/Swerve/SysId/quasistatic forward": "Command",
       "/SmartDashboard/Swerve/offsetCommand": "Command",
       "/SmartDashboard/Swerve/subsytem": "Subsystem",
-      "/SmartDashboard/Vision estimated Pose": "Field2d"
+      "/SmartDashboard/Vision estimated Pose": "Field2d",
+      "/SmartDashboard/tilt-left": "Command",
+      "/SmartDashboard/tilt-right": "Command"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "AutoChooser": {
+          "open": true,
+          "string[]##v_/SmartDashboard/AutoChooser/options": {
+            "open": true
+          }
+        },
         "Swerve": {
           "SysId": {
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },

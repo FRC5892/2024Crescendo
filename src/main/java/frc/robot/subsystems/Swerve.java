@@ -22,8 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.lib.AutoManager;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
 
 /*
@@ -71,7 +72,7 @@ private AHRS gyro;
         new SysIdRoutine.Config(),
         new SysIdRoutine.Mechanism(this::voltageDrive, null, this));
 
-    RobotContainer.getInstance().addSysidCharacterization(
+    AutoManager.addSysidCharacterization(
       "Swerve",
       command -> {
         return command
@@ -83,8 +84,7 @@ private AHRS gyro;
       },
       routine
       );
-
-    RobotContainer.getInstance().addCharacterization("Swerve Offset", setAngleOffsetCommand());
+    AutoManager.addCharacterization("Swerve Offset", setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.OFFSET_DEGREE);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);
@@ -100,6 +100,10 @@ private AHRS gyro;
     mSwerveMods[1].setAngleOffset(Preferences.getDouble("offset 1", mSwerveMods[1].getAngleOffset().getDegrees()));
     mSwerveMods[2].setAngleOffset(Preferences.getDouble("offset 2", mSwerveMods[2].getAngleOffset().getDegrees()));
     mSwerveMods[3].setAngleOffset(Preferences.getDouble("offset 3", mSwerveMods[3].getAngleOffset().getDegrees()));
+  }
+  public SysIdRoutine getSysId() {
+    return routine;
+
   }
 
   public void setupPathPlanner() {
@@ -331,7 +335,11 @@ private AHRS gyro;
    * Sets the yaw of the robot to 0.
    */
   public void zeroGyro() {
-    gyro.zeroYaw();
+    if (Robot.isReal()) {
+      gyro.zeroYaw();
+    } else {
+      System.out.println("Zeroing fake gyro");
+    }
     // gyro.setYaw(0);
   }
 
@@ -341,6 +349,9 @@ private AHRS gyro;
    * @return The yaw of the robot.
    */
   public Rotation2d getYaw() {
+    if (Robot.isSimulation()) {
+      return new Rotation2d(0);
+    }
     return (Constants.Swerve.
     INVERT_GYRO)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
@@ -371,11 +382,11 @@ private AHRS gyro;
     field.setRobotPose(getPose());
 
     SmartDashboard.putNumber("NavX Yaw", getYaw().getDegrees());
-    SmartDashboard.putNumber("NavX Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
-    SmartDashboard.putNumber("NavX Roll", gyro.getRoll());
+    SmartDashboard.putNumber("NavX Roll", gyro == null ? 0: gyro.getRoll());
 
-    SmartDashboard.putNumber("Acceleration", gyro.getWorldLinearAccelX());
+    SmartDashboard.putNumber("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
 
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
