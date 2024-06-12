@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -145,9 +146,10 @@ public class RobotContainer {
                 /* Others */
                         AutoManager.useExistingAutoChooser(AutoBuilder.buildAutoChooser());
                         AutoManager.addCharacterization("Wheel Radius", Commands
-                                .runOnce(()-> s_Swerve.driveRelative(new ChassisSpeeds(0,0,Math.PI)), s_Swerve)
-                                .andThen(new WaitCommand(0.25))
+                                .runOnce(()-> s_Swerve.driveRelative(new ChassisSpeeds(0,0,Units.degreesToRadians(5))), s_Swerve)
+                                .andThen(new WaitCommand(0.1))
                                 .andThen(()->s_Swerve.stop())
+                                .andThen(new WaitCommand(0.15))
                                 .andThen(new WheelRadiusCharacterization(s_Swerve, Direction.COUNTER_CLOCKWISE))
                         );
                         
@@ -183,6 +185,7 @@ public class RobotContainer {
                 HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
                 logger.log("tilt-left",tiltLeft);
                 logger.log("tilt-right",tiltRight);
+                logger.log("Test_command", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),true), ()->s_Swerve.stop(), s_Swerve));
 
                 AutoManager.initDashboard();
         }

@@ -198,11 +198,14 @@ public class Swerve extends SubsystemBase {
   }
 
   public void driveRelative(ChassisSpeeds chassisSpeeds) {
+    driveRelative(chassisSpeeds, false);
+  }
+  public void driveRelative(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
 
@@ -351,10 +354,7 @@ public class Swerve extends SubsystemBase {
     if (Robot.isSimulation()) {
       return new Rotation2d(0);
     }
-    return (Constants.Swerve.
-    INVERT_GYRO)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw());
+    return gyro.getRotation2d();
   }
   public Command setAngleOffsetCommand() {
     return runOnce(() -> {
@@ -387,6 +387,6 @@ public class Swerve extends SubsystemBase {
   }
 
   public void runWheelRadiusCharacterization(double characterizationInput) {
-    driveRelative(new ChassisSpeeds(0, 0, characterizationInput));
+    driveRelative(new ChassisSpeeds(0, 0, characterizationInput),false);
   }
 }

@@ -61,19 +61,6 @@
               }
             }
           },
-          "0,4": {
-            "size": [
-              6,
-              2
-            ],
-            "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/Auto Chooser",
-              "_title": "Auto Chooser",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "16,4": {
             "size": [
               4,
@@ -226,6 +213,45 @@
               "fps": -1,
               "imageWidth": 0,
               "imageHeight": 0
+            }
+          },
+          "0,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/AutoChooser",
+              "_title": "SmartDashboard/AutoChooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,6": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/CharacterizationChooser",
+              "_title": "SmartDashboard/CharacterizationChooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,6": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/CharacterizationMode",
+              "_title": "SmartDashboard/CharacterizationMode",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
