@@ -185,7 +185,9 @@ public class RobotContainer {
                 HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
                 logger.log("tilt-left",tiltLeft);
                 logger.log("tilt-right",tiltRight);
-                logger.log("Test_command", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),true), ()->s_Swerve.stop(), s_Swerve));
+                logger.log("Test_command_Openloop", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),true), ()->s_Swerve.stop(), s_Swerve));
+                logger.log("Test_command", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),false), ()->s_Swerve.stop(), s_Swerve));
+
 
                 AutoManager.initDashboard();
         }

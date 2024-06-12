@@ -84,6 +84,7 @@ public class Swerve extends SubsystemBase {
       routine
       );
     AutoManager.addCharacterization("Swerve Offset", setAngleOffsetCommand());
+    HeroLogger.getDashboard().log("Swerve Offset", setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.OFFSET_DEGREE);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);

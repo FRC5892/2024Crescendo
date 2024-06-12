@@ -18,6 +18,7 @@
       "/Intake/subsystem": "Subsystem",
       "/Robot Container/IntakeCommand": "Command",
       "/Robot Container/ShootCommand": "Command",
+      "/Robot Container/Test_command": "Command",
       "/Robot Container/tilt-left": "Command",
       "/Robot Container/tilt-right": "Command",
       "/Shooter/leftPID": "PIDController",
