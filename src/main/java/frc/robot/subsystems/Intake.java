@@ -12,15 +12,16 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.HeroLogger;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase{
+  private static HeroLogger logger = new HeroLogger("Intake");
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
@@ -46,19 +47,19 @@ public class Intake extends SubsystemBase{
     
     
     
-    SmartDashboard.putData("Intake/subsystem", this);
+    logger.log("subsystem", this);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
-    //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
-    SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
-    SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
-    SmartDashboard.putData("Intake/deployPID",  deployController);
-    SmartDashboard.putNumber("Intake/reference",  deployController.getReference());
+    logger.log("DeployRotations", this.getDeployRotation());
+    //logger.log("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
+    logger.log("deployIntegrated", deployMotor.getEncoder().getPosition()); 
+    logger.log("deploy", !deployLimitSwitch.get());
+    logger.log("retract", !retractLimitSwitch.get());
+    logger.log("BeamBreak", beamBreak.get());
+    logger.log("deployPID",  deployController);
+    logger.log("reference",  deployController.getReference());
   }
 
   /**

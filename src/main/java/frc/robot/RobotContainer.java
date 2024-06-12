@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.lib.AutoManager;
+import frc.lib.HeroLogger;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.WheelRadiusCharacterization;
 import frc.robot.commands.WheelRadiusCharacterization.Direction;
@@ -42,6 +42,7 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+        private static HeroLogger logger = new HeroLogger("Robot Container");
    
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
@@ -113,8 +114,8 @@ public class RobotContainer {
                 /* Hardware and Logging */
                         DriverStation.silenceJoystickConnectionWarning(true);
                         
-                        SmartDashboard.putData("IntakeCommand",deployIntake);
-                        SmartDashboard.putData("ShootCommand",shootCommand);
+                        logger.log("IntakeCommand",deployIntake);
+                        logger.log("ShootCommand",shootCommand);
                 
                         CameraServer.startAutomaticCapture();
 
@@ -179,11 +180,11 @@ public class RobotContainer {
         }
 
         private void configureSmartDashboard() {
-                SmartDashboard.putNumber("Swerve/Speed Multiplier", SPEED_MULTIPLIER);
-                SmartDashboard.putData("tilt-left",tiltLeft);
-                SmartDashboard.putData("tilt-right",tiltRight);
+                HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
+                logger.log("tilt-left",tiltLeft);
+                logger.log("tilt-right",tiltRight);
 
-                AutoManager.initSmartDashboard();
+                AutoManager.initDashboard();
         }
 
         public void disabledInit() {

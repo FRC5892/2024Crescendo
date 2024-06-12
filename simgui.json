@@ -10,7 +10,19 @@
   },
   "NTProvider": {
     "types": {
+      "/Dashboard/AutoChooser": "String Chooser",
+      "/Dashboard/CharacterizationChooser": "String Chooser",
       "/FMSInfo": "FMSInfo",
+      "/Global/Field": "Field2d",
+      "/Intake/deployPID": "PIDController",
+      "/Intake/subsystem": "Subsystem",
+      "/Robot Container/IntakeCommand": "Command",
+      "/Robot Container/ShootCommand": "Command",
+      "/Robot Container/tilt-left": "Command",
+      "/Robot Container/tilt-right": "Command",
+      "/Shooter/leftPID": "PIDController",
+      "/Shooter/rightPID": "PIDController",
+      "/Shooter/subsystem": "Subsystem",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/AutoChooser": "String Chooser",
       "/SmartDashboard/CharacterizationChooser": "String Chooser",
@@ -39,7 +51,8 @@
       "/SmartDashboard/Swerve/subsytem": "Subsystem",
       "/SmartDashboard/Vision estimated Pose": "Field2d",
       "/SmartDashboard/tilt-left": "Command",
-      "/SmartDashboard/tilt-right": "Command"
+      "/SmartDashboard/tilt-right": "Command",
+      "/Vision/Vision estimated Pose": "Field2d"
     }
   },
   "NetworkTables": {

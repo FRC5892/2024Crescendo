@@ -11,17 +11,17 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ShooterConstants;
+import frc.lib.AutoManager;
+import frc.lib.HeroLogger;
 import frc.lib.HeroSparkPID;
 
 public class Shooter extends SubsystemBase {
-  /** Creates a new Shooter. */
+  private static HeroLogger logger = new HeroLogger("Shooter");
   CANSparkMax leftKicker;
   CANSparkMax rightKicker;
   CANSparkMax leftFeederMotor;
@@ -49,20 +49,14 @@ public class Shooter extends SubsystemBase {
     rightController = new HeroSparkPID(rightKicker);
     // leftController.setPID(ShooterConstants.leftPID);
     // rightController.setPID(ShooterConstants.rightPID);
-    SmartDashboard.putNumber("Shooter/leftSpeed", 6000);
-    SmartDashboard.putNumber("Shooter/rightSpeed", -6000);
+    logger.log("leftSpeed", 6000);
+    logger.log("rightSpeed", -6000);
 
-    SmartDashboard.putData("Shooter/subsystem",this);
-    SmartDashboard.putData("Shooter/leftPID",leftController);
-    SmartDashboard.putData("Shooter/rightPID",rightController);
-    SmartDashboard.putData("Shooter/SysId/left/dynamic forward", lSysIdDynamic(Direction.kForward));
-    SmartDashboard.putData("Shooter/SysId/left/dynamic backward", lSysIdDynamic(Direction.kReverse));
-    SmartDashboard.putData("Shooter/SysId/left/quasistatic forward", lSysIdQuasistatic(Direction.kForward));
-    SmartDashboard.putData("Shooter/SysId/left/quasistatic backward", lSysIdQuasistatic(Direction.kReverse));
-    SmartDashboard.putData("Shooter/SysId/right/dynamic forward", rSysIdDynamic(Direction.kForward));
-    SmartDashboard.putData("Shooter/SysId/right/dynamic backward", rSysIdDynamic(Direction.kReverse));
-    SmartDashboard.putData("Shooter/SysId/right/quasistatic forward", rSysIdQuasistatic(Direction.kForward));
-    SmartDashboard.putData("Shooter/SysId/right/quasistatic backward", rSysIdQuasistatic(Direction.kReverse));
+    logger.log("subsystem",this);
+    logger.log("leftPID",leftController);
+    logger.log("rightPID",rightController);
+    AutoManager.addSysidCharacterization("Left Shooter", lShootRoutine);
+    AutoManager.addSysidCharacterization("Right Shooter", rShootRoutine);
   }
   
   public void lShootVoltage(Measure<Voltage> volt) {
@@ -70,20 +64,6 @@ public class Shooter extends SubsystemBase {
   }
   public void rShootVoltage(Measure<Voltage> volt) {
     rightKicker.setVoltage(volt.in(Units.Volts));
-  }
-  public Command lSysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return lShootRoutine.quasistatic(direction);
-  }
-
-  public Command lSysIdDynamic(SysIdRoutine.Direction direction) {
-    return lShootRoutine.dynamic(direction);
-  }
-  public Command rSysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return rShootRoutine.quasistatic(direction);
-  }
-
-  public Command rSysIdDynamic(SysIdRoutine.Direction direction) {
-    return rShootRoutine.dynamic(direction);
   }
 
 
@@ -106,8 +86,8 @@ public class Shooter extends SubsystemBase {
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
-    setLeftKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/leftSpeed", 6000));
-    setRightKickerMotorSpeedRPM(SmartDashboard.getNumber("Shooter/rightSpeed", -6000));
+    setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
+    setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
   }
 
   public Command shootCommand() {
@@ -138,8 +118,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter/leftRealSpeed",leftController.getSpeed());
-    SmartDashboard.putNumber("Shooter/rightRealSpeed",rightController.getSpeed());
+    logger.log("leftRealSpeed",leftController.getSpeed());
+    logger.log("rightRealSpeed",rightController.getSpeed());
 
     // This method will be called once per scheduler run
   }

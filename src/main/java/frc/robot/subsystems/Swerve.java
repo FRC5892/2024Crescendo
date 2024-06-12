@@ -11,18 +11,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AutoManager;
+import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
@@ -36,10 +34,11 @@ In the periodic() method, the robot's odometry is updated, and the yaw of the ro
 */
 
 public class Swerve extends SubsystemBase {
+  private static HeroLogger logger = new HeroLogger("Swerve");
 
 
 
-private AHRS gyro;
+  private AHRS gyro;
 
 
 
@@ -66,7 +65,7 @@ private AHRS gyro;
         getModulePositions(), Constants.Swerve.INITIAL_POSE, Constants.Swerve.STATE_STD_DEVS,
         Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);
     field = new Field2d();
-    SmartDashboard.putData(field);
+    HeroLogger.getGlobal().log("Field",field);
     
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
@@ -91,7 +90,7 @@ private AHRS gyro;
     Preferences.initDouble("offset 3", Constants.Swerve.Mod3.OFFSET_DEGREE);
 
     for (SwerveModule mod : mSwerveMods) {
-      SmartDashboard.putData("Swerve/Modules/Mod "+mod.moduleNumber,mod);
+      logger.log("Modules/Mod "+mod.moduleNumber,mod);
     }
   }
 
@@ -145,8 +144,8 @@ private AHRS gyro;
 
   public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
     swerveOdometry.addVisionMeasurement(measurement, timeStamp);
-    SmartDashboard.putNumber("vision added x", measurement.getX());
-    SmartDashboard.putNumber("vision added y", measurement.getY());
+    logger.log("vision added x", measurement.getX());
+    logger.log("vision added y", measurement.getY());
 
     return swerveOdometry.getEstimatedPosition();
   }
@@ -365,33 +364,26 @@ private AHRS gyro;
     }).ignoringDisable(true);
   }
 
-  StructArrayPublisher<SwerveModuleState> statePublisher = NetworkTableInstance.getDefault()
-      .getTable("SmartDashboard/Swerve")
-      .getStructArrayTopic("States", SwerveModuleState.struct).publish();
-  StructArrayPublisher<SwerveModuleState> desiredStatePublisher = NetworkTableInstance.getDefault()
-      .getTable("SmartDashboard/Swerve")
-      .getStructArrayTopic("Desired States", SwerveModuleState.struct).publish();
-
   @Override
   public void periodic() {
-
-    statePublisher.set(getModuleStates());
-    desiredStatePublisher.set(getModuleDesiredStates());
+    logger.logStructArray("States",SwerveModuleState.struct,getModuleStates());
+    logger.logStructArray("Desired States",SwerveModuleState.struct,getModuleDesiredStates());
 
     swerveOdometry.update(getYaw(), getModulePositions());
-    field.setRobotPose(getPose());
+    logger.logStruct("Robot Pose", Pose2d.struct, getPose());
 
-    SmartDashboard.putNumber("NavX Yaw", getYaw().getDegrees());
-    SmartDashboard.putNumber("NavX Pitch", gyro == null ? 0: gyro.getPitch());
+    logger.log("NavX Yaw", getYaw().getDegrees());
+    logger.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
-    SmartDashboard.putNumber("NavX Roll", gyro == null ? 0: gyro.getRoll());
+    logger.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
 
-    SmartDashboard.putNumber("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
+    logger.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
+    logger.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
 
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }
-    SmartDashboard.putBoolean("Teleop", DriverStation.isTeleopEnabled());
+    HeroLogger.getGlobal().log("Teleop", DriverStation.isTeleopEnabled());
   }
 
   public void runWheelRadiusCharacterization(double characterizationInput) {
