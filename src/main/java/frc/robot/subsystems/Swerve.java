@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -27,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
 import monologue.Logged;
-import monologue.Monologue;
+import monologue.Annotations.Log;
 
 /*
 This is a class for the swerve drive system on the robot. It utilizes a navX gyro to measure the angle of the robot and a SwerveDriveOdometry to measure the position of the robot. There are four SwerveModule objects, each of which is responsible for the individual swerve module. The class also holds a Field2d object which is used for the robot's position with respect to the field.
@@ -38,32 +37,28 @@ In the periodic() method, the robot's odometry is updated, and the yaw of the ro
 */
 
 public class Swerve extends SubsystemBase implements Logged{
-  private static HeroLogger logger = new HeroLogger("Swerve");
 
 
 
   private AHRS gyro;
 
-
-
+  //Monolog I Desperately want to love you but you make me do this 😡
+  @Log private SwerveModule mod0 = new SwerveModule(0, Constants.Swerve.Mod0.CONSTANTS);
+  @Log private SwerveModule mod1 = new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS);
+  @Log private SwerveModule mod2 = new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS);
+  @Log private SwerveModule mod3 = new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS);
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
   private Field2d field;
 
   SysIdRoutine routine;
-
   public Swerve(AHRS gyro) {
-    logger.log("Subsystem",this);
-
     this.gyro = gyro;
     zeroGyro();
     
     mSwerveMods = new SwerveModule[] {
-        new SwerveModule(0, Constants.Swerve.Mod0.CONSTANTS),
-        new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS),
-        new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS),
-        new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS)
+        mod0,mod1,mod2,mod3
     };
     
     swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(),
@@ -94,10 +89,6 @@ public class Swerve extends SubsystemBase implements Logged{
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);
     Preferences.initDouble("offset 3", Constants.Swerve.Mod3.OFFSET_DEGREE);
-
-    for (SwerveModule mod : mSwerveMods) {
-      logger.log("Modules/Mod "+mod.moduleNumber,mod);
-    }
   }
 
   public void getPreferences() {
@@ -150,8 +141,8 @@ public class Swerve extends SubsystemBase implements Logged{
 
   public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
     swerveOdometry.addVisionMeasurement(measurement, timeStamp);
-    logger.log("vision added x", measurement.getX());
-    logger.log("vision added y", measurement.getY());
+    this.log("vision added x", measurement.getX());
+    this.log("vision added y", measurement.getY());
 
     return swerveOdometry.getEstimatedPosition();
   }
@@ -184,7 +175,7 @@ public class Swerve extends SubsystemBase implements Logged{
   public ChassisSpeeds getChassisSpeeds() {
     return Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
   }
-
+  @Log(key = "States")
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -193,7 +184,7 @@ public class Swerve extends SubsystemBase implements Logged{
 
     return states;
   }
-
+  @Log(key = "Desired States")
   public SwerveModuleState[] getModuleDesiredStates() {
     SwerveModuleState[] desiredStates = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -268,6 +259,7 @@ public class Swerve extends SubsystemBase implements Logged{
    * 
    * @return The pose of the robot in meters.
    */
+  @Log
   public Pose2d getPose() {
     return swerveOdometry.getEstimatedPosition();
   }
@@ -372,19 +364,18 @@ public class Swerve extends SubsystemBase implements Logged{
 
   @Override
   public void periodic() {
-    logger.logStructArray("States",SwerveModuleState.struct,getModuleStates());
-    logger.logStructArray("Desired States",SwerveModuleState.struct,getModuleDesiredStates());
+    this.log("Desired States",getModuleDesiredStates());
 
     swerveOdometry.update(getYaw(), getModulePositions());
-    logger.logStruct("Robot Pose", Pose2d.struct, getPose());
+    this.log("Robot Pose", getPose());
 
-    logger.log("NavX Yaw", getYaw().getDegrees());
-    logger.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
+    this.log("NavX Yaw", getYaw().getDegrees());
+    this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
-    logger.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
+    this.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
 
-    logger.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
-    logger.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
+    this.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
+    this.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
     this.log("test",getPose());
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();

@@ -34,6 +34,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import monologue.Monologue;
+import monologue.Annotations.Log;
 import monologue.Logged;
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -45,7 +46,6 @@ import monologue.Logged;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer implements Logged {
-        private static HeroLogger logger = new HeroLogger("Robot Container");
    
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
@@ -100,17 +100,17 @@ public class RobotContainer implements Logged {
                 /* Driver */
                 private final Command climbUp = Climb.climbUp();
                 private final Command climbDown = Climb.climbDown();
-                private final Command tiltLeft = Climb.tiltLeft();
-                private final Command tiltRight = Climb.tiltRight();
+                @Log private final Command tiltLeft = Climb.tiltLeft();
+                @Log private final Command tiltRight = Climb.tiltRight();
                 private final Command followAmpCommand;
         
                 /* Codriver  */
-                private final Command shootCommand = Shooter.shootCommand();
+                @Log private final Command shootCommand = Shooter.shootCommand();
                 private final Command outtakeNote = GroundIntake.outtakeNoteCommand();
                 private final Command intakeNoteSequence = GroundIntake.intakeNoteSequence(driver,codriver);
                 private final Command scoreAmpSequence = AmpAssist.ampAssistCommand();
                 private final Command retractIntake = GroundIntake.retractIntakeCommand();
-                private final Command deployIntake = GroundIntake.deployIntakeCommand();
+                @Log private final Command deployIntake = GroundIntake.deployIntakeCommand();
                 
                 /* Other */
 
@@ -120,9 +120,6 @@ public class RobotContainer implements Logged {
         public RobotContainer() {
                 /* Hardware and Logging */
                         DriverStation.silenceJoystickConnectionWarning(true);
-                        
-                        logger.log("IntakeCommand",deployIntake);
-                        logger.log("ShootCommand",shootCommand);
                 
                         CameraServer.startAutomaticCapture();
 
@@ -189,23 +186,21 @@ public class RobotContainer implements Logged {
 
         private void configureSmartDashboard() {
                 HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
-                logger.log("tilt-left",tiltLeft);
-                logger.log("tilt-right",tiltRight);
                 turnRight.whileTrue(Commands.runEnd(
                         ()->{
-                                s_Swerve.driveRelative(new ChassisSpeeds(0, 0, -0.5),true);
+                                Swerve.driveRelative(new ChassisSpeeds(0, 0, -0.5),true);
                         },
-                        ()->s_Swerve.stop(),
-                        s_Swerve));
+                        ()->Swerve.stop(),
+                        Swerve));
                 turnLeft.whileTrue(Commands.runEnd(
                 ()->{
-                        s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.5),true);
+                        Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.5),true);
                 },
-                ()->s_Swerve.stop(),
-                s_Swerve));
+                ()->Swerve.stop(),
+                Swerve));
 
-                turnRight.onFalse(s_Swerve.CheckTimeCommand(true));
-                turnLeft.onFalse(s_Swerve.CheckTimeCommand(false));
+                turnRight.onFalse(Swerve.CheckTimeCommand(true));
+                turnLeft.onFalse(Swerve.CheckTimeCommand(false));
 
                 
 

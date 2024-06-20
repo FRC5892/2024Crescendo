@@ -7,11 +7,10 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
-import frc.lib.HeroLogger;
+import monologue.Logged;
 import frc.robot.Constants;
 
-public class WheelRadiusCharacterization extends Command {
-  private static HeroLogger logger = new HeroLogger("Swerve/RadiusCharacterization");
+public class WheelRadiusCharacterization extends Command implements Logged {
   private static final double characterizationSpeed = 0.25;
   private static final double swerveRadius = Constants.Swerve.WHEEL_BASE/2;
   private final DoubleSupplier gyroYawRadsSupplier;
@@ -76,9 +75,9 @@ public class WheelRadiusCharacterization extends Command {
     averageWheelPosition /= 4.0;
 
     currentEffectiveWheelRadius = (accumGyroYawRads * swerveRadius) / averageWheelPosition;
-    logger.log("SwervePosition", averageWheelPosition);
-    logger.log("AccumGyroYawRads", accumGyroYawRads);
-    logger.log(
+    this.log("SwervePosition", averageWheelPosition);
+    this.log("AccumGyroYawRads", accumGyroYawRads);
+    this.log(
         "CurrentWheelRadiusInches",
         Units.metersToInches(currentEffectiveWheelRadius));
   }
@@ -92,7 +91,7 @@ public class WheelRadiusCharacterization extends Command {
           "Effective Wheel Radius: "
               + Units.metersToInches(currentEffectiveWheelRadius)
               + " inches");
-      logger.log("effectiveWheelRadiusIn", currentEffectiveWheelRadius);
+      this.log("effectiveWheelRadiusIn", currentEffectiveWheelRadius);
     }
   }
 }

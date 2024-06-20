@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 /** Add your docs here. */
 public class AutoManager {
-    private static HeroLogger logger = new HeroLogger("AutoManager");
     private static final String Characterization_MODE_KEY = "CharacterizationMode";
 
     private static SendableChooser<Command> autoChooser;
