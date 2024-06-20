@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -24,6 +25,8 @@ import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
+import monologue.Logged;
+import monologue.Monologue;
 
 /*
 This is a class for the swerve drive system on the robot. It utilizes a navX gyro to measure the angle of the robot and a SwerveDriveOdometry to measure the position of the robot. There are four SwerveModule objects, each of which is responsible for the individual swerve module. The class also holds a Field2d object which is used for the robot's position with respect to the field.
@@ -33,7 +36,7 @@ The drive() method is used to set the desired speed and angle for the robot. The
 In the periodic() method, the robot's odometry is updated, and the yaw of the robot is put to the SmartDashboard. The states and positions of each swerve module is also put to the SmartDashboard.
 */
 
-public class Swerve extends SubsystemBase {
+public class Swerve extends SubsystemBase implements Logged{
   private static HeroLogger logger = new HeroLogger("Swerve");
 
 
@@ -380,7 +383,7 @@ public class Swerve extends SubsystemBase {
 
     logger.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
     logger.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
-
+    this.log("test",getPose());
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }
