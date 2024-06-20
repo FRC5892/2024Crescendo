@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AutoManager;
 import frc.lib.HeroLogger;
@@ -53,6 +54,7 @@ public class Swerve extends SubsystemBase implements Logged{
   SysIdRoutine routine;
 
   public Swerve(AHRS gyro) {
+    logger.log("Subsystem",this);
 
     this.gyro = gyro;
     zeroGyro();
@@ -392,5 +394,9 @@ public class Swerve extends SubsystemBase implements Logged{
 
   public void runWheelRadiusCharacterization(double characterizationInput) {
     driveRelative(new ChassisSpeeds(0, 0, characterizationInput),false);
+  }
+  public double inityaw;
+  public Command CheckTimeCommand(boolean isRight) {
+    return runOnce(()->inityaw=this.getYaw().getDegrees()).andThen(new WaitCommand(4)).andThen(()->System.out.println((isRight? "right":"left")+","+inityaw+","+Double.toString(this.getYaw().getDegrees()-inityaw)),this);
   }
 }
