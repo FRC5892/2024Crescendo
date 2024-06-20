@@ -43,7 +43,7 @@ public class HeroLogger {
         structArrays = new HashMap<>();
 
         this.name = name;
-        table = NetworkTableInstance.getDefault().getTable(this.name);
+        table = NetworkTableInstance.getDefault().getTable("SmartDashboard/"+this.name);
     }
     public static HeroLogger getGlobal() {
         if (global == null) global = new HeroLogger("Global");

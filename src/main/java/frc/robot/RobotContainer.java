@@ -89,6 +89,10 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
+                private final JoystickButton turnLeft = new JoystickButton(driver, XboxController.Button.kX.value);
+                private final JoystickButton turnRight = new JoystickButton(driver, XboxController.Button.kB.value);
+
+
         
         /* Commands */
                 /* Driver */
@@ -185,8 +189,23 @@ public class RobotContainer {
                 HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
                 logger.log("tilt-left",tiltLeft);
                 logger.log("tilt-right",tiltRight);
-                logger.log("Test_command_OpenLoop", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),true), ()->s_Swerve.stop(), s_Swerve));
-                logger.log("Test_command", Commands.runEnd(()->s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.25),false), ()->s_Swerve.stop(), s_Swerve));
+                turnRight.whileTrue(Commands.runEnd(
+                        ()->{
+                                s_Swerve.driveRelative(new ChassisSpeeds(0, 0, -0.5),true);
+                        },
+                        ()->s_Swerve.stop(),
+                        s_Swerve));
+                turnLeft.whileTrue(Commands.runEnd(
+                ()->{
+                        s_Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.5),true);
+                },
+                ()->s_Swerve.stop(),
+                s_Swerve));
+
+                turnRight.onFalse(s_Swerve.CheckTimeCommand(true));
+                turnLeft.onFalse(s_Swerve.CheckTimeCommand(false));
+
+                
 
 
                 AutoManager.initDashboard();
