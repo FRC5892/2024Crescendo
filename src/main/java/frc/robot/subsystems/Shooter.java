@@ -19,11 +19,9 @@ import frc.robot.Constants.ShooterConstants;
 import monologue.Logged;
 import monologue.Annotations.Log;
 import frc.lib.AutoManager;
-import frc.lib.HeroLogger;
 import frc.lib.HeroSparkPID;
 
 public class Shooter extends SubsystemBase implements Logged{
-  private static HeroLogger logger = new HeroLogger("Shooter");
   CANSparkMax leftKicker;
   CANSparkMax rightKicker;
   CANSparkMax leftFeederMotor;
@@ -85,8 +83,8 @@ public class Shooter extends SubsystemBase implements Logged{
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
-    setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
-    setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
+    // setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
+    // setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
   }
 
   public Command shootCommand() {

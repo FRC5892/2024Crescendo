@@ -10,6 +10,8 @@
   },
   "NTProvider": {
     "types": {
+      "/AutoManager/autoChooser": "String Chooser",
+      "/AutoManager/characterizationChooser": "String Chooser",
       "/Dashboard/AutoChooser": "String Chooser",
       "/Dashboard/CharacterizationChooser": "String Chooser",
       "/FMSInfo": "FMSInfo",
@@ -21,10 +23,15 @@
       "/Robot Container/Test_command": "Command",
       "/Robot Container/tilt-left": "Command",
       "/Robot Container/tilt-right": "Command",
+      "/Robot/AutoManager/autoChooser": "String Chooser",
+      "/Robot/AutoManager/characterizationChooser": "String Chooser",
       "/Robot/GroundIntake/deployController": "PIDController",
+      "/Robot/Intake/deployController": "PIDController",
       "/Robot/Shooter/leftController": "PIDController",
       "/Robot/Shooter/rightController": "PIDController",
       "/Robot/Vision/field2d": "Field2d",
+      "/Robot/autoChooser": "String Chooser",
+      "/Robot/characterizationChooser": "String Chooser",
       "/Robot/deployIntake": "Command",
       "/Robot/shootCommand": "Command",
       "/Robot/tiltLeft": "Command",
@@ -70,7 +77,43 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "retained": {
+      "Robot": {
+        "Swerve": {
+          "open": true
+        },
+        "open": true
+      }
+    },
     "transitory": {
+      "AutoManager": {
+        "open": true
+      },
+      "CameraPublisher": {
+        "open": true
+      },
+      "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        }
+      },
+      "Robot": {
+        "AutoManager": {
+          "open": true,
+          "selector": {
+            "open": true
+          }
+        },
+        "Swerve": {
+          "open": true
+        }
+      },
       "SmartDashboard": {
         "AutoChooser": {
           "open": true,

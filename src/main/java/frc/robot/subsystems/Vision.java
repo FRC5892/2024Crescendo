@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import monologue.Logged;
@@ -67,9 +66,9 @@ public class Vision extends SubsystemBase implements Logged{
     try {
       fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
     } catch (IOException e) {throw new UncheckedIOException(e);}
-    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCamera,
+    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
         VisionConstants.ROBOT_TO_FRONT_CAM);
-    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCamera,
+    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCamera,
         VisionConstants.ROBOT_TO_BACK_CAM);
 
     poseTimestamp = Timer.getFPGATimestamp();

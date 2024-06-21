@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.lib.AutoManager;
-import frc.lib.HeroLogger;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.WheelRadiusCharacterization;
 import frc.robot.commands.WheelRadiusCharacterization.Direction;
@@ -55,9 +54,8 @@ public class RobotContainer implements Logged {
                 /* Gyro Sensor */
                 AHRS ahrs = Robot.isReal() ? new AHRS(Port.kMXP) : null;
 
-                /* Swerve Subsystem */
                 private final Swerve Swerve = new Swerve(ahrs);
-                private final Intake GroundIntake = new Intake();
+                private final Intake Intake = new Intake();
                 private final Shooter Shooter = new Shooter(); 
                 private final Climb Climb = new Climb();
                 private final Vision Vision = new Vision(Swerve::useVisionMeasurement,Swerve::getPose);
@@ -106,11 +104,11 @@ public class RobotContainer implements Logged {
         
                 /* Codriver  */
                 @Log private final Command shootCommand = Shooter.shootCommand();
-                private final Command outtakeNote = GroundIntake.outtakeNoteCommand();
-                private final Command intakeNoteSequence = GroundIntake.intakeNoteSequence(driver,codriver);
+                private final Command outtakeNote = Intake.outtakeNoteCommand();
+                private final Command intakeNoteSequence = Intake.intakeNoteSequence(driver,codriver);
                 private final Command scoreAmpSequence = AmpAssist.ampAssistCommand();
-                private final Command retractIntake = GroundIntake.retractIntakeCommand();
-                @Log private final Command deployIntake = GroundIntake.deployIntakeCommand();
+                private final Command retractIntake = Intake.retractIntakeCommand();
+                @Log private final Command deployIntake = Intake.deployIntakeCommand();
                 
                 /* Other */
 
@@ -125,14 +123,14 @@ public class RobotContainer implements Logged {
 
                 /* PathPlanner Named Commands */
                         Swerve.setupPathPlanner();
-                        NamedCommands.registerCommand("deployIntake", GroundIntake.deployIntakeCommand());
-                        NamedCommands.registerCommand("retractIntake", GroundIntake.retractIntakeCommand());
-                        NamedCommands.registerCommand("intakeSequence", GroundIntake.intakeNoteSequence(driver,codriver));
-                        NamedCommands.registerCommand("shootSequence", Shooter.fullShooter(GroundIntake));
+                        NamedCommands.registerCommand("deployIntake", Intake.deployIntakeCommand());
+                        NamedCommands.registerCommand("retractIntake", Intake.retractIntakeCommand());
+                        NamedCommands.registerCommand("intakeSequence", Intake.intakeNoteSequence(driver,codriver));
+                        NamedCommands.registerCommand("shootSequence", Shooter.fullShooter(Intake));
                         NamedCommands.registerCommand("runShooter", Shooter.shootCommand());
-                        NamedCommands.registerCommand("deployAmp", GroundIntake.deployAmpCommand());
-                        NamedCommands.registerCommand("ampSequence", GroundIntake.scoreAmpSequence());
-                        NamedCommands.registerCommand("handoffNote", GroundIntake.handoffNote());
+                        NamedCommands.registerCommand("deployAmp", Intake.deployAmpCommand());
+                        NamedCommands.registerCommand("ampSequence", Intake.scoreAmpSequence());
+                        NamedCommands.registerCommand("handoffNote", Intake.handoffNote());
                         NamedCommands.registerCommand("reducedVisionAmp", Vision.reducedDistanceCommand());
                         followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(Vision.reducedDistanceCommand());
                 
@@ -185,7 +183,9 @@ public class RobotContainer implements Logged {
         }
 
         private void configureSmartDashboard() {
-                HeroLogger.getDashboard().log("Speed Multiplier", SPEED_MULTIPLIER);
+                AutoManager.checkForFMS();
+                
+                this.log("Speed Multiplier", SPEED_MULTIPLIER);
                 turnRight.whileTrue(Commands.runEnd(
                         ()->{
                                 Swerve.driveRelative(new ChassisSpeeds(0, 0, -0.5),true);
@@ -205,8 +205,7 @@ public class RobotContainer implements Logged {
                 
 
 
-                AutoManager.initDashboard();
-
+                Monologue.logObj(new AutoManager(),"Robot/AutoManager");
                 Monologue.setupMonologue(this, "Robot",false,true);
         }
 

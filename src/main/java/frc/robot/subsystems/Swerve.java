@@ -15,13 +15,11 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AutoManager;
-import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
@@ -50,7 +48,6 @@ public class Swerve extends SubsystemBase implements Logged{
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
-  private Field2d field;
 
   SysIdRoutine routine;
   public Swerve(AHRS gyro) {
@@ -64,8 +61,6 @@ public class Swerve extends SubsystemBase implements Logged{
     swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(),
         getModulePositions(), Constants.Swerve.INITIAL_POSE, Constants.Swerve.STATE_STD_DEVS,
         Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);
-    field = new Field2d();
-    HeroLogger.getGlobal().log("Field",field);
     
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
@@ -84,7 +79,6 @@ public class Swerve extends SubsystemBase implements Logged{
       routine
       );
     AutoManager.addCharacterization("Swerve Offset", setAngleOffsetCommand());
-    HeroLogger.getDashboard().log("Swerve Offset", setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.OFFSET_DEGREE);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);
@@ -259,18 +253,9 @@ public class Swerve extends SubsystemBase implements Logged{
    * 
    * @return The pose of the robot in meters.
    */
-  @Log
+  @Log(key = "Robot Pose")
   public Pose2d getPose() {
     return swerveOdometry.getEstimatedPosition();
-  }
-
-  /**
-   * Returns the Field2d object.
-   * 
-   * @return The Field2d object.
-   */
-  public Field2d getField() {
-    return field;
   }
 
   /**
@@ -367,7 +352,6 @@ public class Swerve extends SubsystemBase implements Logged{
     this.log("Desired States",getModuleDesiredStates());
 
     swerveOdometry.update(getYaw(), getModulePositions());
-    this.log("Robot Pose", getPose());
 
     this.log("NavX Yaw", getYaw().getDegrees());
     this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
@@ -380,7 +364,7 @@ public class Swerve extends SubsystemBase implements Logged{
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }
-    HeroLogger.getGlobal().log("Teleop", DriverStation.isTeleopEnabled());
+    this.log("Teleop", DriverStation.isTeleopEnabled());
   }
 
   public void runWheelRadiusCharacterization(double characterizationInput) {
