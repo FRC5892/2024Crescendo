@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ShooterConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 import frc.lib.AutoManager;
-import frc.lib.HeroLogger;
 import frc.lib.HeroSparkPID;
 
-public class Shooter extends SubsystemBase {
-  private static HeroLogger logger = new HeroLogger("Shooter");
+public class Shooter extends SubsystemBase implements Logged{
   CANSparkMax leftKicker;
   CANSparkMax rightKicker;
   CANSparkMax leftFeederMotor;
@@ -29,9 +29,9 @@ public class Shooter extends SubsystemBase {
 
   SysIdRoutine lShootRoutine;
   SysIdRoutine rShootRoutine;
-
-  HeroSparkPID leftController;
-  HeroSparkPID rightController;
+  
+  @Log HeroSparkPID leftController;
+  @Log HeroSparkPID rightController;
 
   public Shooter() {
     leftKicker = new CANSparkMax(ShooterConstants.LEFT_KICKER_MOTOR_ID, MotorType.kBrushless);
@@ -49,12 +49,9 @@ public class Shooter extends SubsystemBase {
     rightController = new HeroSparkPID(rightKicker);
     // leftController.setPID(ShooterConstants.leftPID);
     // rightController.setPID(ShooterConstants.rightPID);
-    logger.log("leftSpeed", 6000);
-    logger.log("rightSpeed", -6000);
+    this.log("leftSpeed", 6000);
+    this.log("rightSpeed", -6000);
 
-    logger.log("subsystem",this);
-    logger.log("leftPID",leftController);
-    logger.log("rightPID",rightController);
     AutoManager.addSysidCharacterization("Left Shooter", lShootRoutine);
     AutoManager.addSysidCharacterization("Right Shooter", rShootRoutine);
   }
@@ -86,8 +83,8 @@ public class Shooter extends SubsystemBase {
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
-    setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
-    setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
+    // setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
+    // setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
   }
 
   public Command shootCommand() {
@@ -118,8 +115,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    logger.log("leftRealSpeed",leftController.getSpeed());
-    logger.log("rightRealSpeed",rightController.getSpeed());
+    this.log("leftRealSpeed",leftController.getSpeed());
+    this.log("rightRealSpeed",rightController.getSpeed());
 
     // This method will be called once per scheduler run
   }

@@ -15,16 +15,16 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.AutoManager;
-import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
 /*
 This is a class for the swerve drive system on the robot. It utilizes a navX gyro to measure the angle of the robot and a SwerveDriveOdometry to measure the position of the robot. There are four SwerveModule objects, each of which is responsible for the individual swerve module. The class also holds a Field2d object which is used for the robot's position with respect to the field.
@@ -34,40 +34,33 @@ The drive() method is used to set the desired speed and angle for the robot. The
 In the periodic() method, the robot's odometry is updated, and the yaw of the robot is put to the SmartDashboard. The states and positions of each swerve module is also put to the SmartDashboard.
 */
 
-public class Swerve extends SubsystemBase {
-  private static HeroLogger logger = new HeroLogger("Swerve");
+public class Swerve extends SubsystemBase implements Logged{
 
 
 
   private AHRS gyro;
 
-
-
+  //Monolog I Desperately want to love you but you make me do this 😡
+  @Log private SwerveModule mod0 = new SwerveModule(0, Constants.Swerve.Mod0.CONSTANTS);
+  @Log private SwerveModule mod1 = new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS);
+  @Log private SwerveModule mod2 = new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS);
+  @Log private SwerveModule mod3 = new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS);
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
-  private Field2d field;
 
   SysIdRoutine routine;
-
   public Swerve(AHRS gyro) {
-    logger.log("Subsystem",this);
-
     this.gyro = gyro;
     zeroGyro();
     
     mSwerveMods = new SwerveModule[] {
-        new SwerveModule(0, Constants.Swerve.Mod0.CONSTANTS),
-        new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS),
-        new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS),
-        new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS)
+        mod0,mod1,mod2,mod3
     };
     
     swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(),
         getModulePositions(), Constants.Swerve.INITIAL_POSE, Constants.Swerve.STATE_STD_DEVS,
         Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS);
-    field = new Field2d();
-    HeroLogger.getGlobal().log("Field",field);
     
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
@@ -86,15 +79,10 @@ public class Swerve extends SubsystemBase {
       routine
       );
     AutoManager.addCharacterization("Swerve Offset", setAngleOffsetCommand());
-    HeroLogger.getDashboard().log("Swerve Offset", setAngleOffsetCommand());
     Preferences.initDouble("offset 0", Constants.Swerve.Mod0.OFFSET_DEGREE);
     Preferences.initDouble("offset 1", Constants.Swerve.Mod1.OFFSET_DEGREE);
     Preferences.initDouble("offset 2", Constants.Swerve.Mod2.OFFSET_DEGREE);
     Preferences.initDouble("offset 3", Constants.Swerve.Mod3.OFFSET_DEGREE);
-
-    for (SwerveModule mod : mSwerveMods) {
-      logger.log("Modules/Mod "+mod.moduleNumber,mod);
-    }
   }
 
   public void getPreferences() {
@@ -147,8 +135,8 @@ public class Swerve extends SubsystemBase {
 
   public Pose2d addVisionMeasurement(Pose2d measurement, double timeStamp) {
     swerveOdometry.addVisionMeasurement(measurement, timeStamp);
-    logger.log("vision added x", measurement.getX());
-    logger.log("vision added y", measurement.getY());
+    this.log("vision added x", measurement.getX());
+    this.log("vision added y", measurement.getY());
 
     return swerveOdometry.getEstimatedPosition();
   }
@@ -181,7 +169,7 @@ public class Swerve extends SubsystemBase {
   public ChassisSpeeds getChassisSpeeds() {
     return Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
   }
-
+  @Log(key = "States")
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -190,7 +178,7 @@ public class Swerve extends SubsystemBase {
 
     return states;
   }
-
+  @Log(key = "Desired States")
   public SwerveModuleState[] getModuleDesiredStates() {
     SwerveModuleState[] desiredStates = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -265,17 +253,9 @@ public class Swerve extends SubsystemBase {
    * 
    * @return The pose of the robot in meters.
    */
+  @Log(key = "Robot Pose")
   public Pose2d getPose() {
     return swerveOdometry.getEstimatedPosition();
-  }
-
-  /**
-   * Returns the Field2d object.
-   * 
-   * @return The Field2d object.
-   */
-  public Field2d getField() {
-    return field;
   }
 
   /**
@@ -369,24 +349,22 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    logger.logStructArray("States",SwerveModuleState.struct,getModuleStates());
-    logger.logStructArray("Desired States",SwerveModuleState.struct,getModuleDesiredStates());
+    this.log("Desired States",getModuleDesiredStates());
 
     swerveOdometry.update(getYaw(), getModulePositions());
-    logger.logStruct("Robot Pose", Pose2d.struct, getPose());
 
-    logger.log("NavX Yaw", getYaw().getDegrees());
-    logger.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
+    this.log("NavX Yaw", getYaw().getDegrees());
+    this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
-    logger.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
+    this.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
 
-    logger.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
-    logger.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
-
+    this.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
+    this.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
+    this.log("test",getPose());
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }
-    HeroLogger.getGlobal().log("Teleop", DriverStation.isTeleopEnabled());
+    this.log("Teleop", DriverStation.isTeleopEnabled());
   }
 
   public void runWheelRadiusCharacterization(double characterizationInput) {

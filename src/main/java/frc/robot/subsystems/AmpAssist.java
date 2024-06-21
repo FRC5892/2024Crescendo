@@ -7,12 +7,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Constants.AmpAssistConstants;
+import monologue.Logged;
 
-public class AmpAssist extends SubsystemBase {
-  private static HeroLogger logger = new HeroLogger("AmpAssist");
+public class AmpAssist extends SubsystemBase implements Logged{
   /** Creates a new AmpAssist. */
   Servo leftServo;
   Servo rightServo;
@@ -35,8 +34,8 @@ public class AmpAssist extends SubsystemBase {
 
   @Override
   public void periodic() {
-    logger.log("AmpAssist/leftServo", leftServo.get());
-    logger.log("AmpAssist/rightServo", rightServo.get());
+    this.log("leftServo", leftServo.get());
+    this.log("rightServo", rightServo.get());
 
     // This method will be called once per scheduler run
   }

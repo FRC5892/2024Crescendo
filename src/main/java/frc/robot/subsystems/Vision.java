@@ -26,12 +26,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.HeroLogger;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-public class Vision extends SubsystemBase {
-  private static HeroLogger logger = new HeroLogger("Vision");
+public class Vision extends SubsystemBase implements Logged{
   private PhotonCamera frontCamera; private PhotonCamera backCamera;
 
   private PhotonPoseEstimator frontEstimator; private PhotonPoseEstimator backEstimator;
@@ -39,7 +39,7 @@ public class Vision extends SubsystemBase {
   private AprilTagFieldLayout fieldLayout;
   private double poseTimestamp;
   private Pose2d visionPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-  private Field2d field2d;
+  @Log private Field2d field2d;
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Consumer<VisionMeasurement> consumer;
   private Supplier<Pose2d> poseSupplier;
@@ -60,18 +60,17 @@ public class Vision extends SubsystemBase {
     this.consumer = consumer;
     frontCamera = new PhotonCamera(VisionConstants.FRONT_CAMERA_NAME);
     backCamera = new PhotonCamera(VisionConstants.BACK_CAMERA_NAME);
-
+    
     field2d = new Field2d();
 
     try {
       fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
     } catch (IOException e) {throw new UncheckedIOException(e);}
-    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCamera,
+    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
         VisionConstants.ROBOT_TO_FRONT_CAM);
-    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCamera,
+    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCamera,
         VisionConstants.ROBOT_TO_BACK_CAM);
 
-    logger.log("Vision estimated Pose", field2d);
     poseTimestamp = Timer.getFPGATimestamp();
   }
   
@@ -145,14 +144,14 @@ public class Vision extends SubsystemBase {
     if (!backCamera.isConnected()) backTags = new Pose3d[0];
     
 
-    logger.logStructArray("Front Tags", Pose3d.struct,frontTags);
-    logger.logStructArray("Back Tags", Pose3d.struct,backTags);
+    this.log("Front Tags",frontTags);
+    this.log("Back Tags",backTags);
     
-    logger.log("Front Camera Connected", frontCamera.isConnected());
-    logger.log("Back Camera Connected", backCamera.isConnected());
+    this.log("Front Camera Connected", frontCamera.isConnected());
+    this.log("Back Camera Connected", backCamera.isConnected());
     field2d.setRobotPose(this.visionPose);
     
-    logger.log("Estimated Angle",getVisionPose().getRotation().getDegrees());
+    this.log("Estimated Angle",getVisionPose().getRotation().getDegrees());
   }
   // private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
    private boolean confidenceCalculator(EstimatedRobotPose estimation) {

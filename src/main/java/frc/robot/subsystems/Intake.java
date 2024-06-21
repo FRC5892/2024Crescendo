@@ -15,18 +15,18 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.lib.HeroLogger;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-public class Intake extends SubsystemBase{
-  private static HeroLogger logger = new HeroLogger("Intake");
+public class Intake extends SubsystemBase implements Logged{
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private DigitalInput beamBreak;
-  private HeroSparkPID deployController;
+  @Log private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
   private DigitalInput retractLimitSwitch;
   private SparkAbsoluteEncoder deployEncoder;
@@ -37,29 +37,23 @@ public class Intake extends SubsystemBase{
 
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
-    
     deployController = new HeroSparkPID(deployMotor);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     
     beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
-    
-    
-    
-    logger.log("subsystem", this);
   }
 
   @Override
   public void periodic() {
-    logger.log("DeployRotations", this.getDeployRotation());
-    //logger.log("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
-    logger.log("deployIntegrated", deployMotor.getEncoder().getPosition()); 
-    logger.log("deploy", !deployLimitSwitch.get());
-    logger.log("retract", !retractLimitSwitch.get());
-    logger.log("BeamBreak", beamBreak.get());
-    logger.log("deployPID",  deployController);
-    logger.log("reference",  deployController.getReference());
+    this.log("DeployRotations", this.getDeployRotation());
+    //this.log("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
+    this.log("deployIntegrated", deployMotor.getEncoder().getPosition()); 
+    this.log("deploy", !deployLimitSwitch.get());
+    this.log("retract", !retractLimitSwitch.get());
+    this.log("BeamBreak", beamBreak.get());
+    this.log("reference",  deployController.getReference());
   }
 
   /**
