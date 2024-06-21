@@ -29,6 +29,8 @@
       "/Robot/Intake/deployController": "PIDController",
       "/Robot/Shooter/leftController": "PIDController",
       "/Robot/Shooter/rightController": "PIDController",
+      "/Robot/Swerve/LoggedSwerveOffsetCommand": "Command",
+      "/Robot/Swerve/swerveOffsetCommand": "Command",
       "/Robot/Vision/field2d": "Field2d",
       "/Robot/autoChooser": "String Chooser",
       "/Robot/characterizationChooser": "String Chooser",
@@ -93,6 +95,9 @@
         "open": true
       },
       "CameraPublisher": {
+        "USB Camera 0": {
+          "open": true
+        },
         "open": true
       },
       "FMSInfo": {
@@ -105,14 +110,17 @@
       },
       "Robot": {
         "AutoManager": {
-          "open": true,
+          "autoChooser": {
+            "open": true
+          },
           "selector": {
             "open": true
           }
         },
         "Swerve": {
           "open": true
-        }
+        },
+        "open": true
       },
       "SmartDashboard": {
         "AutoChooser": {

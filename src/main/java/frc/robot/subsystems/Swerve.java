@@ -45,6 +45,7 @@ public class Swerve extends SubsystemBase implements Logged{
   @Log private SwerveModule mod1 = new SwerveModule(1, Constants.Swerve.Mod1.CONSTANTS);
   @Log private SwerveModule mod2 = new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS);
   @Log private SwerveModule mod3 = new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS);
+  @Log(key="swerveOffsetCommand") private Command LoggedSwerveOffsetCommand = setAngleOffsetCommand();
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
@@ -340,6 +341,7 @@ public class Swerve extends SubsystemBase implements Logged{
     return gyro.getRotation2d();
   }
   public Command setAngleOffsetCommand() {
+    System.out.println("SetAngleOffsetCommand-------------------");
     return runOnce(() -> {
       for (SwerveModule mod : mSwerveMods) {
         Preferences.setDouble("offset " + mod.moduleNumber, mod.getCanCoder().getDegrees());
@@ -349,8 +351,6 @@ public class Swerve extends SubsystemBase implements Logged{
 
   @Override
   public void periodic() {
-    this.log("Desired States",getModuleDesiredStates());
-
     swerveOdometry.update(getYaw(), getModulePositions());
 
     this.log("NavX Yaw", getYaw().getDegrees());
@@ -360,7 +360,6 @@ public class Swerve extends SubsystemBase implements Logged{
 
     this.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
     this.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
-    this.log("test",getPose());
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }

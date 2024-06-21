@@ -11,10 +11,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -66,7 +71,7 @@ public class RobotContainer implements Logged {
                 private static final int translationAxis = XboxController.Axis.kLeftY.value;
                 private static final int strafeAxis = XboxController.Axis.kLeftX.value;
                 private static final int rotationAxis = XboxController.Axis.kRightX.value;
-                private static final double SPEED_MULTIPLIER = 1.0;
+                private static double SPEED_MULTIPLIER = 1.0;
                 
                 /* Driver Buttons */
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -113,6 +118,24 @@ public class RobotContainer implements Logged {
                 /* Other */
 
         /* Other */
+                private boolean isSpeedLimited = false;
+                @Log Sendable presentationMode = new Sendable() {
+                        @Override
+                        public void initSendable(SendableBuilder builder) {
+                                builder.addBooleanProperty("speedLimit",
+                                        ()->isSpeedLimited, 
+                                        (b)->{
+                                                if (!DriverStation.isFMSAttached()) {isSpeedLimited = b;
+                                                        if (isSpeedLimited) {
+                                                                SPEED_MULTIPLIER = 0.5;
+                                                        } else {
+                                                                SPEED_MULTIPLIER = 1;
+                                                        }
+                                                };
+                                });
+                            
+                        }
+                };
                 /* SendableChooser */
 
         public RobotContainer() {
