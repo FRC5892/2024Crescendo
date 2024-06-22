@@ -46,6 +46,8 @@ public class Swerve extends SubsystemBase implements Logged{
   @Log private SwerveModule mod2 = new SwerveModule(2, Constants.Swerve.Mod2.CONSTANTS);
   @Log private SwerveModule mod3 = new SwerveModule(3, Constants.Swerve.Mod3.CONSTANTS);
   @Log(key="swerveOffsetCommand") private Command LoggedSwerveOffsetCommand = setAngleOffsetCommand();
+  @Log(key="readyForSysIDCommand") private Command loggedReadyForSysIDCommand = positionForSysIDCommand();
+
   private SwerveDrivePoseEstimator swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
@@ -71,10 +73,7 @@ public class Swerve extends SubsystemBase implements Logged{
       "Swerve",
       command -> {
         return command
-        .beforeStarting(() ->{
-          setModuleRotation(new Rotation2d(0));
-          setAllDriveEnabled(false);
-        })
+        .beforeStarting(this.positionForSysIDCommand()).andThen(new WaitCommand(1))
         .finallyDo(()-> setAllDriveEnabled(true));
       },
       routine
@@ -163,7 +162,7 @@ public class Swerve extends SubsystemBase implements Logged{
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop,false);
     }
   }
 
@@ -197,7 +196,7 @@ public class Swerve extends SubsystemBase implements Logged{
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop,false);
     }
   }
 
@@ -207,17 +206,16 @@ public class Swerve extends SubsystemBase implements Logged{
         true, false);
   }
 
-  /* Used by SwerveControllerCommand in Auto */
   /**
    * Sets the desired states for each SwerveModule.
    * 
    * @param desiredStates The desired states for each SwerveModule.
    */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
+  public void setModuleStates(SwerveModuleState[] desiredStates,boolean force) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
 
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+      mod.setDesiredState(desiredStates[mod.moduleNumber], false,force);
     }
   }
 
@@ -226,27 +224,27 @@ public class Swerve extends SubsystemBase implements Logged{
    * 
    * @param rotation The desired rotation.
    */
-  public void setModuleRotation(Rotation2d rotation) {
+  public void setModuleRotation(Rotation2d rotation,boolean force) {
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(new SwerveModuleState(0, rotation), false);
+      mod.setDesiredState(new SwerveModuleState(0, rotation), false,force);
     }
   }
 
   /* Set individual rotation */
   public void setModule0(Rotation2d rotation) {
-    mSwerveMods[0].setDesiredState(new SwerveModuleState(0, rotation), false);
+    mSwerveMods[0].setDesiredState(new SwerveModuleState(0, rotation), false,false);
   }
 
   public void setModule1(Rotation2d rotation) {
-    mSwerveMods[1].setDesiredState(new SwerveModuleState(0, rotation), false);
+    mSwerveMods[1].setDesiredState(new SwerveModuleState(0, rotation), false,false);
   }
 
   public void setModule2(Rotation2d rotation) {
-    mSwerveMods[2].setDesiredState(new SwerveModuleState(0, rotation), false);
+    mSwerveMods[2].setDesiredState(new SwerveModuleState(0, rotation), false,false);
   }
 
   public void setModule3(Rotation2d rotation) {
-    mSwerveMods[3].setDesiredState(new SwerveModuleState(0, rotation), false);
+    mSwerveMods[3].setDesiredState(new SwerveModuleState(0, rotation), false,false);
   }
 
   /**
@@ -341,7 +339,6 @@ public class Swerve extends SubsystemBase implements Logged{
     return gyro.getRotation2d();
   }
   public Command setAngleOffsetCommand() {
-    System.out.println("SetAngleOffsetCommand-------------------");
     return runOnce(() -> {
       for (SwerveModule mod : mSwerveMods) {
         Preferences.setDouble("offset " + mod.moduleNumber, mod.getCanCoder().getDegrees());
@@ -372,5 +369,11 @@ public class Swerve extends SubsystemBase implements Logged{
   public double inityaw;
   public Command CheckTimeCommand(boolean isRight) {
     return runOnce(()->inityaw=this.getYaw().getDegrees()).andThen(new WaitCommand(4)).andThen(()->System.out.println((isRight? "right":"left")+","+inityaw+","+Double.toString(this.getYaw().getDegrees()-inityaw)),this);
+  }
+  public Command positionForSysIDCommand() {
+    return this.startEnd(() ->{
+          setModuleRotation(new Rotation2d(),true);
+          setAllDriveEnabled(false);
+        },()-> {}).withTimeout(1);
   }
 }

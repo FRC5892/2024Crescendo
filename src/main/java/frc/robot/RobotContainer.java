@@ -17,7 +17,9 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
@@ -127,7 +129,7 @@ public class RobotContainer implements Logged {
                                         (b)->{
                                                 if (!DriverStation.isFMSAttached()) {isSpeedLimited = b;
                                                         if (isSpeedLimited) {
-                                                                SPEED_MULTIPLIER = 0.5;
+                                                                SPEED_MULTIPLIER = 0.4;
                                                         } else {
                                                                 SPEED_MULTIPLIER = 1;
                                                         }
