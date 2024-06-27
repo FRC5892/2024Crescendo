@@ -11,7 +11,7 @@ import monologue.Logged;
 import frc.robot.Constants;
 
 public class WheelRadiusCharacterization extends Command implements Logged {
-  private static final double characterizationSpeed = 0.25;
+  private static final double characterizationSpeed = 0.5;
   private static final double swerveRadius = Constants.Swerve.WHEEL_BASE/2;
   private final DoubleSupplier gyroYawRadsSupplier;
       // () -> RobotState.getInstance().getOdometryPose().getRotation().getRadians();

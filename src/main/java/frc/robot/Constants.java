@@ -88,7 +88,7 @@ public final class Constants {
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
     public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
     public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
-    public static final double NOISY_DISTANCE_METERS = 2.5;
+    public static final double NOISY_DISTANCE_METERS = 4.5;
     public static final double AMP_NOISY_DISTANCE_METERS = 1.5;
 
     public static final double DISTANCE_WEIGHT = 15;

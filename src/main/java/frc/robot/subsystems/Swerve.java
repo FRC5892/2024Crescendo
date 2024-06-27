@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -350,13 +351,15 @@ public class Swerve extends SubsystemBase implements Logged{
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions());
 
-    this.log("NavX Yaw", getYaw().getDegrees());
+    this.log("NavX Yaw", gyro.getYaw());
+    this.log("NavX Angle", gyro.getAngle());
+
     this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
     this.log("NavX Roll", gyro == null ? 0: gyro.getRoll());
 
     this.log("Acceleration", gyro == null ? 0: gyro.getWorldLinearAccelX());
-    this.log("Direction",  gyro == null ? 0:gyro.getCompassHeading());
+    
     for (SwerveModule mod : mSwerveMods) {
       mod.updateCache();
     }
@@ -375,5 +378,8 @@ public class Swerve extends SubsystemBase implements Logged{
           setModuleRotation(new Rotation2d(),true);
           setAllDriveEnabled(false);
         },()-> {}).withTimeout(1);
+  }
+  public double getYawRadians() {
+    return Units.degreesToRadians(gyro.getYaw());
   }
 }

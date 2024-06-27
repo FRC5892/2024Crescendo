@@ -83,8 +83,8 @@ public class Shooter extends SubsystemBase implements Logged{
   }
 
   private void setKickerSpeedsFromSmartDashboard() {
-    // setLeftKickerMotorSpeedRPM(logger.get("leftSpeed", 6000));
-    // setRightKickerMotorSpeedRPM(logger.get("rightSpeed", -6000));
+    setLeftKickerMotorSpeedRPM(6000);
+    setRightKickerMotorSpeedRPM(-6000);
   }
 
   public Command shootCommand() {
