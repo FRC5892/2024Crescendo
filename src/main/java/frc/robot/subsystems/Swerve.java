@@ -351,8 +351,8 @@ public class Swerve extends SubsystemBase implements Logged{
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions());
 
-    this.log("NavX Yaw", gyro.getYaw());
-    this.log("NavX Angle", gyro.getAngle());
+    this.log("NavX Yaw", gyro == null ? 0:gyro.getYaw());
+    this.log("NavX Angle", gyro == null ? 0:gyro.getAngle());
 
     this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 
