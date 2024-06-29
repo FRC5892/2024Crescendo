@@ -4,19 +4,14 @@
 
 package frc.robot.subsystems;
 
-import java.security.interfaces.RSAKey;
-import java.sql.ResultSet;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AmpAssistConstants;
+import monologue.Logged;
 
-public class AmpAssist extends SubsystemBase {
+public class AmpAssist extends SubsystemBase implements Logged{
   /** Creates a new AmpAssist. */
   Servo leftServo;
   Servo rightServo;
@@ -39,8 +34,8 @@ public class AmpAssist extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("AmpAssist/leftServo", leftServo.get());
-    SmartDashboard.putNumber("AmpAssist/rightServo", rightServo.get());
+    this.log("leftServo", leftServo.get());
+    this.log("rightServo", rightServo.get());
 
     // This method will be called once per scheduler run
   }

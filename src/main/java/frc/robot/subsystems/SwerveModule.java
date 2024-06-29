@@ -80,14 +80,16 @@ public class SwerveModule implements Sendable {
 
   }
 
-  public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-    desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+  public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop, boolean force) {
+    if (!force) {
+      desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+    }
     this.desiredState = desiredState;
     // Custom optimize command, since default WPILib optimize assumes
     // continuous controller which REV and CTRE are not
 
 
-    setAngle(desiredState);
+    setAngle(desiredState,force);
     setSpeed(desiredState, isOpenLoop);
   }
 
@@ -112,15 +114,18 @@ public class SwerveModule implements Sendable {
     driveMotor.setVoltage(volts.in(Units.Volts));
   }
 
-  private void setAngle(SwerveModuleState desiredState) {
+  public void setAngle(SwerveModuleState desiredState,boolean force) {
     if (!isAngleEnabled) {
       angleMotor.set(0);
       return;
     }
-    // Prevent rotating module if speed is less then 1%. Prevents jittering.
-    Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))
-        ? lastAngle
-        : desiredState.angle;
+    Rotation2d angle = desiredState.angle;
+    if (!force) {
+      // Prevent rotating module if speed is less then 1%. Prevents jittering.
+      angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))
+      ? lastAngle
+      : desiredState.angle;
+    }
 
     angleController.setReference(angle.getDegrees(), ControlType.kPosition);
     lastAngle = angle;

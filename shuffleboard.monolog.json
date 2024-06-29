@@ -18,7 +18,7 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///Intake/BeamBreak",
+              "_source0": "network_table:///Robot/Intake/BeamBreak",
               "_title": "Beam Break",
               "_glyph": 148,
               "_showGlyph": false,
@@ -42,7 +42,7 @@
               "_children": {
                 "0,0": {
                   "_type": "Boolean Box",
-                  "_source0": "network_table:///Intake/deploy",
+                  "_source0": "network_table:///Robot/Intake/deploy",
                   "_title": "Deploy",
                   "_glyph": 148,
                   "_showGlyph": false,
@@ -51,7 +51,7 @@
                 },
                 "1,0": {
                   "_type": "Boolean Box",
-                  "_source0": "network_table:///Intake/retract",
+                  "_source0": "network_table:///Robot/Intake/retract",
                   "_title": "Retract",
                   "_glyph": 148,
                   "_showGlyph": false,
@@ -68,7 +68,7 @@
             ],
             "content": {
               "_type": "Simple Dial",
-              "_source0": "network_table:///Shooter/leftRealSpeed",
+              "_source0": "network_table:///Robot/Shooter/leftRealSpeed",
               "_title": "Shooter RPM",
               "_glyph": 148,
               "_showGlyph": false,
@@ -102,14 +102,14 @@
                   "_children": {
                     "0,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 0/Drive Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod0/Drive Enabled",
                       "_title": "Drive",
                       "_glyph": 148,
                       "_showGlyph": false
                     },
                     "1,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 0/Angle Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod0/Angle Enabled",
                       "_title": "Angle",
                       "_glyph": 148,
                       "_showGlyph": false
@@ -127,14 +127,14 @@
                   "_children": {
                     "0,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 1/Drive Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod1/Drive Enabled",
                       "_title": "Drive",
                       "_glyph": 148,
                       "_showGlyph": false
                     },
                     "1,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 1/Angle Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod1/Angle Enabled",
                       "_title": "Angle",
                       "_glyph": 148,
                       "_showGlyph": false
@@ -152,14 +152,14 @@
                   "_children": {
                     "0,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 2/Drive Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod2/Drive Enabled",
                       "_title": "Drive",
                       "_glyph": 148,
                       "_showGlyph": false
                     },
                     "1,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 2/Angle Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod2/Angle Enabled",
                       "_title": "Angle",
                       "_glyph": 148,
                       "_showGlyph": false
@@ -177,14 +177,14 @@
                   "_children": {
                     "0,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 3/Drive Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod3/Drive Enabled",
                       "_title": "Drive",
                       "_glyph": 148,
                       "_showGlyph": false
                     },
                     "1,0": {
                       "_type": "Toggle Switch",
-                      "_source0": "network_table:///Swerve/Modules/Mod 3/Angle Enabled",
+                      "_source0": "network_table:///Robot/Swerve/mod3/Angle Enabled",
                       "_title": "Angle",
                       "_glyph": 148,
                       "_showGlyph": false
@@ -217,13 +217,13 @@
           },
           "0,4": {
             "size": [
-              3,
+              6,
               2
             ],
             "content": {
               "_type": "ComboBox Chooser",
-              "_source0": "network_table:///Dashboard/AutoChooser",
-              "_title": "AutoChooser",
+              "_source0": "network_table:///Robot/AutoManager/autoChooser",
+              "_title": "Auto Chooser",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -235,21 +235,21 @@
             ],
             "content": {
               "_type": "ComboBox Chooser",
-              "_source0": "network_table:///Dashboard/CharacterizationChooser",
-              "_title": "CharacterizationChooser",
+              "_source0": "network_table:///Robot/AutoManager/characterizationChooser",
+              "_title": "Robot/CharacterizationChooser",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
           "2,6": {
             "size": [
-              2,
+              4,
               2
             ],
             "content": {
               "_type": "Toggle Switch",
-              "_source0": "network_table:///Dashboard/CharacterizationMode",
-              "_title": "CharacterizationMode",
+              "_source0": "network_table:///Robot/AutoManager/selector/characterizationMode",
+              "_title": "Robot/CharacterizationMode",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -275,7 +275,7 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///Swerve/Modules/Mod 0/Stats",
+              "_source0": "network_table:///Robot/Swerve/mod0/Stats",
               "_title": "Mod 0 Stats",
               "_glyph": 148,
               "_showGlyph": false
@@ -288,7 +288,7 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///Swerve/Modules/Mod 1/Stats",
+              "_source0": "network_table:///Robot/Swerve/mod1/Stats",
               "_title": "Mod 1 Stats",
               "_glyph": 148,
               "_showGlyph": false
@@ -301,7 +301,7 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///Swerve/Modules/Mod 2/Stats",
+              "_source0": "network_table:///Robot/Swerve/mod2/Stats",
               "_title": "Mod 2",
               "_glyph": 148,
               "_showGlyph": false
@@ -314,7 +314,7 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///Swerve/Modules/Mod 3/Stats",
+              "_source0": "network_table:///Robot/Swerve/mod3/Stats",
               "_title": "Mod 3",
               "_glyph": 148,
               "_showGlyph": false
@@ -341,7 +341,7 @@
             ],
             "content": {
               "_type": "PID Controller",
-              "_source0": "network_table:///Intake/pid",
+              "_source0": "network_table:///Robot/Intake/pid",
               "_title": "Intake PID",
               "_glyph": 148,
               "_showGlyph": false
@@ -354,7 +354,7 @@
             ],
             "content": {
               "_type": "Boolean Box",
-              "_source0": "network_table:///Intake/BeamBreak",
+              "_source0": "network_table:///Robot/Intake/BeamBreak",
               "_title": "Beam Break",
               "_glyph": 148,
               "_showGlyph": false,
@@ -369,7 +369,7 @@
             ],
             "content": {
               "_type": "Simple Dial",
-              "_source0": "network_table:///Intake/DeployRotations",
+              "_source0": "network_table:///Robot/Intake/DeployRotations",
               "_title": "Deploy",
               "_glyph": 148,
               "_showGlyph": false,
@@ -394,7 +394,7 @@
               "_children": {
                 "0,0": {
                   "_type": "Boolean Box",
-                  "_source0": "network_table:///Intake/deploy",
+                  "_source0": "network_table:///Robot/Intake/deploy",
                   "_title": "Deploy",
                   "_glyph": 148,
                   "_showGlyph": false,
@@ -403,7 +403,7 @@
                 },
                 "1,0": {
                   "_type": "Boolean Box",
-                  "_source0": "network_table:///Intake/retract",
+                  "_source0": "network_table:///Robot/Intake/retract",
                   "_title": "Retract",
                   "_glyph": 148,
                   "_showGlyph": false,
@@ -420,7 +420,7 @@
             ],
             "content": {
               "_type": "PID Controller",
-              "_source0": "network_table:///Shooter/leftPID",
+              "_source0": "network_table:///Robot/Shooter/leftPID",
               "_title": "Left PID",
               "_glyph": 148,
               "_showGlyph": false
@@ -433,7 +433,7 @@
             ],
             "content": {
               "_type": "PID Controller",
-              "_source0": "network_table:///Shooter/rightPID",
+              "_source0": "network_table:///Robot/Shooter/rightPID",
               "_title": "Right PID",
               "_glyph": 148,
               "_showGlyph": false
@@ -446,7 +446,7 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shooter/leftRealSpeed",
+              "_source0": "network_table:///Robot/Shooter/leftRealSpeed",
               "_title": "Left Velocity",
               "_glyph": 148,
               "_showGlyph": false
@@ -459,7 +459,7 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shooter/rightSpeed",
+              "_source0": "network_table:///Robot/Shooter/rightSpeed",
               "_title": "Right Velocity",
               "_glyph": 148,
               "_showGlyph": false
@@ -472,7 +472,7 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shooter/leftSpeed",
+              "_source0": "network_table:///Robot/Shooter/leftSpeed",
               "_title": "Left Setpoint",
               "_glyph": 148,
               "_showGlyph": false
@@ -485,7 +485,7 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shooter/rightSpeed",
+              "_source0": "network_table:///Robot/Shooter/rightSpeed",
               "_title": "Right Setpoint",
               "_glyph": 148,
               "_showGlyph": false
@@ -498,7 +498,7 @@
             ],
             "content": {
               "_type": "Field",
-              "_source0": "network_table:///Vision estimated Pose",
+              "_source0": "network_table:///Robot/Vision estimated Pose",
               "_title": "Vision Pose",
               "_glyph": 148,
               "_showGlyph": false,
@@ -514,8 +514,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Dashboard/Swerve Offset",
-              "_title": "Swerve/offsetCommand",
+              "_source0": "network_table:///Robot/Swerve/offsetCommand",
+              "_title": "Robot/Swerve/offsetCommand",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -541,8 +541,8 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///Swerve/SysId",
-              "_title": "Swerve/SysId",
+              "_source0": "network_table:///Robot/Swerve/SysId",
+              "_title": "Robot/Swerve/SysId",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -554,8 +554,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Swerve/SysId/dynamic backward",
-              "_title": "Swerve/SysId/dynamic backward",
+              "_source0": "network_table:///Robot/Swerve/SysId/dynamic backward",
+              "_title": "Robot/Swerve/SysId/dynamic backward",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -567,8 +567,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Swerve/SysId/dynamic forward",
-              "_title": "Swerve/SysId/dynamic forward",
+              "_source0": "network_table:///Robot/Swerve/SysId/dynamic forward",
+              "_title": "Robot/Swerve/SysId/dynamic forward",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -580,8 +580,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Swerve/SysId/quasistatic backward",
-              "_title": "Swerve/SysId/quasistatic backward",
+              "_source0": "network_table:///Robot/Swerve/SysId/quasistatic backward",
+              "_title": "Robot/Swerve/SysId/quasistatic backward",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -593,8 +593,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Swerve/SysId/quasistatic forward",
-              "_title": "Swerve/SysId/quasistatic forward",
+              "_source0": "network_table:///Robot/Swerve/SysId/quasistatic forward",
+              "_title": "Robot/Swerve/SysId/quasistatic forward",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -606,8 +606,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///Swerve/offsetCommand",
-              "_title": "Swerve/offsetCommand",
+              "_source0": "network_table:///Robot/Swerve/offsetCommand",
+              "_title": "Robot/Swerve/offsetCommand",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -619,8 +619,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///IntakeCommand",
-              "_title": "/IntakeCommand",
+              "_source0": "network_table:///Robot/IntakeCommand",
+              "_title": "/Robot/IntakeCommand",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -632,8 +632,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///AmpAssist/leftServo",
-              "_title": "AmpAssist/leftServo",
+              "_source0": "network_table:///Robot/AmpAssist/leftServo",
+              "_title": "Robot/AmpAssist/leftServo",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -645,8 +645,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///AmpAssist/rightServo",
-              "_title": "AmpAssist/rightServo",
+              "_source0": "network_table:///Robot/AmpAssist/rightServo",
+              "_title": "Robot/AmpAssist/rightServo",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -658,8 +658,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///tilt-left",
-              "_title": "tilt-left",
+              "_source0": "network_table:///Robot/tilt-left",
+              "_title": "Robot/tilt-left",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -671,8 +671,8 @@
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///tilt-right",
-              "_title": "tilt-right",
+              "_source0": "network_table:///Robot/tilt-right",
+              "_title": "Robot/tilt-right",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -698,8 +698,8 @@
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard",
-              "_title": "SmartDashboard",
+              "_source0": "network_table:///Robot",
+              "_title": "Robot",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -711,8 +711,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///P Gain",
-              "_title": "/P Gain",
+              "_source0": "network_table:///Robot/P Gain",
+              "_title": "/Robot/P Gain",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -724,8 +724,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///I Gain",
-              "_title": "/I Gain",
+              "_source0": "network_table:///Robot/I Gain",
+              "_title": "/Robot/I Gain",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -737,8 +737,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///D Gain",
-              "_title": "D Gain",
+              "_source0": "network_table:///Robot/D Gain",
+              "_title": "Robot/D Gain",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -750,8 +750,8 @@
             ],
             "content": {
               "_type": "Number Slider",
-              "_source0": "network_table:///Set Rotations",
-              "_title": "Set Rotations",
+              "_source0": "network_table:///Robot/Set Rotations",
+              "_title": "Robot/Set Rotations",
               "_glyph": 148,
               "_showGlyph": false,
               "Slider Settings/Min": 0.0,
@@ -765,9 +765,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1382.0,
-    "height": 736.0
+    "x": 0.0,
+    "y": 0.0,
+    "width": 2560.0,
+    "height": 1396.0
   }
 }

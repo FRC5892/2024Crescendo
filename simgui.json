@@ -10,9 +10,46 @@
   },
   "NTProvider": {
     "types": {
+      "/AutoManager/autoChooser": "String Chooser",
+      "/AutoManager/characterizationChooser": "String Chooser",
+      "/Dashboard/AutoChooser": "String Chooser",
+      "/Dashboard/CharacterizationChooser": "String Chooser",
       "/FMSInfo": "FMSInfo",
+      "/Global/Field": "Field2d",
+      "/Intake/deployPID": "PIDController",
+      "/Intake/subsystem": "Subsystem",
+      "/Robot Container/IntakeCommand": "Command",
+      "/Robot Container/ShootCommand": "Command",
+      "/Robot Container/Test_command": "Command",
+      "/Robot Container/tilt-left": "Command",
+      "/Robot Container/tilt-right": "Command",
+      "/Robot/AutoManager/autoChooser": "String Chooser",
+      "/Robot/AutoManager/characterizationChooser": "String Chooser",
+      "/Robot/GroundIntake/deployController": "PIDController",
+      "/Robot/Intake/deployController": "PIDController",
+      "/Robot/Shooter/leftController": "PIDController",
+      "/Robot/Shooter/rightController": "PIDController",
+      "/Robot/Swerve/LoggedSwerveOffsetCommand": "Command",
+      "/Robot/Swerve/swerveOffsetCommand": "Command",
+      "/Robot/Vision/field2d": "Field2d",
+      "/Robot/autoChooser": "String Chooser",
+      "/Robot/characterizationChooser": "String Chooser",
+      "/Robot/deployIntake": "Command",
+      "/Robot/shootCommand": "Command",
+      "/Robot/tiltLeft": "Command",
+      "/Robot/tiltRight": "Command",
+      "/Shooter/leftPID": "PIDController",
+      "/Shooter/rightPID": "PIDController",
+      "/Shooter/subsystem": "Subsystem",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/AutoChooser": "String Chooser",
+      "/SmartDashboard/CharacterizationChooser": "String Chooser",
+      "/SmartDashboard/Dashboard/AutoChooser": "String Chooser",
+      "/SmartDashboard/Dashboard/CharacterizationChooser": "String Chooser",
+      "/SmartDashboard/Dashboard/Swerve Offset": "Command",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Global/Field": "Field2d",
+      "/SmartDashboard/Intake/deployPID": "PIDController",
       "/SmartDashboard/Intake/pid": "PIDController",
       "/SmartDashboard/Intake/subsystem": "Subsystem",
       "/SmartDashboard/IntakeCommand": "Command",
@@ -28,25 +65,76 @@
       "/SmartDashboard/Shooter/leftPID": "PIDController",
       "/SmartDashboard/Shooter/rightPID": "PIDController",
       "/SmartDashboard/Shooter/subsystem": "Subsystem",
+      "/SmartDashboard/Swerve/Subsystem": "Subsystem",
       "/SmartDashboard/Swerve/SysId/dynamic backward": "Command",
       "/SmartDashboard/Swerve/SysId/dynamic forward": "Command",
       "/SmartDashboard/Swerve/SysId/quasistatic backward": "Command",
       "/SmartDashboard/Swerve/SysId/quasistatic forward": "Command",
       "/SmartDashboard/Swerve/offsetCommand": "Command",
       "/SmartDashboard/Swerve/subsytem": "Subsystem",
-      "/SmartDashboard/Vision estimated Pose": "Field2d"
+      "/SmartDashboard/Vision estimated Pose": "Field2d",
+      "/SmartDashboard/tilt-left": "Command",
+      "/SmartDashboard/tilt-right": "Command",
+      "/Vision/Vision estimated Pose": "Field2d"
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "retained": {
+      "Robot": {
+        "Swerve": {
+          "open": true
+        },
+        "open": true
+      }
+    },
     "transitory": {
+      "AutoManager": {
+        "open": true
+      },
+      "CameraPublisher": {
+        "USB Camera 0": {
+          "open": true
+        },
+        "open": true
+      },
+      "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        }
+      },
+      "Robot": {
+        "AutoManager": {
+          "autoChooser": {
+            "open": true
+          },
+          "selector": {
+            "open": true
+          }
+        },
+        "Swerve": {
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
+        "AutoChooser": {
+          "open": true,
+          "string[]##v_/SmartDashboard/AutoChooser/options": {
+            "open": true
+          }
+        },
         "Swerve": {
           "SysId": {
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },

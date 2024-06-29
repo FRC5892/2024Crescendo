@@ -88,7 +88,7 @@ public final class Constants {
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
     public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
     public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
-    public static final double NOISY_DISTANCE_METERS = 2.5;
+    public static final double NOISY_DISTANCE_METERS = 4.5;
     public static final double AMP_NOISY_DISTANCE_METERS = 1.5;
 
     public static final double DISTANCE_WEIGHT = 15;
@@ -172,7 +172,7 @@ public final class Constants {
     /* TODO: set Swerve Profiling Values  */
     // private static final double SPEED_MULTIPLIER = 0.2;
     public static final double MAX_SPEED = 6.5; // meters per second
-    public static final double MAX_ANGULAR_VELOCITY = 5; // TODO: Tune
+    public static final double MAX_ANGULAR_VELOCITY = 5;// TODO: Tune
 
     /* Neutral Modes */
     public static final IdleMode ANGLE_NEUTRAL_MODE = IdleMode.kBrake;

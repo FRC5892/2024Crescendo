@@ -9,20 +9,39 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.lib.AutoManager;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.WheelRadiusCharacterization;
+import frc.robot.commands.WheelRadiusCharacterization.Direction;
+import frc.robot.subsystems.AmpAssist;
+import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
+import monologue.Monologue;
+import monologue.Annotations.Log;
+import monologue.Logged;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -32,29 +51,29 @@ import frc.robot.subsystems.*;
  * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer implements Logged {
+   
         /* Controllers */
                 public final static XboxController driver = new XboxController(0);
                 public final static XboxController codriver = new XboxController(1);
 
         /* Subsystems & Hardware */
                 /* Gyro Sensor */
-                AHRS ahrs = new AHRS(Port.kMXP);
+                AHRS ahrs = Robot.isReal() ? new AHRS(Port.kMXP) : null;
 
-                /* Swerve Subsystem */
-                private final Swerve s_Swerve = new Swerve(ahrs);
-                private final Intake s_GroundIntake = new Intake();
-                private final Shooter s_Shooter = new Shooter(); 
-                private final Climb s_Climb = new Climb();
-                private final Vision s_Vision = new Vision(s_Swerve::useVisionMeasurement,s_Swerve::getPose);
-                private final AmpAssist s_AmpAssist = new AmpAssist(); 
+                private final Swerve Swerve = new Swerve(ahrs);
+                private final Intake Intake = new Intake();
+                private final Shooter Shooter = new Shooter(); 
+                private final Climb Climb = new Climb();
+                private final Vision Vision = new Vision(Swerve::useVisionMeasurement,Swerve::getPose);
+                private final AmpAssist AmpAssist = new AmpAssist(); 
                 
         /* Controls & Buttons */
                 /* Drive Controls */
                 private static final int translationAxis = XboxController.Axis.kLeftY.value;
                 private static final int strafeAxis = XboxController.Axis.kLeftX.value;
                 private static final int rotationAxis = XboxController.Axis.kRightX.value;
-                private static final double SPEED_MULTIPLIER = 1.0;
+                private static double SPEED_MULTIPLIER = 1.0;
                 
                 /* Driver Buttons */
                 private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -73,59 +92,77 @@ public class RobotContainer {
                         XboxController.Button.kA.value);   
                 private final POVButton climbUpButton = new POVButton(codriver, 0);
                 private final POVButton climbDownButton = new POVButton(codriver, 180);
-                private final POVButton tiltClimbLeftButton = new POVButton(codriver, 270);
-                private final POVButton tiltClimbRightButton = new POVButton(codriver, 90);
                 private final JoystickButton deployIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kLeftBumper.value);
                 private final JoystickButton retractIntakeButton2 = new JoystickButton(codriver,
                         XboxController.Button.kRightBumper.value);
+                private final JoystickButton turnLeft = new JoystickButton(driver, XboxController.Button.kX.value);
+                private final JoystickButton turnRight = new JoystickButton(driver, XboxController.Button.kB.value);
+
+
         
         /* Commands */
                 /* Driver */
-                private final Command climbUp = s_Climb.climbUp();
-                private final Command climbDown = s_Climb.climbDown();
-                private final Command tiltLeft = s_Climb.tiltLeft();
-                private final Command tiltRight = s_Climb.tiltRight();
+                private final Command climbUp = Climb.climbUp();
+                private final Command climbDown = Climb.climbDown();
+                @Log private final Command tiltLeft = Climb.tiltLeft();
+                @Log private final Command tiltRight = Climb.tiltRight();
                 private final Command followAmpCommand;
         
                 /* Codriver  */
-                private final Command shootCommand = s_Shooter.shootCommand();
-                private final Command outtakeNote = s_GroundIntake.outtakeNoteCommand();
-                private final Command intakeNoteSequence = s_GroundIntake.intakeNoteSequence(driver,codriver);
-                private final Command scoreAmpSequence = s_AmpAssist.ampAssistCommand();
-                private final Command retractIntake = s_GroundIntake.retractIntakeCommand();
-                private final Command deployIntake = s_GroundIntake.deployIntakeCommand();
+                @Log private final Command shootCommand = Shooter.shootCommand();
+                private final Command outtakeNote = Intake.outtakeNoteCommand();
+                private final Command intakeNoteSequence = Intake.intakeNoteSequence(driver,codriver);
+                private final Command scoreAmpSequence = AmpAssist.ampAssistCommand();
+                private final Command retractIntake = Intake.retractIntakeCommand();
+                @Log private final Command deployIntake = Intake.deployIntakeCommand();
+                
+                /* Other */
 
         /* Other */
+                private boolean isSpeedLimited = false;
+                @Log Sendable presentationMode = new Sendable() {
+                        @Override
+                        public void initSendable(SendableBuilder builder) {
+                                builder.addBooleanProperty("speedLimit",
+                                        ()->isSpeedLimited, 
+                                        (b)->{
+                                                if (!DriverStation.isFMSAttached()) {isSpeedLimited = b;
+                                                        if (isSpeedLimited) {
+                                                                SPEED_MULTIPLIER = 0.4;
+                                                        } else {
+                                                                SPEED_MULTIPLIER = 1;
+                                                        }
+                                                };
+                                });
+                            
+                        }
+                };
                 /* SendableChooser */
-                public final SendableChooser<Command> autoChooser;
 
         public RobotContainer() {
                 /* Hardware and Logging */
                         DriverStation.silenceJoystickConnectionWarning(true);
-                        
-                        SmartDashboard.putData("IntakeCommand",deployIntake);
-                        SmartDashboard.putData("ShootCommand",shootCommand);
                 
                         CameraServer.startAutomaticCapture();
 
                 /* PathPlanner Named Commands */
-                        s_Swerve.setupPathPlanner();
-                        NamedCommands.registerCommand("deployIntake", s_GroundIntake.deployIntakeCommand());
-                        NamedCommands.registerCommand("retractIntake", s_GroundIntake.retractIntakeCommand());
-                        NamedCommands.registerCommand("intakeSequence", s_GroundIntake.intakeNoteSequence(driver,codriver));
-                        NamedCommands.registerCommand("shootSequence", s_Shooter.fullShooter(s_GroundIntake));
-                        NamedCommands.registerCommand("runShooter", s_Shooter.shootCommand());
-                        NamedCommands.registerCommand("deployAmp", s_GroundIntake.deployAmpCommand());
-                        NamedCommands.registerCommand("ampSequence", s_GroundIntake.scoreAmpSequence());
-                        NamedCommands.registerCommand("handoffNote", s_GroundIntake.handoffNote());
-                        NamedCommands.registerCommand("reducedVisionAmp", s_Vision.reducedDistanceCommand());
-                        followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(s_Vision.reducedDistanceCommand());
+                        Swerve.setupPathPlanner();
+                        NamedCommands.registerCommand("deployIntake", Intake.deployIntakeCommand());
+                        NamedCommands.registerCommand("retractIntake", Intake.retractIntakeCommand());
+                        NamedCommands.registerCommand("intakeSequence", Intake.intakeNoteSequence(driver,codriver));
+                        NamedCommands.registerCommand("shootSequence", Shooter.fullShooter(Intake));
+                        NamedCommands.registerCommand("runShooter", Shooter.shootCommand());
+                        NamedCommands.registerCommand("deployAmp", Intake.deployAmpCommand());
+                        NamedCommands.registerCommand("ampSequence", Intake.scoreAmpSequence());
+                        NamedCommands.registerCommand("handoffNote", Intake.handoffNote());
+                        NamedCommands.registerCommand("reducedVisionAmp", Vision.reducedDistanceCommand());
+                        followAmpCommand = AutoBuilder.buildAuto("Amp Alignment").raceWith(Vision.reducedDistanceCommand());
                 
                 /* Default Commands */
-                        s_Swerve.setDefaultCommand(
+                        Swerve.setDefaultCommand(
                                 new TeleopSwerve(
-                                        s_Swerve,
+                                        Swerve,
 
                                         () -> -driver.getRawAxis(translationAxis) * SPEED_MULTIPLIER,
                                         () -> -driver.getRawAxis(strafeAxis) * SPEED_MULTIPLIER,
@@ -133,7 +170,14 @@ public class RobotContainer {
                                         () -> robotCentric.getAsBoolean()));
 
                 /* Others */
-                        autoChooser = AutoBuilder.buildAutoChooser();
+                        AutoManager.useExistingAutoChooser(AutoBuilder.buildAutoChooser());
+                        AutoManager.addCharacterization("Wheel Radius", Commands
+                                .runOnce(()-> Swerve.driveRelative(new ChassisSpeeds(0,0,Units.degreesToRadians(5))), Swerve)
+                                .andThen(new WaitCommand(0.1))
+                                .andThen(()->Swerve.stop())
+                                .andThen(new WaitCommand(0.15))
+                                .andThen(new WheelRadiusCharacterization(Swerve, Direction.COUNTER_CLOCKWISE))
+                        );
                         
                         configureButtonBindings();
                         configureSmartDashboard();
@@ -149,7 +193,7 @@ public class RobotContainer {
          */
         private void configureButtonBindings() {
                 /* Driver Buttons */
-                zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()).ignoringDisable(true));
+                zeroGyro.onTrue(new InstantCommand(() -> Swerve.zeroGyro()).ignoringDisable(true));
                 alignAmpButton.whileTrue(followAmpCommand);
                 /* Codriver Buttons */
                 intakeNoteSequenceButton.onTrue(intakeNoteSequence);
@@ -157,8 +201,6 @@ public class RobotContainer {
                 shootButton.whileTrue(outtakeNote);
                 climbUpButton.whileTrue(climbUp);
                 climbDownButton.whileTrue(climbDown);
-                // tiltClimbLeftButton.whileTrue(tiltLeft);
-                // tiltClimbRightButton.whileTrue(tiltRight);
 
                 scoreAmpSequenceButton.toggleOnTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
@@ -166,15 +208,34 @@ public class RobotContainer {
         }
 
         private void configureSmartDashboard() {
-                SmartDashboard.putNumber("Swerve/Speed Multiplier", SPEED_MULTIPLIER);
-                SmartDashboard.putData("Auto Chooser", autoChooser);
-                SmartDashboard.putData("tilt-left",tiltLeft);
-                SmartDashboard.putData("tilt-right",tiltRight);
+                AutoManager.checkForFMS();
+                
+                this.log("Speed Multiplier", SPEED_MULTIPLIER);
+                turnRight.whileTrue(Commands.runEnd(
+                        ()->{
+                                Swerve.driveRelative(new ChassisSpeeds(0, 0, -0.5),true);
+                        },
+                        ()->Swerve.stop(),
+                        Swerve));
+                turnLeft.whileTrue(Commands.runEnd(
+                ()->{
+                        Swerve.driveRelative(new ChassisSpeeds(0, 0, 0.5),true);
+                },
+                ()->Swerve.stop(),
+                Swerve));
 
+                turnRight.onFalse(Swerve.CheckTimeCommand(true));
+                turnLeft.onFalse(Swerve.CheckTimeCommand(false));
+
+                
+
+
+                Monologue.logObj(new AutoManager(),"Robot/AutoManager");
+                Monologue.setupMonologue(this, "Robot",false,true);
         }
 
         public void disabledInit() {
-                s_Swerve.resetToAbsolute();
+                Swerve.resetToAbsolute();
                 driver.setRumble(RumbleType.kBothRumble, 0);
                 codriver.setRumble(RumbleType.kBothRumble, 0);
         }
@@ -185,7 +246,8 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                // Executes the autonomous command chosen in smart dashboard
-                return autoChooser.getSelected();
+                return AutoManager.getSelected();
         }
+
+        
 }

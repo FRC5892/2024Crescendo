@@ -5,31 +5,28 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-import com.revrobotics.jni.CANSparkMaxJNI;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.HeroSparkPID;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-public class Intake extends SubsystemBase{
+public class Intake extends SubsystemBase implements Logged{
 
   private CANSparkMax intakeMotor;
   private CANSparkMax deployMotor;
   private DigitalInput beamBreak;
-  private HeroSparkPID deployController;
+  @Log private HeroSparkPID deployController;
   private DigitalInput deployLimitSwitch;
   private DigitalInput retractLimitSwitch;
   private SparkAbsoluteEncoder deployEncoder;
@@ -40,29 +37,23 @@ public class Intake extends SubsystemBase{
 
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     deployMotor = new CANSparkMax(IntakeConstants.DEPLOY_MOTOR_ID, MotorType.kBrushless);
-    
     deployController = new HeroSparkPID(deployMotor);
     deployEncoder = deployMotor.getAbsoluteEncoder(Type.kDutyCycle);
     
     beamBreak = new DigitalInput(IntakeConstants.BEAM_BREAK_DIO_PORT_ID);
     deployLimitSwitch = new DigitalInput(IntakeConstants.DEPLOY_LIMIT_SWITCH_DIO_PORT_ID);
     retractLimitSwitch = new DigitalInput(IntakeConstants.RETRACT_LIMIT_SWITCH_DIO_PORT_ID);
-    
-    
-    
-    SmartDashboard.putData("Intake/subsystem", this);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Intake/DeployRotations", this.getDeployRotation());
-    //SmartDashboard.putNumber("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
-    SmartDashboard.putNumber("Intake/deployIntegrated", deployMotor.getEncoder().getPosition()); 
-    SmartDashboard.putBoolean("Intake/deploy", !deployLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/retract", !retractLimitSwitch.get());
-    SmartDashboard.putBoolean("Intake/BeamBreak", beamBreak.get());
-    SmartDashboard.putData("Intake/deployPID",  deployController);
-    SmartDashboard.putNumber("Intake/reference",  deployController.getReference());
+    this.log("DeployRotations", this.getDeployRotation());
+    //this.log("Intake Speed", deployController.calculate(getDeployRotation(), 0.6));
+    this.log("deployIntegrated", deployMotor.getEncoder().getPosition()); 
+    this.log("deploy", !deployLimitSwitch.get());
+    this.log("retract", !retractLimitSwitch.get());
+    this.log("BeamBreak", beamBreak.get());
+    this.log("reference",  deployController.getReference());
   }
 
   /**
