@@ -37,6 +37,7 @@ In the periodic() method, the robot's odometry is updated, and the yaw of the ro
 
 public class Swerve extends SubsystemBase implements Logged{
 
+  private Translation2d currentCenterOfRotation = CenterOfRotation.CENTER.value;
 
 
   private AHRS gyro;
@@ -165,6 +166,24 @@ public class Swerve extends SubsystemBase implements Logged{
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop,false);
     }
+  }
+  public static enum CenterOfRotation {
+    FRONT_RIGHT(new Translation2d(Constants.Swerve.WHEEL_BASE/2,Constants.Swerve.WHEEL_BASE/2)),
+    FRONT_LEFT(new Translation2d(-Constants.Swerve.WHEEL_BASE/2,Constants.Swerve.WHEEL_BASE/2)),
+    CENTER(new Translation2d());
+
+    public final Translation2d value;
+    CenterOfRotation(Translation2d value) {
+      this.value = value;
+    } 
+  }
+  public Command pivotCommand(CenterOfRotation position) {
+    return startEnd(()-> {
+      this.currentCenterOfRotation = position.value;
+    }, ()-> {
+      this.currentCenterOfRotation = CenterOfRotation.CENTER.value;
+    });
+
   }
 
   public ChassisSpeeds getChassisSpeeds() {
@@ -351,8 +370,8 @@ public class Swerve extends SubsystemBase implements Logged{
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions());
 
-    this.log("NavX Yaw", gyro.getYaw());
-    this.log("NavX Angle", gyro.getAngle());
+    this.log("NavX Yaw", gyro == null ? 0:gyro.getYaw());
+    this.log("NavX Angle", gyro == null ? 0:gyro.getAngle());
 
     this.log("NavX Pitch", gyro == null ? 0: gyro.getPitch());
 

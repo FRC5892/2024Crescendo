@@ -117,6 +117,7 @@ public class Shooter extends SubsystemBase implements Logged{
   public void periodic() {
     this.log("leftRealSpeed",leftController.getSpeed());
     this.log("rightRealSpeed",rightController.getSpeed());
+    this.log("readytoShoot",leftController.getSpeed() >= 5400);
 
     // This method will be called once per scheduler run
   }
