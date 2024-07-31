@@ -21,6 +21,13 @@ import edu.wpi.first.units.Units;
 import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
+  public static final mode currentMode = mode.SIM;
+
+  enum mode {
+    REAL,
+    SIM,
+    REPLAY
+  }
 
   public static final class ClimbConstants {
     public static final int LEFT_CLIMB_MOTOR_ID = 19;
