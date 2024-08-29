@@ -22,17 +22,16 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-public class Vision extends SubsystemBase {
+public class Vision extends SubsystemBase implements Logged{
   private PhotonCamera frontCamera; private PhotonCamera backCamera;
 
   private PhotonPoseEstimator frontEstimator; private PhotonPoseEstimator backEstimator;
@@ -40,7 +39,7 @@ public class Vision extends SubsystemBase {
   private AprilTagFieldLayout fieldLayout;
   private double poseTimestamp;
   private Pose2d visionPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-  private Field2d field2d;
+  @Log private Field2d field2d;
   private Pose2d referencePose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
   private Consumer<VisionMeasurement> consumer;
   private Supplier<Pose2d> poseSupplier;
@@ -61,18 +60,17 @@ public class Vision extends SubsystemBase {
     this.consumer = consumer;
     frontCamera = new PhotonCamera(VisionConstants.FRONT_CAMERA_NAME);
     backCamera = new PhotonCamera(VisionConstants.BACK_CAMERA_NAME);
-
+    
     field2d = new Field2d();
 
     try {
       fieldLayout = AprilTagFieldLayout.loadFromResource(VisionConstants.FIELD_LAYOUT_RESOURCE_FILE);
     } catch (IOException e) {throw new UncheckedIOException(e);}
-    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCamera,
+    frontEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
         VisionConstants.ROBOT_TO_FRONT_CAM);
-    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCamera,
+    backEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCamera,
         VisionConstants.ROBOT_TO_BACK_CAM);
 
-    SmartDashboard.putData("Vision estimated Pose", field2d);
     poseTimestamp = Timer.getFPGATimestamp();
   }
   
@@ -99,10 +97,7 @@ public class Vision extends SubsystemBase {
   return startEnd(()->setNoisyDistance(VisionConstants.AMP_NOISY_DISTANCE_METERS), this::resetNoisyDistance);
  }
 
-  StructArrayPublisher<Pose3d> frontTags = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("SmartDashboard/Vision/Front Tags", Pose3d.struct).publish();
-  StructArrayPublisher<Pose3d> backTags = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("SmartDashboard/Vision/Back Tags", Pose3d.struct).publish();
+
   @Override
   public void periodic() {
     /* update estimated pose */
@@ -112,7 +107,7 @@ public class Vision extends SubsystemBase {
 
     Optional<EstimatedRobotPose> frontEstimate = frontEstimator.update();
     Optional<EstimatedRobotPose> backEstimate  = backEstimator.update();
-
+    Pose3d[] frontTags; 
     if (frontEstimate.isPresent()) {
       // consumer.accept(new VisionMeasurement(frontEstimate.get().estimatedPose.toPose2d(), frontEstimate.get().timestampSeconds, confidenceCalculator(frontEstimate.get())));
       if (confidenceCalculator(frontEstimate.get())) {
@@ -121,15 +116,16 @@ public class Vision extends SubsystemBase {
 
       }
         //good old java
-        frontTags.set(
-          frontEstimate.get().targetsUsed.stream()
+        frontTags = frontEstimate.get().targetsUsed.stream()
           .map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get())
-          .toArray(size -> new Pose3d[size])
-        );
+          .toArray(size -> new Pose3d[size]);
+       
       
     } else {
-      frontTags.set(new Pose3d[0]);
+      frontTags = new Pose3d[0];
     }
+    
+    Pose3d[] backTags; 
     if (backEstimate.isPresent()) {
       // consumer.accept(new VisionMeasurement(backEstimate.get().estimatedPose.toPose2d(), backEstimate.get().timestampSeconds, confidenceCalculator(backEstimate.get())));
       if (confidenceCalculator(backEstimate.get())) {
@@ -137,23 +133,25 @@ public class Vision extends SubsystemBase {
         this.visionPose = backEstimate.get().estimatedPose.toPose2d();
       }
       //good old java
-       backTags.set(
-          backEstimate.get().targetsUsed.stream()
-          .map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get())
-          .toArray(size -> new Pose3d[size])
-          );
+      backTags= backEstimate.get().targetsUsed.stream()
+      .map((i)-> fieldLayout.getTagPose(i.getFiducialId()).get())
+      .toArray(size -> new Pose3d[size]);
       
     } else {
-      backTags.set(new Pose3d[0]);
+      backTags= new Pose3d[0];
     }
+    if (!frontCamera.isConnected()) frontTags = new Pose3d[0];
+    if (!backCamera.isConnected()) backTags = new Pose3d[0];
     
-    SmartDashboard.putBoolean("Vision/Front Camera Connected", frontCamera.isConnected());
-    SmartDashboard.putBoolean("Vision/Back Camera Connected", backCamera.isConnected());
-    if (!frontCamera.isConnected()) frontTags.set(new Pose3d[0]);
-    if (!backCamera.isConnected()) backTags.set(new Pose3d[0]);
+
+    this.log("Front Tags",frontTags);
+    this.log("Back Tags",backTags);
+    
+    this.log("Front Camera Connected", frontCamera.isConnected());
+    this.log("Back Camera Connected", backCamera.isConnected());
     field2d.setRobotPose(this.visionPose);
     
-    SmartDashboard.putNumber("Vision/Estimated Angle",getVisionPose().getRotation().getDegrees());
+    this.log("Estimated Angle",getVisionPose().getRotation().getDegrees());
   }
   // private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
    private boolean confidenceCalculator(EstimatedRobotPose estimation) {
