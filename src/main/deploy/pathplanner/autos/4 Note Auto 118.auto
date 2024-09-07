@@ -169,9 +169,22 @@
                             }
                           },
                           {
-                            "type": "named",
+                            "type": "sequential",
                             "data": {
-                              "name": "intakeSequence"
+                              "commands": [
+                                {
+                                  "type": "wait",
+                                  "data": {
+                                    "waitTime": 0.5
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "intakeSequence"
+                                  }
+                                }
+                              ]
                             }
                           }
                         ]
@@ -186,6 +199,6 @@
       ]
     }
   },
-  "folder": "118 Autos",
+  "folder": null,
   "choreoAuto": false
 }
