@@ -6,8 +6,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.CenterOfRotation;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class TeleopSwerve extends Command {
   private Swerve s_Swerve;
@@ -15,6 +18,7 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier strafeSup;
   private DoubleSupplier rotationSup;
   private BooleanSupplier robotCentricSup;
+  Supplier<CenterOfRotation> centerSup;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(6);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(6);
@@ -25,7 +29,8 @@ public class TeleopSwerve extends Command {
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
-      BooleanSupplier robotCentricSup) {
+      BooleanSupplier robotCentricSup,
+      Supplier<CenterOfRotation> centerSup) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
 
@@ -33,6 +38,9 @@ public class TeleopSwerve extends Command {
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;
     this.robotCentricSup = robotCentricSup;
+    this.centerSup = centerSup;
+    
+    
   }
 
   @Override
@@ -49,6 +57,6 @@ public class TeleopSwerve extends Command {
     s_Swerve.drive(
         new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
         rotationVal * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-        !robotCentricSup.getAsBoolean(), true);
+        !robotCentricSup.getAsBoolean(), true,centerSup.get().value);
   }
 }

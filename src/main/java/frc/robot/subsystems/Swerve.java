@@ -155,12 +155,13 @@ public class Swerve extends SubsystemBase implements Logged{
    *                      loop.
    */
   public void drive(
-      Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+      Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop, Translation2d centerOfRotation) {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(), translation.getY(), rotation, getYaw())
-            : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+            : new ChassisSpeeds(translation.getX(), translation.getY(), rotation),
+            centerOfRotation);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
     for (SwerveModule mod : mSwerveMods) {
@@ -168,8 +169,8 @@ public class Swerve extends SubsystemBase implements Logged{
     }
   }
   public static enum CenterOfRotation {
-    FRONT_RIGHT(new Translation2d(Constants.Swerve.WHEEL_BASE/2,Constants.Swerve.WHEEL_BASE/2)),
-    FRONT_LEFT(new Translation2d(-Constants.Swerve.WHEEL_BASE/2,Constants.Swerve.WHEEL_BASE/2)),
+    FRONT_RIGHT(new Translation2d(Constants.Swerve.WHEEL_BASE/2,-Constants.Swerve.WHEEL_BASE/2)),
+    FRONT_LEFT(new Translation2d(Constants.Swerve.WHEEL_BASE/2,Constants.Swerve.WHEEL_BASE/2)),
     CENTER(new Translation2d());
 
     public final Translation2d value;
@@ -223,7 +224,7 @@ public class Swerve extends SubsystemBase implements Logged{
   public void stop() {
     drive(new Translation2d(0, 0).times(Constants.Swerve.MAX_SPEED),
         0 * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-        true, false);
+        true, false,CenterOfRotation.CENTER.value);
   }
 
   /**

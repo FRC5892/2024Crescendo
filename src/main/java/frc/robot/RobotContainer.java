@@ -83,9 +83,6 @@ public class RobotContainer implements Logged {
                 // private final JoystickButton robotCentric = new JoystickButton(driver,
                         // XboxController.Button.kRightBumper.value);
                 private final JoystickButton alignAmpButton = new JoystickButton(driver, XboxController.Button.kA.value);
-                private final JoystickButton pivotRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-                private final JoystickButton pivotLeft = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-
 
                 /* Co-Driver Buttons */
                 private final JoystickButton intakeNoteSequenceButton = new JoystickButton(codriver, 
@@ -172,7 +169,8 @@ public class RobotContainer implements Logged {
                                         () -> (-driver.getRawAxis(translationAxis) - singleDriver.getLeftY()) * SPEED_MULTIPLIER,
                                         () -> (-driver.getRawAxis(strafeAxis) - singleDriver.getLeftX()) * SPEED_MULTIPLIER,
                                         () -> -driver.getRawAxis(rotationAxis) - singleDriver.getRightX()* SPEED_MULTIPLIER,
-                                        () -> false));
+                                        () -> false,
+                                        ()-> driver.getRightBumper() ? CenterOfRotation.FRONT_RIGHT : (driver.getLeftBumper() ? CenterOfRotation.FRONT_LEFT : CenterOfRotation.CENTER) ));
 
                 /* Others */
                         AutoManager.useExistingAutoChooser(AutoBuilder.buildAutoChooser());
@@ -207,12 +205,11 @@ public class RobotContainer implements Logged {
                 climbUpButton.whileTrue(climbUp);
                 climbDownButton.whileTrue(climbDown);
 
+                
+
                 scoreAmpSequenceButton.toggleOnTrue(scoreAmpSequence);
                 deployIntakeButton2.whileTrue(deployIntake);
                 retractIntakeButton2.whileTrue(retractIntake);
-
-                pivotLeft.whileTrue(swerve.pivotCommand(CenterOfRotation.FRONT_LEFT));
-                pivotRight.whileTrue(swerve.pivotCommand(CenterOfRotation.FRONT_RIGHT));
 
 
                 singleDriver.y().whileTrue(intake.outtakeNoteCommand());
